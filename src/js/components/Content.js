@@ -20,7 +20,7 @@ export default class Content extends React.Component{
 		this.props.changeTitle(title);
 	};
 
-	componentsWillMount(){
+	componentWillMount(){
 		ItemsStore.on("change", () => {
 			this.setState({
 				items: ItemsStore.getAll(),
