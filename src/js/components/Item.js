@@ -25,7 +25,7 @@ export default class Item extends React.Component{
 					<li class="list-group-item list-group-item-success"><span>Status: erledigt</span></li>
 					<li class="list-group-item list-group-item-success"><span>Verantwortlicher: {person}</span></li>
 					<li class="list-group-item list-group-item-success"><span>Vertretung: {person_spare}</span></li>
-					<li class="list-group-item"><a class="btn btn-default" onClick={
+					<li class="list-group-item list-group-item-success"><a class="btn btn-default" onClick={
 						() => this.changeItemStatus(this, 3)
 					}>auf NICHT ERLEDIGT setzen</a></li>
 				</ul>	
