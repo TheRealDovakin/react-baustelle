@@ -1,11 +1,14 @@
 import dispatcher from "../dispatcher";
 
-export function createItem(status, name, place){
+export function createItem(phase_id, status, name, person, person_spare, spare){
 	dispatcher.dispatch({
 		type: "CREATE_ITEM",
+		phase_id,
 		status,
 		name,
-		place,
+		person,
+		person_spare,
+		spare
 	});
 }
 
