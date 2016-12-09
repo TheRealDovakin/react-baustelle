@@ -29,7 +29,7 @@ export default class Content extends React.Component{
 	}
 
 	createItem(){
-		ItemsActions.createItem("Schraube", "Bamberger");
+		ItemsActions.createItem(2, "Schraube", "Bamberger");
 	}
 
 	render(){
