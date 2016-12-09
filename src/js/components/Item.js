@@ -14,12 +14,12 @@ export default class Item extends React.Component{
 
 		if(status==1){//erledigt collapse
 			return(
-			<div class="panel panel-success">
-				<div class="panel-heading">
-					<h4>{name}   <a onClick={() => this.changeItemStatus(this, 2)}>
+			<div class="list-group">
+				<div class="panel-heading panel-heading-success">
+					<h3>{name}   <a onClick={() => this.changeItemStatus(this, 2)}>
 						<span class="glyphicon glyphicon-chevron-up">  </span>
 					</a>
-					</h4>
+					</h3>
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item list-group-item-success"><span>Status: erledigt</span></li>
@@ -35,17 +35,17 @@ export default class Item extends React.Component{
 			return(
 			<div class="panel panel-success">
 				<div class="panel-heading">
-					<h4>{name}   <a onClick={() => this.changeItemStatus(this, 1)}>
+					<h3>{name}   <a onClick={() => this.changeItemStatus(this, 1)}>
 						<span class="glyphicon glyphicon-chevron-down">  </span>
 					</a>
-					</h4>
+					</h3>
 				</div>	
 			</div>
 			);
 		}if(status==3){//nicht erledigt
 			return(
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4>{name}</h4></div>
+				<div class="panel-heading"><h3>{name}</h3></div>
 				<ul class="list-group">
 					<li class="list-group-item"><span>Status: in progress</span></li>
 					<li class="list-group-item"><span>Verantwortlicher: {person}</span></li>
@@ -61,7 +61,7 @@ export default class Item extends React.Component{
 		}else{//noch nicht freigegeben
 			return(
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4>{name}</h4></div>
+				<div class="panel-heading"><h3>{name}</h3></div>
 				<ul class="list-group">
 					<li class="list-group-item disabled"><span>Status: in Warteschlage</span></li>
 					<li class="list-group-item disabled"><span>Verantwortlicher: {person}</span></li>
