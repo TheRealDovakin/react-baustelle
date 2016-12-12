@@ -4,7 +4,10 @@ var webpack = require('webpack');
 module.exports = {
   context: __dirname,
   devtool: debug ? "inline-sourcemap" : null,
-  entry: "./js/client.js",
+  entry: [
+    "./js/client.js",
+    "webpack-dev-server/client?http://0.0.0.0:25555",
+  ],
   module: {
     loaders: [
       {
