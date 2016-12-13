@@ -59,6 +59,24 @@ class ItemsStore extends EventEmitter {
 				person_spare: "Horst Krämer",
 				spare: true,
 			},
+			{
+				id: 6,
+				phase_id: 3,
+				status: 3,
+				name: "Werkzeugset",
+				person: "Hans Peter",
+				person_spare: "Klaus Dieter",
+				spare: false,
+			},
+			{
+				id: 7,
+				phase_id: 3,
+				status: 3,
+				name: "Spannungsprüfer",
+				person: "Petra Meier",
+				person_spare: "Horst Krämer",
+				spare: true,
+			},
 		];
 	}
 
@@ -81,9 +99,11 @@ class ItemsStore extends EventEmitter {
 	}
 
 	changeItemStatus(id, status){
-		for (var index = 0; index < this.items.length; ++index) {
-    		if(this.items[index].id==id){
-    			this.items[index].status = status;
+		const it = this.items;
+		for (var index = 0; index < it.length; ++index) {
+			var phase_id;
+    		if(it[index].id==id){
+    			it[index].status = status;
     		}
 		}
 		this.emit('change');

@@ -8,10 +8,10 @@ export default class Header extends React.Component{
 		return(
 			<div>
 				<nav class="navbar navbar-default navbar-static-top">
-				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				    <div>
 				      <ul class="nav navbar-nav">
-				      	<a class="navbar-brand" href="#">Brand</a>
-				        <li><Link to="items" activeClassName=" active">Items</Link></li>
+				      	<a class="navbar-brand" href="#">Kieback & Peter</a>
+				        <li><Link to="processView" activeClassName=" active">Processes</Link></li>
 						<li><Link to="places" activeClassName="active">Places</Link></li>
 				      </ul>
 				    </div>

@@ -9,8 +9,8 @@ import * as PhaseActions from "../actions/PhaseActions";
 
 export default class Phase extends React.Component{
 	
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 		this.state = {
 			items: ItemsStore.getAll(),
 			progress: 0.0,
@@ -36,7 +36,7 @@ export default class Phase extends React.Component{
     			}	
 			}
 		}
-		return (100/max)*sumDone; 
+		return Math.round((100/max)*sumDone);
 	}
 
 	componentWillMount(){
@@ -68,13 +68,9 @@ export default class Phase extends React.Component{
 		};
 
 		return(
-			<div class="col-md-12 panel panel-default">
+			<div class="col-md-12 panel panel-info">
 				<Title title={this.props.title} />
 				<div class="panel-heading"><h2>{name}</h2></div>	
-				<button onClick={this.createItem.bind(this)}>create</button>
-				<input 
-					onChange={this.handleChange.bind(this)}
-					value={this.props.title}/>
 				<div> {ItemComponents} </div>
 				<h3><span class="">Fortschitt</span></h3>
 				<div class="progress">

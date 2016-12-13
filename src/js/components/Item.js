@@ -14,8 +14,8 @@ export default class Item extends React.Component{
 
 		if(status==1){//erledigt collapse
 			return(
-			<div class="list-group">
-				<div class="panel-heading panel-heading-success">
+			<div class="panel panel-success">
+				<div class="panel-heading">
 					<h3>{name}   <a onClick={() => this.changeItemStatus(this, 2)}>
 						<span class="glyphicon glyphicon-chevron-up">  </span>
 					</a>
