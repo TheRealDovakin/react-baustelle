@@ -31,10 +31,13 @@ class ProcessStore extends EventEmitter {
 		return this.items;
 	}
 
-	createProcess(){
+	createProcess(status, person_name, due_date){
 		const id = Date.now();
 		this.items.push({
 			id,
+			status,
+			person_name,
+			due_date,
 		});
 		this.emit('change');
 	}
@@ -51,7 +54,7 @@ class ProcessStore extends EventEmitter {
 	handleActions(action){
 		switch(action.type){
 			case "CREATE_PROCESS": {
-				this.createProcess();
+				this.createProcess(action.status, action.person_name, action.due_date);
 			};break;
 			case "CHANGE_PROCESS_STATUS": {
 				this.changeProcessStatus(action.id, action.status);
