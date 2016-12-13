@@ -11,8 +11,8 @@ export default class Header extends React.Component{
 				    <div>
 				      <ul class="nav navbar-nav">
 				      	<a class="navbar-brand" href="#">Kieback & Peter</a>
-				        <li><Link to="processView" activeClassName=" active">Processes</Link></li>
-						<li><Link to="places" activeClassName="active">Places</Link></li>
+				        <li><Link to="processView" activeClassName=" active">Prozesse</Link></li>
+						<li><Link to="/" activeClassName="active">Places</Link></li>
 				      </ul>
 				    </div>
 				</nav>

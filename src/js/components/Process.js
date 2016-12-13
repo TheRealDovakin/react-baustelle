@@ -18,7 +18,7 @@ export default class Process extends React.Component{
 					</ul>	
 				</div>
 			);
-		}else{//nicht erledigt
+		}else{//erledigt
 			return(
 				<div class="panel panel-success">
 					<div class="panel-heading"><a href={"#/processView/"+id}>{person_name}</a></div>

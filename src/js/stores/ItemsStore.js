@@ -19,7 +19,7 @@ class ItemsStore extends EventEmitter {
 				phase_id: 1,
 				status: 2,
 				name: "AD-Konto",
-				person: "Hans Peter",
+				person: "Kasper Nadrajkowski",
 				person_spare: "Klaus Dieter",
 				spare: false,
 			},

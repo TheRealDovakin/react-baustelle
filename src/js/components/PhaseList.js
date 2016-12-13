@@ -16,6 +16,10 @@ export default class PhaseList extends React.Component{
 
 		const { items } = this.state;
 
+		const phaseListStyle = {
+			backgroundColor: '#6A98AA',
+		};
+
 		items.sort(function(a, b){
 		    var keyA = a.r_nr,
 		        keyB = b.r_nr;
@@ -34,8 +38,8 @@ export default class PhaseList extends React.Component{
 		return(
 			
 			<div>
-				<div class="col-md-12">
-					<p>Liste aller Phasen eines Eintritts-/ Austrittsprozesses</p>
+				<div class="col-md-12" >
+					<h2>Liste aller Phasen eines Eintritts-/ Austrittsprozesses</h2>
 				</div>
 				<div> {ItemComponents} </div>
 			</div>

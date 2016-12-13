@@ -67,10 +67,14 @@ export default class Phase extends React.Component{
 			width: progress+'%',
 		};
 
+		const phaseListStyle = {
+			backgroundColor: '#dddddd',
+		};
+
 		return(
-			<div class="col-md-12 panel panel-info">
+			<div class="col-md-12 panel panel-default disabled" style={phaseListStyle}>
 				<Title title={this.props.title} />
-				<div class="panel-heading"><h2>{name}</h2></div>	
+				<div><h3>{name}</h3></div>	
 				<div> {ItemComponents} </div>
 				<h3><span class="">Fortschitt</span></h3>
 				<div class="progress">

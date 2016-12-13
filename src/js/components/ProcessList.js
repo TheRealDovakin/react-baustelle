@@ -41,7 +41,7 @@ export default class ProcessList extends React.Component{
 		return(
 			<div>
 				<div class="col-md-12">
-					<p>Liste aller Eintritts-/ Austrittsprozesse</p>
+					<h2>Liste aller laufenden und abgeschlossenen Eintritts- und Austrittsprozesse</h2>
 				</div>
 				<div> {ItemComponents} </div>
 			</div>
