@@ -16,6 +16,8 @@ export default class PhaseList extends React.Component{
 
 		const { items } = this.state;
 
+		const processId = 1;
+
 		const phaseListStyle = {
 			backgroundColor: '#6A98AA',
 		};
@@ -29,7 +31,7 @@ export default class PhaseList extends React.Component{
 		});
 		
 		const ItemComponents = items.map((item) => {
-			if(item.process_id==1){
+			if(item.process_id==processId){
 				return <Phase key={item.id} {...item}/>;
 			}
 			
@@ -38,7 +40,7 @@ export default class PhaseList extends React.Component{
 		return(
 			
 			<div>
-				<div class="col-md-12" >
+				<div class="col-md-12">
 					<h2>Liste aller Phasen eines Eintritts-/ Austrittsprozesses</h2>
 				</div>
 				<div> {ItemComponents} </div>

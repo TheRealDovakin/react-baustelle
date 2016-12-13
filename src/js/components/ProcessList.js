@@ -43,7 +43,10 @@ export default class ProcessList extends React.Component{
 				<div class="col-md-12">
 					<h2>Liste aller laufenden und abgeschlossenen Eintritts- und Austrittsprozesse</h2>
 				</div>
-				<div> {ItemComponents} </div>
+				<div class="col-md-4" >
+					<a class="btn btn-info" href="#/newProcess">neuen Prozess anlegen</a>
+				</div>
+				<div class="col-md-12"> {ItemComponents} </div>
 			</div>
 		);
 	}

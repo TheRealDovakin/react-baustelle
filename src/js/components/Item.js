@@ -12,7 +12,7 @@ export default class Item extends React.Component{
 
 		const { id, status, name, place, person, person_spare, spare } = this.props;
 
-		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=";
+		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 
 		if(status==1){//erledigt collapse
 			return(
@@ -25,8 +25,8 @@ export default class Item extends React.Component{
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item list-group-item-success"><span>Status: erledigt</span></li>
-					<li class="list-group-item list-group-item-success"><a>Verantwortlicher: {person}</a></li>
-					<li class="list-group-item list-group-item-success"><a>Vertretung: {person_spare}</a></li>
+					<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>Verantwortlicher: {person}"</a></li>
+					<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>Vertretung: {person_spare}</a></li>
 					<li class="list-group-item list-group-item-success"><a class="btn btn-default" onClick={
 						() => this.changeItemStatus(this, 3)
 					}>auf NICHT ERLEDIGT setzen</a></li>
@@ -51,7 +51,7 @@ export default class Item extends React.Component{
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
 						<li class="list-group-item"><span>Status: laufend</span></li>
-						<li class="list-group-item"><a href={phoneBookLink+person.split(" ").splice(-1)[0]}>Verantwortlicher: {person}</a></li>
+						<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>Verantwortlicher: {person}</a></li>
 						<li class="list-group-item disabled"><a>Vertretung: {person_spare}</a></li>
 						<li class="list-group-item">
 							<a class="btn btn-success" onClick={
@@ -68,7 +68,7 @@ export default class Item extends React.Component{
 					<ul class="list-group">
 						<li class="list-group-item"><span>Status: laufend</span></li>
 						<li class="list-group-item disabled"><a>Verantwortlicher: {person}</a></li>
-						<li class="list-group-item"><a>Vertretung: {person_spare}</a></li>
+						<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>Vertretung: {person_spare}</a></li>
 						<li class="list-group-item">
 							<a class="btn btn-success" onClick={
 								() => this.changeItemStatus(this, 2)
