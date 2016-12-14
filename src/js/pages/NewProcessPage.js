@@ -64,7 +64,7 @@ export default class NewProcessPage extends React.Component{
 				  </div>
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
-				      <a 	class="btn btn-default" href="#/" 
+				      <a 	class="btn btn-info" href="#/" 
 								onClick={() => this.createProcess(this, this.state.name, this.state.due_date)}>
 								neuen Prozess erstellen
 							</a>

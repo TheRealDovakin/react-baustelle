@@ -2,6 +2,7 @@ import React from "react";
 
 import Phase from "./Phase";
 import PhaseStore from "../stores/PhaseStore"
+import { withRouter } from "react-router"
 
 export default class PhaseList extends React.Component{
 
@@ -16,11 +17,7 @@ export default class PhaseList extends React.Component{
 
 		const { items } = this.state;
 
-		const processId = 1;
-
-		const phaseListStyle = {
-			backgroundColor: '#6A98AA',
-		};
+		const processId = this.props.location.pathname.split("/")[2];
 
 		items.sort(function(a, b){
 		    var keyA = a.r_nr,

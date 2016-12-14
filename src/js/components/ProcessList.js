@@ -14,6 +14,10 @@ export default class ProcessList extends React.Component{
 
 	render(){
 
+		const btnStyle={
+			margin: 15,
+		}
+
 		const { items } = this.state;
 
 		items.sort(function(a, b){
@@ -43,8 +47,8 @@ export default class ProcessList extends React.Component{
 				<div class="col-md-12">
 					<h2>Liste aller laufenden und abgeschlossenen Eintritts- und Austrittsprozesse</h2>
 				</div>
-				<div class="col-md-4" >
-					<a class="btn btn-info" href="#/newProcess">neuen Prozess anlegen</a>
+				<div class="" >
+					<a class="btn btn-info btn-lg" style={btnStyle} href="#/newProcess">neuen Prozess anlegen</a>
 				</div>
 				<div class="col-md-12"> {ItemComponents} </div>
 			</div>

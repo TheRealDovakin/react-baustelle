@@ -68,7 +68,7 @@ export default class Phase extends React.Component{
 		};
 
 		const phaseListStyle = {
-			backgroundColor: '#dddddd',
+			backgroundColor: '#eeeecc',
 		};
 
 		return(
