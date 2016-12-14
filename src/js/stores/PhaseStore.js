@@ -24,7 +24,7 @@ class PhaseStore extends EventEmitter {
 				id: 3,
 				process_id: 2,
 				status: 2,
-				name: "IT-Phase 2",
+				name: "ABK-Phase",
 				r_nr: 1,
 			},
 		];
@@ -34,10 +34,15 @@ class PhaseStore extends EventEmitter {
 		return this.items;
 	}
 
-	createPhase(){
-		const id = Date.now();
+	createPhase(process_id, status, name, r_nr){
+		console.log("create-phase: "+process_id)
+		const id = this.items.length+1;
 		this.items.push({
 			id,
+			process_id,
+			status,
+			name,
+			r_nr,
 		});
 		this.emit('change');
 	}
@@ -45,7 +50,7 @@ class PhaseStore extends EventEmitter {
 	handleActions(action){
 		switch(action.type){
 			case "CREATE_PHASE": {
-				this.createPhase();
+				this.createPhase(action.process_id, action.status, action.name, action.r_nr);
 			};break;
 		}
 	}

@@ -1,6 +1,10 @@
 import React from "react";
 
 import * as ProcessActions from "../actions/ProcessActions";
+import * as PhaseActions from "../actions/PhaseActions";
+import * as ItemsActions from "../actions/ItemsActions";
+import ProcessStore from '../stores/ProcessStore';
+import PhaseStore from '../stores/PhaseStore';
 
 
 export default class NewProcessPage extends React.Component{
@@ -43,7 +47,18 @@ export default class NewProcessPage extends React.Component{
   	}
 
 	createProcess(t, name, due_date, p_type){
+		//only for prototype - needs to be replaced
+		const pr_id = ProcessStore.getAll().length+1;
+		const ph_id = PhaseStore.getAll().length+1;
 		ProcessActions.createProcess(1, name, due_date, p_type);
+		//only for prototype - needs to be replaced
+		PhaseActions.createPhase(pr_id, 2, "Neue Phase 1", 7);
+		PhaseActions.createPhase(pr_id, 2, "Neue Phase 2", 6);
+		ItemsActions.createItem(ph_id, 3, "lul", "er", "jens", true);
+		ItemsActions.createItem(ph_id, 3, "lu", "op", "ok", false);
+		ItemsActions.createItem(ph_id+1, 3, "lul", "ko", "po", false);
+		ItemsActions.createItem(ph_id+1, 3, "lul", "fg", "tz", true);
+
 	}	
 
 	render(){

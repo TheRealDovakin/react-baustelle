@@ -1,8 +1,10 @@
 import React from "react";
 
-import * as ItemsActions from "../actions/ItemsActions";
-
 export default class Process extends React.Component{
+
+	constructor(props){
+		super();
+	}
 
 	render(){
 

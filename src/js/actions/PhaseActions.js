@@ -1,8 +1,12 @@
 import dispatcher from "../dispatcher";
 
-export function createPhase(){
+export function createPhase(process_id, status, name, r_nr){
 	dispatcher.dispatch({
-		type: "CREATE_ITEM",
+		type: "CREATE_PHASE",
+		process_id, 
+		status, 
+		name, 
+		r_nr,
 	});
 }
 

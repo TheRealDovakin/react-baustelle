@@ -85,7 +85,7 @@ class ItemsStore extends EventEmitter {
 	}
 
 	createItem(phase_id, status, name, person, person_spare, spare){
-		const id = Date.now();
+		const id = this.items.length+1;
 		this.items.push({
 			id,
 			phase_id,
