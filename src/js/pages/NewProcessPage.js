@@ -10,16 +10,19 @@ export default class NewProcessPage extends React.Component{
 	   this.state = {
 	    	name: '',
 	    	due_date:'',
+	    	p_type:'Vertieb',
 	   };
 
 	   this.handleNameChange = this.handleNameChange.bind(this);
 	   this.handleDueDateChange = this.handleDueDateChange.bind(this);
+	   this.handlep_typeChange = this.handlep_typeChange.bind(this);
 	}
 
 	handleNameChange(event) {
     	this.setState({
     		name: event.target.value,
     		due_date: this.state.due_date,
+    		p_type: this.state.p_type,
     	});
   	}
 
@@ -27,12 +30,20 @@ export default class NewProcessPage extends React.Component{
     	this.setState({
     		name: this.state.name,
     		due_date: event.target.value,
+    		p_type: this.state.p_type,
     	});
   	}
 
-	createProcess(t, name, due_date){
-		ProcessActions.createProcess(1, name, due_date);
-		console.log("create process");
+  	handlep_typeChange(event) {
+    	this.setState({
+    		name: this.state.name,
+    		due_date: this.state.due_date,
+    		p_type: event.target.value,
+    	});
+  	}
+
+	createProcess(t, name, due_date, p_type){
+		ProcessActions.createProcess(1, name, due_date, p_type);
 	}	
 
 	render(){
@@ -55,7 +66,7 @@ export default class NewProcessPage extends React.Component{
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">Typ</label>
 				    <div class="col-sm-10">
-				      <select class="form-control">
+				      <select class="form-control" value={this.state.p_type} onChange={this.handlep_typeChange}>
 						  <option>Vertieb</option>
 						  <option>Techniker</option>
 						  <option>Zentrale</option>
@@ -65,7 +76,7 @@ export default class NewProcessPage extends React.Component{
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	class="btn btn-info" href="#/" 
-								onClick={() => this.createProcess(this, this.state.name, this.state.due_date)}>
+								onClick={() => this.createProcess(this, this.state.name, this.state.due_date, this.state.p_type)}>
 								neuen Prozess erstellen
 							</a>
 				    </div>

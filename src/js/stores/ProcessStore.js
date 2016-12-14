@@ -11,18 +11,21 @@ class ProcessStore extends EventEmitter {
 				status: 1,
 				person_name: "Hans Butter",
 				due_date: "2017-01-02",
+				p_type: 'Vertrieb'
 			},
 			{
 				id: 2,
 				status: 2,
 				person_name: "Claus Milch",
 				due_date: "2017-01-01",
+				p_type: 'Techniker'
 			},
 			{
 				id: 3,
 				status: 2,
 				person_name: "Peter Pan",
 				due_date: "2017-01-03",
+				p_type: 'Zentrale'
 			},
 		];
 	}
@@ -31,14 +34,17 @@ class ProcessStore extends EventEmitter {
 		return this.items;
 	}
 
-	createProcess(status, person_name, due_date){
+	createProcess(status, person_name, due_date, p_type){
 		const id = Date.now();
+		console.log("create-process-store");
 		this.items.push({
 			id,
 			status,
 			person_name,
 			due_date,
+			p_type,
 		});
+		console.log("create-process-store");
 		this.emit('change');
 	}
 
@@ -54,7 +60,9 @@ class ProcessStore extends EventEmitter {
 	handleActions(action){
 		switch(action.type){
 			case "CREATE_PROCESS": {
-				this.createProcess(action.status, action.person_name, action.due_date);
+				console.log("create-process-store");
+				this.createProcess(action.status, action.person_name, action.due_date, action.p_type);
+				console.log("create-process-store-actions");
 			};break;
 			case "CHANGE_PROCESS_STATUS": {
 				this.changeProcessStatus(action.id, action.status);
