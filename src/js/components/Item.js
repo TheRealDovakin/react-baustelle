@@ -18,9 +18,8 @@ export default class Item extends React.Component{
 			return(
 			<div class="panel panel-success">
 				<div class="panel-heading">
-					<h4>{name}   <a onClick={() => this.changeItemStatus(this, 2)}>
-						<a class="glyphicon glyphicon-chevron-up">  </a>
-					</a>
+					<h4>{name}   
+						<a onClick={() => this.changeItemStatus(this, 2)} class="glyphicon glyphicon-chevron-up"></a>
 					</h4>
 				</div>
 				<ul class="list-group">
@@ -37,9 +36,8 @@ export default class Item extends React.Component{
 			return(
 			<div class="panel panel-success">
 				<div class="panel-heading">
-					<h4>{name}   <a onClick={() => this.changeItemStatus(this, 1)}>
-						<a class="glyphicon glyphicon-chevron-down">  </a>
-					</a>
+					<h4>{name}   
+						<a onClick={() => this.changeItemStatus(this, 1)} class="glyphicon glyphicon-chevron-down">  </a>
 					</h4>
 				</div>	
 			</div>

@@ -7,9 +7,24 @@ export default class ProcessList extends React.Component{
 
 	constructor(){
 		super();
+		this.getProcesses = this.getProcesses.bind(this);
 		this.state = {
 			items: ProcessStore.getAll(),
 		};
+	}
+
+	componentWillMount(){
+		ProcessStore.on("change", this.getProcesses);
+	}
+
+	componentWillUnmount(){
+		ProcessStore.removeListener("change", this.getProcesses);
+	}
+
+	getProcesses(){
+		this.setState({
+			items: ProcessStore.getAll(),
+		});
 	}
 
 	render(){

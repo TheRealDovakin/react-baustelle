@@ -11,6 +11,7 @@ export default class Phase extends React.Component{
 	
 	constructor(props){
 		super(props);
+		this.getItems = this.getItems.bind(this);
 		this.state = {
 			items: ItemsStore.getAll(),
 			progress: 0.0,
@@ -40,11 +41,17 @@ export default class Phase extends React.Component{
 	}
 
 	componentWillMount(){
-		ItemsStore.on("change", () => {
-			this.setState({
-				items: ItemsStore.getAll(),
-				progess: this.getProgress(),
-			});
+		ItemsStore.on("change", this.getItems);
+	}
+
+	componentWillUnmount(){
+		ItemsStore.removeListener("change", this.getItems);
+	}
+
+	getItems(){
+		this.setState({
+			items: ItemsStore.getAll(),
+			progess: this.getProgress(),
 		});
 	}
 

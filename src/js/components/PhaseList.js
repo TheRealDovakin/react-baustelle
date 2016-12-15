@@ -8,9 +8,24 @@ export default class PhaseList extends React.Component{
 
 	constructor(props){
 		super(props);
+		this.getPhases = this.getPhases.bind(this);
 		this.state = {
 			items: PhaseStore.getAll(),
 		};
+	}
+
+	componentWillMount(){
+		PhaseStore.on("change", this.getPhases);
+	}
+
+	componentWillUnmount(){
+		PhaseStore.removeListener("change", this.getPhases);
+	}
+
+	getPhases(){
+		this.setState({
+			items: PhaseStore.getAll(),
+		});
 	}
 
 	render(){
