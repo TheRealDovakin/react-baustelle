@@ -2,14 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory} from "react-router";
 
-
 import Layout from "./components/Layout";
 import NewProcessPage from "./pages/NewProcessPage";
 import Places from "./pages/Places";
 import PhaseList from "./components/PhaseList";
 import ProcessListPage from "./pages/ProcessListPage";
 import ProcessView from "./pages/ProcessView";
-
 
 const app = document.getElementById('app');
 

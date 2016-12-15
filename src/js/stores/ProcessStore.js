@@ -35,6 +35,7 @@ class ProcessStore extends EventEmitter {
 	}
 
 	createProcess(status, person_name, due_date, p_type){
+		//only for prototype - needs to be replaced
 		const id = parseInt(this.items.length+1);
 		this.items.push({
 			id,
