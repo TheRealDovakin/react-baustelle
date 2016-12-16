@@ -5,37 +5,21 @@ import dispatcher from "../dispatcher";
 class PhaseStore extends EventEmitter {
 	constructor(){
 		super();
-		this.items = [
-			{
-				id: 1,
-				process_id: 1,
-				status: 2,
-				name: "IT-Phase 1",
-				r_nr: 2,
-			},
-			{
-				id: 2,
-				process_id: 1,
-				status: 2,
-				name: "IT-Phase 2",
-				r_nr: 1,
-			},
-			{
-				id: 3,
-				process_id: 2,
-				status: 2,
-				name: "ABK-Phase",
-				r_nr: 1,
-			},
-		];
+		this.state = {
+			items: [],
+		}	
 	}
 
 	getAll(){
-		return this.items;
+		return this.state.items;
+	}
+
+	fetchPhasesFromApi(data){
+		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
+		this.emit('change');
 	}
 
 	createPhase(process_id, status, name, r_nr){
-		console.log("create-phase: "+process_id)
 		const id = this.items.length+1;
 		this.items.push({
 			id,
@@ -52,6 +36,9 @@ class PhaseStore extends EventEmitter {
 			case "CREATE_PHASE": {
 				this.createPhase(action.process_id, action.status, action.name, action.r_nr);
 			};break;
+			case "FETCH_PHASES_FROM_API": {
+				this.fetchPhasesFromApi(action.res);
+			}
 		}
 	}
 }

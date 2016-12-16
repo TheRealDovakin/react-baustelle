@@ -1,56 +1,54 @@
 import { EventEmitter } from "events";
-
+import $ from "jquery";
 import dispatcher from "../dispatcher";
 
 class ProcessStore extends EventEmitter {
 	constructor(){
 		super();
-		this.items = [
-			{
-				id: 1,
-				status: 1,
-				person_name: "Hans Butter",
-				due_date: "2017-01-02",
-				p_type: 'Vertrieb'
-			},
-			{
-				id: 2,
-				status: 2,
-				person_name: "Claus Milch",
-				due_date: "2017-01-01",
-				p_type: 'Techniker'
-			},
-			{
-				id: 3,
-				status: 2,
-				person_name: "Peter Pan",
-				due_date: "2017-01-03",
-				p_type: 'Zentrale'
-			},
-		];
+		this.state = {
+			items: [],
+		}
 	}
 
 	getAll(){
-		return this.items;
+		return this.state.items;
+	}
+
+	fetchProcessesFromApi(data){
+		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
+		this.emit('change');
 	}
 
 	createProcess(status, person_name, due_date, p_type){
-		//only for prototype - needs to be replaced
-		const id = parseInt(this.items.length+1);
-		this.items.push({
-			id,
-			status,
-			person_name,
-			due_date,
-			p_type,
+		var json_data = JSON.stringify({
+			status: status,
+			person_name: person_name, 
+			due_date: due_date, 
+			p_type: p_type
+		});
+		console.log(json_data);
+		$.ajax({
+			url: 'http://172.22.23.6:3000/processes/',
+			type: "POST",
+			contentType: "application/json",
+			data: json_data,
+			success: function(res){
+				document.location.href = '/';
+			},
+			error: function(res){
+				console.log(res);
+				//needs to be reaplaced
+				alert("Die eingabe war nicht volständdig oder korrekt");
+			}
 		});
 		this.emit('change');
 	}
 
 	changeProcessStatus(id, status){
-		for (var index = 0; index < this.items.length; ++index) {
-    		if(this.items[index].id==id){
-    			this.items[index].status = status;
+		const it = this.state.items;
+		for (var index = 0; index < it.length; ++index) {
+    		if(it[index].id==id){
+    			it[index].status = status;
     		}
 		}
 		this.emit('change');
@@ -66,6 +64,9 @@ class ProcessStore extends EventEmitter {
 			case "CHANGE_PROCESS_STATUS": {
 				this.changeProcessStatus(action.id, action.status);
 			};break;
+			case "FETCH_PROCESSES_FROM_API": {
+				this.fetchProcessesFromApi(action.res);
+			}
 		}
 	}
 }

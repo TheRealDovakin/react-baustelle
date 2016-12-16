@@ -4,7 +4,7 @@ var mongoose = restful.mongoose;
 
 var PhaseSchema = new mongoose.Schema({
 	name: {type: String, required: true},
-	process_id: {type: Number, required: true},
+	process_id: {type: String, required: true},
 	status: {type: String, required: true},
 	r_nr: {type: Number, required: true},
 	}, {

@@ -1,7 +1,10 @@
 import React from "react";
+import $ from "jquery";
 
+import dispatcher from "../dispatcher";
 import Process from "./Process";
-import ProcessStore from "../stores/ProcessStore"
+import ProcessStore from "../stores/ProcessStore";
+import ProcessActions from "../actions/ProcessActions";
 
 export default class ProcessList extends React.Component{
 
@@ -19,6 +22,21 @@ export default class ProcessList extends React.Component{
 
 	componentWillUnmount(){
 		ProcessStore.removeListener("change", this.getProcesses);
+	}
+
+	componentDidMount(){
+		$.ajax({
+			url: 'http://172.22.23.6:3000/processes',
+			type: "GET",
+			contentType: 'application/json',
+			dataType: "json",
+			success: function(res){
+				dispatcher.dispatch({
+					type: 	"FETCH_PROCESSES_FROM_API",
+					res,
+				});
+			}
+		});
 	}
 
 	getProcesses(){
@@ -52,7 +70,7 @@ export default class ProcessList extends React.Component{
 		});
 		
 		const ItemComponents = items.map((item) => {
-			return <Process key={item.id} {...item}/>;
+			return <Process key={item._id} {...item}/>;
 		});
 
 

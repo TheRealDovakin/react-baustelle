@@ -8,12 +8,18 @@ export function createProcess(status, person_name, due_date, p_type){
 		due_date,
 		p_type,
 	});
-	console.log("create-process-action");
 }
 
 export function changeProcessStatus(id, status){
 	dispatcher.dispatch({
 		type: "CHANGE_PROCESS_STATUS",
 		id,
+	});
+}
+
+export function fetchItemsFromApi(res){
+	dispatcher.dispatch({
+		type: 	"FETCH_ITEMS_FROM_API",
+		res,
 	});
 }

@@ -62,7 +62,12 @@ export default class NewProcessPage extends React.Component{
 
 	}	
 
+	componentDidMount(){
+		console.log("mount");
+	}
+
 	render(){
+
 		return(
 			<div class="col-md-12">
 				<h1>New Process Page</h1>
@@ -76,7 +81,7 @@ export default class NewProcessPage extends React.Component{
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">Deadline</label>
 				    <div class="col-sm-10">
-				      <input  class="form-control" placeholder="Deadline" value={this.state.due_date} onChange={this.handleDueDateChange}></input>
+				      <input  id="datepicker" class="datepicker form-control" placeholder="Deadline" value={this.state.due_date} onChange={this.handleDueDateChange}></input>
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -91,7 +96,7 @@ export default class NewProcessPage extends React.Component{
 				  </div>
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
-				      <a 	class="btn btn-info" href="#/" 
+				      <a 	class="btn btn-info" 
 								onClick={() => this.createProcess(this, this.state.name, this.state.due_date, this.state.p_type)}>
 								neuen Prozess erstellen
 							</a>
