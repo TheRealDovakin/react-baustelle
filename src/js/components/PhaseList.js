@@ -10,6 +10,7 @@ export default class PhaseList extends React.Component{
 
 	constructor(){
 		super();
+		this.delete = this.delete.bind(this);
 		this.getPhases = this.getPhases.bind(this);
 		this.setProcess = this.setProcess.bind(this);
 		this.fetchPhases = this.fetchPhases.bind(this);
@@ -33,6 +34,23 @@ export default class PhaseList extends React.Component{
 		this.fetchPhases();
 		this.fetchProcess();
 		this.setProcess();
+	}
+
+	delete(){
+		//TODO: replace confirm with custom dialog
+		if(confirm("Wenn Sie auf OK drücken wird dieser Process aus der Datenbank gelöscht")){
+			const processId = this.props.location.pathname.split("/")[2];
+			$.ajax({
+			url: 'http://172.22.23.6:3000/processes/'+processId,
+			type: "DELETE",
+			context: this,
+			contentType: 'application/json',
+			dataType: "json",
+			success: function(res){
+				document.location.href = '/';
+			}
+		});
+		}
 	}
 
 	fetchPhases(){
@@ -149,6 +167,9 @@ export default class PhaseList extends React.Component{
 					onClick={() => this.initProcesses()}>Initialise</a>
 				</div>
 				<div> {ItemComponents} </div>
+				<div class="col-md-12">
+					<a class="btn btn-danger" onClick={() => this.delete()}>Prozess löschen</a>
+				</div>
 			</div>
 		);
 	}
