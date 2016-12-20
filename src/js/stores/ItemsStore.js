@@ -5,107 +5,17 @@ import dispatcher from "../dispatcher";
 class ItemsStore extends EventEmitter {
 	constructor(){
 		super();
-		this.items = [
-			/*
-				1: done,
-				2: done collapsed,
-				3: in progress,
-				4: not todo yet,
-				5
-
-			*/
-			{
-				id: 1,
-				phase_id: 1,
-				status: 2,
-				name: "AD-Konto",
-				person: "Kasper Nadrajkowski",
-				person_spare: "Klaus Dieter",
-				spare: false,
-			},
-			{
-				id: 2,
-				phase_id: 1,
-				status: 3,
-				name: "Baumann",
-				person: "Klaus Dieter",
-				person_spare: "Hans Peter",
-				spare: true,
-			},
-			{
-				id: 3,
-				phase_id: 1,
-				status: 3,
-				name: "Adito",
-				person: "Hans Peter",
-				person_spare: "Klaus Dieter",
-				spare: false,
-			},
-			{
-				id: 4,
-				phase_id: 2,
-				status: 3,
-				name: "PKW",
-				person: "Hans Peter",
-				person_spare: "Klaus Dieter",
-				spare: false,
-			},
-			{
-				id: 5,
-				phase_id: 2,
-				status: 3,
-				name: "Handy",
-				person: "Petra Meier",
-				person_spare: "Horst Krämer",
-				spare: true,
-			},
-			{
-				id: 6,
-				phase_id: 3,
-				status: 3,
-				name: "Werkzeugset",
-				person: "Hans Peter",
-				person_spare: "Klaus Dieter",
-				spare: false,
-			},
-			{
-				id: 7,
-				phase_id: 3,
-				status: 3,
-				name: "Spannungsprüfer",
-				person: "Petra Meier",
-				person_spare: "Horst Krämer",
-				spare: true,
-			},
-		];
+		this.state = {
+			items: [],
+		}
 	}
 
 	getAll(){
-		return this.items;
+		return this.state.items;
 	}
 
-	createItem(phase_id, status, name, person, person_spare, spare){
-		const id = this.items.length+1;
-		this.items.push({
-			id,
-			phase_id,
-			status,
-			name,
-			person,
-			person_spare,
-			spare
-		});
-		this.emit('change');
-	}
-
-	changeItemStatus(id, status){
-		const it = this.items;
-		for (var index = 0; index < it.length; ++index) {
-			var phase_id;
-    		if(it[index].id==id){
-    			it[index].status = status;
-    		}
-		}
+	updateItems(res){
+		this.state.items = res;
 		this.emit('change');
 	}
 
@@ -114,8 +24,11 @@ class ItemsStore extends EventEmitter {
 			case "CREATE_ITEM": {
 				this.createItem(action.phase_id, action.status, action.name, action.person, action.person_spare, action.spare);
 			};break;
-			case "CHANGE_ITEM_STATUS": {
+			case "ITEM_STATUS_CHANGED": {
 				this.changeItemStatus(action.id, action.status);
+			};break;
+			case "FETCH_ITEMS_FROM_API": {
+				this.updateItems(action.res);
 			};break;
 		}
 	}

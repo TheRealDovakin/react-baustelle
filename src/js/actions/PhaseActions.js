@@ -23,3 +23,10 @@ export function fetchProcessFromApi(res){
 		res,
 	});
 }
+
+export function pahseCreated(res){
+	dispatcher.dispatch({
+		type: 	"PHASE_CREATED",
+		res,
+	});
+}
