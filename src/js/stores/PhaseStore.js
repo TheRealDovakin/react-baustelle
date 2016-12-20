@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-
 import dispatcher from "../dispatcher";
+import $ from "jquery";
 
 class PhaseStore extends EventEmitter {
 	constructor(){
@@ -14,30 +14,19 @@ class PhaseStore extends EventEmitter {
 		return this.state.items;
 	}
 
-	fetchPhasesFromApi(data){
-		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
-		this.emit('change');
+	getProcess(){
+		return this.state.process;
 	}
 
-	createPhase(process_id, status, name, r_nr){
-		const id = this.items.length+1;
-		this.items.push({
-			id,
-			process_id,
-			status,
-			name,
-			r_nr,
-		});
+	updatePhases(data){
+		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
 		this.emit('change');
 	}
 
 	handleActions(action){
 		switch(action.type){
-			case "CREATE_PHASE": {
-				this.createPhase(action.process_id, action.status, action.name, action.r_nr);
-			};break;
 			case "FETCH_PHASES_FROM_API": {
-				this.fetchPhasesFromApi(action.res);
+				this.updatePhases(action.res);
 			}
 		}
 	}

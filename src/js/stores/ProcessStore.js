@@ -1,5 +1,5 @@
-import { EventEmitter } from "events";
 import $ from "jquery";
+import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 
 class ProcessStore extends EventEmitter {
@@ -14,33 +14,12 @@ class ProcessStore extends EventEmitter {
 		return this.state.items;
 	}
 
-	fetchProcessesFromApi(data){
-		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
-		this.emit('change');
+	getProcess(id){
+		
 	}
 
-	createProcess(status, person_name, due_date, p_type){
-		var json_data = JSON.stringify({
-			status: status,
-			person_name: person_name, 
-			due_date: due_date, 
-			p_type: p_type
-		});
-		console.log(json_data);
-		$.ajax({
-			url: 'http://172.22.23.6:3000/processes/',
-			type: "POST",
-			contentType: "application/json",
-			data: json_data,
-			success: function(res){
-				document.location.href = '/';
-			},
-			error: function(res){
-				console.log(res);
-				//needs to be reaplaced
-				alert("Die eingabe war nicht volständdig oder korrekt");
-			}
-		});
+	fetchProcessesFromApi(data){
+		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
 		this.emit('change');
 	}
 
@@ -66,7 +45,8 @@ class ProcessStore extends EventEmitter {
 			};break;
 			case "FETCH_PROCESSES_FROM_API": {
 				this.fetchProcessesFromApi(action.res);
-			}
+			};break;
+			case "PROCESS_CREATED": {};break;
 		}
 	}
 }

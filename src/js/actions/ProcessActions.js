@@ -23,3 +23,10 @@ export function fetchItemsFromApi(res){
 		res,
 	});
 }
+
+export function processCreated(res){
+	dispatcher.dispatch({
+		type: 	"PROCESS_CREATED",
+		res,
+	});
+}

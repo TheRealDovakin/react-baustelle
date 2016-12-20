@@ -16,3 +16,10 @@ export function deletePahse(id){
 		id,
 	});
 }
+
+export function fetchProcessFromApi(res){
+	dispatcher.dispatch({
+		type: 	"FETCH_PROCESS_FROM_API",
+		res,
+	});
+}
