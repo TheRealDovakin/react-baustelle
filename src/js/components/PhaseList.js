@@ -1,5 +1,5 @@
 import React from "react";
-import $ from "jquery";
+import "whatwg-fetch";
 
 import dispatcher from "../dispatcher";
 import Phase from "./Phase";
@@ -17,7 +17,7 @@ export default class PhaseList extends React.Component{
 		this.fetchProcess = this.fetchProcess.bind(this);
 		this.initProcesses = this.initProcesses.bind(this);
 		this.state = {
-			items: [],
+			items: undefined,
 			process: undefined,
 		};
 	}
@@ -40,30 +40,46 @@ export default class PhaseList extends React.Component{
 		//TODO: replace confirm with custom dialog
 		if(confirm("Wenn Sie auf OK drücken wird dieser Process aus der Datenbank gelöscht")){
 			const processId = this.props.location.pathname.split("/")[2];
-			$.ajax({
-			url: 'http://172.22.23.6:3000/processes/'+processId,
-			type: "DELETE",
-			context: this,
-			contentType: 'application/json',
-			dataType: "json",
-			success: function(res){
-				document.location.href = '/';
-			}
-		});
+			var myInit = { method: 'DELETE' }
+			fetch('http://172.22.23.6:3000/processes/'+processId, myInit).then(function(res){
+				if(res.ok) document.location.href = '/';
+				else{
+					console.log('error in delete Process');
+					console.log(res);
+				}
+			});
 		}
 	}
 
 	fetchPhases(){
-		$.ajax({
-			url: 'http://172.22.23.6:3000/phases',
-			type: "GET",
-			contentType: 'application/json',
-			dataType: "json",
-			success: function(res){
-				dispatcher.dispatch({
-					type: 	"FETCH_PHASES_FROM_API",
-					res,
-				});
+		fetch('http://172.22.23.6:3000/phases').then(function(res){
+			if(res.ok){
+				res.json().then(function(res){	
+					dispatcher.dispatch({
+						type: 	"FETCH_PHASES_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log('error in fetch Phases');
+				console.log(res);
+			}
+		});
+	}
+
+	fetchProcess(){
+		const processId = this.props.location.pathname.split("/")[2];
+		var self = this;
+		fetch('http://172.22.23.6:3000/processes/'+processId).then(function(res){
+			if(res.ok){
+				res.json().then(function(res){	
+					self.setProcess(res);
+				})
+			}
+			else{
+				console.log('error in fetch Process');
+				console.log(res);
 			}
 		});
 	}
@@ -76,49 +92,8 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
-	fetchProcess(){
-		const processId = this.props.location.pathname.split("/")[2];
-		$.ajax({
-			url: 'http://172.22.23.6:3000/processes/'+processId,
-			type: "GET",
-			context: this,
-			contentType: 'application/json',
-			dataType: "json",
-			success: function(res){
-				this.setProcess(res);
-			}
-		});
-	}
-
 	initProcesses(){
-		const processId = this.props.location.pathname.split("/")[2];
-		console.log(processId);
-
-		var json_data = JSON.stringify({
-			name: "Neue Phase",
-			process_id: processId, 
-			status: 1,
-			r_nr: 1,
-		});
-		$.ajax({
-			url: 'http://172.22.23.6:3000/phases/',
-			type: "POST",
-			contentType: "application/json",
-			data: json_data,
-			success: function(res){
-				console.log("phase created");
-				dispatcher.dispatch({
-					type: 	"PHASE_CREATED",
-					res,
-				})
-			},
-			error: function(res){
-				console.log(res);
-				//needs to be reaplaced
-				alert("Die Eingabe war nicht vollständig oder korrekt");
-			}
-		});
-
+		console.log('init')
 	}
 
 	setProcess(res){
@@ -130,47 +105,53 @@ export default class PhaseList extends React.Component{
 	}
 
 	render(){
-
 		const { items } = this.state;
-		var process;
+		if(items!=undefined){
+			var process;
+			if(this.state.process != undefined){
+				process = this.state.process;
+			}else{
+				process = {
+					person_name: "Babo",
+				}
+			}
 
-		if(this.state.process != undefined){
-			process = this.state.process;
+			items.sort(function(a, b){
+			    var keyA = a.r_nr,
+			        keyB = b.r_nr;
+			    if(keyA < keyB) return -1;
+			    if(keyA > keyB) return 1;
+			    return 0;
+			});
+
+			const processId = this.props.location.pathname.split("/")[2];
+			const ItemComponents = items.map((item) => {
+				if(item.process_id==processId){
+					return <Phase key={item._id} {...item}/>;
+				}
+				
+			});
+
+			return(
+				
+				<div>
+					<div class="col-md-12">
+						<h2>{process.person_name}</h2>
+						<a class="btn btn-default" 
+						onClick={() => this.initProcesses()}>Initialise</a>
+					</div>
+					<div> {ItemComponents} </div>
+					<div class="col-md-12">
+						<a class="btn btn-danger" onClick={() => this.delete()}>Prozess löschen</a>
+					</div>
+				</div>
+			);
 		}else{
-			process = {
-				person_name: "Babo",
-			}
+			return(
+				<div class="cssload-container">
+					<div class="cssload-speeding-wheel"></div>
+				</div>
+			)
 		}
-
-		items.sort(function(a, b){
-		    var keyA = a.r_nr,
-		        keyB = b.r_nr;
-		    if(keyA < keyB) return -1;
-		    if(keyA > keyB) return 1;
-		    return 0;
-		});
-		
-		const processId = this.props.location.pathname.split("/")[2];
-		const ItemComponents = items.map((item) => {
-			if(item.process_id==processId){
-				return <Phase key={item._id} {...item}/>;
-			}
-			
-		});
-
-		return(
-			
-			<div>
-				<div class="col-md-12">
-					<h2>{process.person_name}</h2>
-					<a class="btn btn-default" 
-					onClick={() => this.initProcesses()}>Initialise</a>
-				</div>
-				<div> {ItemComponents} </div>
-				<div class="col-md-12">
-					<a class="btn btn-danger" onClick={() => this.delete()}>Prozess löschen</a>
-				</div>
-			</div>
-		);
 	}
 }

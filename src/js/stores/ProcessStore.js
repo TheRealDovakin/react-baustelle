@@ -18,7 +18,7 @@ class ProcessStore extends EventEmitter {
 		
 	}
 
-	fetchProcessesFromApi(data){
+	updateProcesses(data){
 		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
 		this.emit('change');
 	}
@@ -44,7 +44,7 @@ class ProcessStore extends EventEmitter {
 				this.changeProcessStatus(action.id, action.status);
 			};break;
 			case "FETCH_PROCESSES_FROM_API": {
-				this.fetchProcessesFromApi(action.res);
+				this.updateProcesses(action.res);
 			};break;
 			case "PROCESS_CREATED": {};break;
 		}

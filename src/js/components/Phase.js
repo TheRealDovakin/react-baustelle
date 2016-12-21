@@ -1,5 +1,5 @@
 import React from "react";
-import $ from "jquery";
+import "whatwg-fetch";
 import dispatcher from "../dispatcher";
 
 import Title from "./Header/Title";
@@ -16,7 +16,7 @@ export default class Phase extends React.Component{
 		this.fetchItems = this.fetchItems.bind(this);
 		this.getItems = this.getItems.bind(this);
 		this.state = {
-			items: [],
+			items: undefined,
 			progress: 0.0,
 		};
 	}
@@ -62,16 +62,21 @@ export default class Phase extends React.Component{
 	}
 
 	fetchItems(){
-		$.ajax({
-			url: 'http://172.22.23.6:3000/items',
-			type: "GET",
-			contentType: 'application/json',
-			dataType: "json",
-			success: function(res){
-				dispatcher.dispatch({
-					type: 	"FETCH_ITEMS_FROM_API",
-					res,
-				});
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var myInit = { method: 'GET', headers: myHeaders }
+		fetch('http://172.22.23.6:3000/items').then(function(res){
+			if(res.ok){
+				res.json().then(function(res){	
+					dispatcher.dispatch({
+						type: 	"FETCH_ITEMS_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log('error in fetch Items');
+				console.log(res);
 			}
 		});
 	}
@@ -83,33 +88,41 @@ export default class Phase extends React.Component{
 
 		const { _id, status, name, r_nr } = this.props;
 		const { items } = this.state;
-		var progress = this.getProgress();
-		const ItemComponents = items.map((item) => {
-			if(item.phase_id==_id){
-				return <Item key={item._id} {...item}/>;
-			}
-		});
+		if(items!=undefined){
+			var progress = this.getProgress();
+			const ItemComponents = items.map((item) => {
+				if(item.phase_id==_id){
+					return <Item key={item._id} {...item}/>;
+				}
+			});
 
-		const progressStyle = {
-			width: progress+'%',
-		};
+			const progressStyle = {
+				width: progress+'%',
+			};
 
-		const phaseListStyle = {
-			backgroundColor: '#eeeecc',
-		};
+			const phaseListStyle = {
+				backgroundColor: '#eeeecc',
+			};
 
-		return(
-			<div class="col-md-12 panel panel-default disabled" style={phaseListStyle}>
-				<Title title={this.props.title} />
-				<div><h3>{name}</h3></div>	
-				<div> {ItemComponents} </div>
-				<h3><span class="">Fortschitt</span></h3>
-				<div class="progress">
-				  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
-				    {progress} %
-				  </div>
+			return(
+				<div class="col-md-12 panel panel-default disabled" style={phaseListStyle}>
+					<Title title={this.props.title} />
+					<div><h3>{name}</h3></div>	
+					<div> {ItemComponents} </div>
+					<h3><span class="">Fortschitt</span></h3>
+					<div class="progress">
+					  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
+					    {progress} %
+					  </div>
+					</div>
 				</div>
-			</div>
-		);
+			);
+		}else{
+			return(
+				<div class="cssload-container">
+					<div class="cssload-speeding-wheel"></div>
+				</div>
+			)
+		}
 	}
 }

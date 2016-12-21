@@ -1,5 +1,5 @@
 import React from "react";
-import $ from "jquery";
+import "whatwg-fetch";
 
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
@@ -21,7 +21,7 @@ export default class NewProcessPage extends React.Component{
 
 	   this.handleNameChange = this.handleNameChange.bind(this);
 	   this.handleDueDateChange = this.handleDueDateChange.bind(this);
-	   this.handlep_typeChange = this.handlep_typeChange.bind(this);
+	   this.handleTypeChange = this.handleTypeChange.bind(this);
 	}
 
 	handleNameChange(event) {
@@ -40,7 +40,7 @@ export default class NewProcessPage extends React.Component{
     	});
   	}
 
-  	handlep_typeChange(event) {
+  	handleTypeChange(event) {
     	this.setState({
     		name: this.state.name,
     		due_date: this.state.due_date,
@@ -55,23 +55,19 @@ export default class NewProcessPage extends React.Component{
 			due_date: due_date, 
 			p_type: p_type
 		});
-		console.log(json_data);
-		$.ajax({
-			url: 'http://172.22.23.6:3000/processes/',
-			type: "POST",
-			contentType: "application/json",
-			data: json_data,
-			success: function(res){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
+		fetch('http://172.22.23.6:3000/processes/', myInit).then(function(res){
+			if(res.ok){ 
 				dispatcher.dispatch({type: "PROCESS_CREATED"});
 				document.location.href = '/';
-			},
-			error: function(res){
+			}
+			else{
+				console.log('error in create Process');
 				console.log(res);
-				//needs to be reaplaced
-				alert("Die Eingabe war nicht vollständig oder korrekt");
 			}
 		});
-
 	}	
 
 	componentDidMount(){
@@ -99,7 +95,7 @@ export default class NewProcessPage extends React.Component{
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">Typ</label>
 				    <div class="col-sm-10">
-				      <select class="form-control" value={this.state.p_type} onChange={this.handlep_typeChange}>
+				      <select class="form-control" value={this.state.p_type} onChange={this.handleTypeChange}>
 						  <option>Vertieb</option>
 						  <option>Techniker</option>
 						  <option>Zentrale</option>
