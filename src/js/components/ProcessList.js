@@ -90,6 +90,12 @@ export default class ProcessList extends React.Component{
 					<div class="" >
 						<a class="btn btn-info btn-lg" style={btnStyle} href="#/newProcess">neuen Prozess anlegen</a>
 					</div>
+					<form>
+					  <div class="form-group">
+					    <label>Suche</label>
+					    <input class="form-control"  placeholder="Suchbegriff"></input>
+					  </div>
+					</form>
 					<div class="col-md-12"> {ItemComponents} </div>
 				</div>
 			);

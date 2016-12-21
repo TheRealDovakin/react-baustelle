@@ -1,6 +1,5 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
-import $ from "jquery";
 
 class PhaseStore extends EventEmitter {
 	constructor(){
