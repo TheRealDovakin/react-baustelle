@@ -1,5 +1,6 @@
 //js
 import React from "react";
+import _ from "underscore";
 import { withRouter } from "react-router"
 import "whatwg-fetch";
 
@@ -8,6 +9,7 @@ import "../../css/spinner.css"
 
 //own files
 import dispatcher from "../dispatcher";
+import ItemsStore from "../stores/ItemsStore"
 import Phase from "./Phase";
 import PhaseStore from "../stores/PhaseStore"
 
@@ -15,45 +17,107 @@ export default class PhaseList extends React.Component{
 
 	constructor(){
 		super();
-		this.delete = this.delete.bind(this);
-		this.getPhases = this.getPhases.bind(this);
-		this.setProcess = this.setProcess.bind(this);
+		this.deleteItems = this.deleteItems.bind(this);
+		this.deletePhases = this.deletePhases.bind(this);
+		this.deleteProcess = this.deleteProcess.bind(this);
+		this.fetchItems = this.fetchItems.bind(this);
 		this.fetchPhases = this.fetchPhases.bind(this);
 		this.fetchProcess = this.fetchProcess.bind(this);
-		this.initProcesses = this.initProcesses.bind(this);
+		this.getItems = this.getItems.bind(this);
+		this.getPhases = this.getPhases.bind(this);
+		this.setProcess = this.setProcess.bind(this);
 		this.state = {
 			items: undefined,
+			phases: undefined,
 			process: undefined,
 		};
 	}
 
 	componentWillMount(){
+		ItemsStore.on("change", this.getItems);
 		PhaseStore.on("change", this.getPhases);
 	}
 
 	componentWillUnmount(){
+		ItemsStore.removeListener("change", this.getItems);
 		PhaseStore.removeListener("change", this.getPhases);
 	}
 
 	componentDidMount(){
+		this.fetchItems();
 		this.fetchPhases();
 		this.fetchProcess();
 		this.setProcess();
 	}
 
-	delete(){
+	deleteProcess(){
 		//TODO: replace confirm with custom dialog
 		if(confirm("Wenn Sie auf OK drücken wird dieser Process aus der Datenbank gelöscht")){
 			const processId = this.props.location.pathname.split("/")[2];
+			this.deletePhases();
 			var myInit = { method: 'DELETE' }
 			fetch('http://172.22.23.6:3000/processes/'+processId, myInit).then(function(res){
-				if(res.ok) document.location.href = '/';
-				else{
+				if(res.ok){
+					document.location.href = '/';
+					
+				}else{
 					console.log('error in delete Process');
 					console.log(res);
 				}
 			});
 		}
+	}
+
+	deleteItems(phase_id){
+		const self = this;
+		_.each(self.state.items, function(item){
+			if(item.phase_id==phase_id){
+				var myInit = { method: 'DELETE' }
+				fetch('http://172.22.23.6:3000/items/'+item._id, myInit).then(function(res){
+					if(res.ok) {}
+					else{
+						console.log('error in delete Process');
+						console.log(res);
+					}
+				});
+			}
+		});
+	}
+
+	deletePhases(){
+		const self = this;
+		_.each(self.state.phases, function(phase){
+			if(phase.process_id==self.state.process._id){
+				self.deleteItems(phase._id);
+				var myInit = { method: 'DELETE' }
+				fetch('http://172.22.23.6:3000/phases/'+phase._id, myInit).then(function(res){
+					if(res.ok){
+						
+					}
+					else{
+						console.log('error in delete Process');
+						console.log(res);
+					}
+				});
+			}
+		});
+	}
+
+	fetchItems(){
+		fetch('http://172.22.23.6:3000/items').then(function(res){
+			if(res.ok){
+				res.json().then(function(res){	
+					dispatcher.dispatch({
+						type: 	"FETCH_ITEMS_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log('error in fetch Items');
+				console.log(res);
+			}
+		});
 	}
 
 	fetchPhases(){
@@ -89,29 +153,33 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
-	getPhases(){
-		const process = this.state.process;
+	getItems(){
 		this.setState({
-			items: PhaseStore.getAll(),
-			process: process,
+			items: ItemsStore.getAll(),
+			phases: this.state.phases,
+			process: this.state.process,
 		});
 	}
 
-	initProcesses(){
-		console.log('init')
+	getPhases(){
+		this.setState({
+			items: this.state.items,
+			phases: PhaseStore.getAll(),
+			process: this.state.process,
+		});
 	}
 
 	setProcess(res){
-		const items = this.state.items;
 		this.setState({
-			items: items,
+			items: this.state.items,
+			phases: this.state.phases,
 			process: res,
 		});
 	}
 
 	render(){
-		const { items } = this.state;
-		if(items!=undefined){
+		const { phases } = this.state;
+		if(phases!=undefined){
 			var process;
 			if(this.state.process != undefined){
 				process = this.state.process;
@@ -121,7 +189,7 @@ export default class PhaseList extends React.Component{
 				}
 			}
 
-			items.sort(function(a, b){
+			phases.sort(function(a, b){
 			    var keyA = a.r_nr,
 			        keyB = b.r_nr;
 			    if(keyA < keyB) return -1;
@@ -130,7 +198,7 @@ export default class PhaseList extends React.Component{
 			});
 
 			const processId = this.props.location.pathname.split("/")[2];
-			const ItemComponents = items.map((item) => {
+			const ItemComponents = phases.map((item) => {
 				if(item.process_id==processId){
 					return <Phase key={item._id} {...item}/>;
 				}
@@ -142,12 +210,11 @@ export default class PhaseList extends React.Component{
 				<div>
 					<div class="col-md-12">
 						<h2>{process.person_name}</h2>
-						<a class="btn btn-default" 
-						onClick={() => this.initProcesses()}>Initialise</a>
+						<button onClick={this.deletePhases}>JO</button>
 					</div>
 					<div> {ItemComponents} </div>
 					<div class="col-md-12">
-						<a class="btn btn-danger" onClick={() => this.delete()}>Prozess löschen</a>
+						<a class="btn btn-danger" onClick={() => this.deleteProcess()}>Prozess löschen</a>
 					</div>
 				</div>
 			);
