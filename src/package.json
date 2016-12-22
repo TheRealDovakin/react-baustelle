@@ -19,6 +19,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "body-parser": "^1.15.2",
+    "css-loader": "^0.26.1",
     "express": "^4.14.0",
     "fetch": "^1.1.0",
     "flatpickr": "^2.2.4",
@@ -32,6 +33,7 @@
     "react": "^15.4.1",
     "react-datepicker": "^0.39.0",
     "react-dom": "^15.4.1",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
     "whatwg-fetch": "^2.0.1"

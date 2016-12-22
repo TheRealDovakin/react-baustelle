@@ -1,6 +1,11 @@
+//js
 import React from "react";
 import "whatwg-fetch";
 
+//css
+import "../../css/spinner.css"
+
+//own files
 import dispatcher from "../dispatcher";
 import Process from "./Process";
 import ProcessStore from "../stores/ProcessStore";

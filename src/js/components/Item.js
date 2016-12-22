@@ -1,4 +1,10 @@
+//js
 import React from "react";
+
+//css
+import "../../css/spinner.css"
+
+//own files
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
 

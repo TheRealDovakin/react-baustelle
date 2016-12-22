@@ -1,7 +1,12 @@
+//js
 import React from "react";
 import "whatwg-fetch";
-import dispatcher from "../dispatcher";
 
+//css
+import "../../css/spinner.css"
+
+//own files
+import dispatcher from "../dispatcher";
 import Title from "./Header/Title";
 import Item from "./Item";
 import ItemsStore from "../stores/ItemsStore";

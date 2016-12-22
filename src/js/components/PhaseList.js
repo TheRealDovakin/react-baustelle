@@ -1,10 +1,15 @@
+//js
 import React from "react";
+import { withRouter } from "react-router"
 import "whatwg-fetch";
 
+//cs
+import "../../css/spinner.css"
+
+//own files
 import dispatcher from "../dispatcher";
 import Phase from "./Phase";
 import PhaseStore from "../stores/PhaseStore"
-import { withRouter } from "react-router"
 
 export default class PhaseList extends React.Component{
 

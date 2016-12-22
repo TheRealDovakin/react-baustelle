@@ -1,13 +1,18 @@
+//js
 import React from "react";
 import "whatwg-fetch";
+import flatpickr from "flatpickr";
 
+//css
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
+//own files
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
 import * as PhaseActions from "../actions/PhaseActions";
 import PhaseStore from '../stores/PhaseStore';
 import * as ProcessActions from "../actions/ProcessActions";
 import ProcessStore from '../stores/ProcessStore';
-import flatpickr from "flatpickr";
 
 
 export default class NewProcessPage extends React.Component{
