@@ -63,6 +63,7 @@ export default class PhaseList extends React.Component{
 				}else{
 					console.log('error in delete Process');
 					console.log(res);
+					
 				}
 			});
 		}
