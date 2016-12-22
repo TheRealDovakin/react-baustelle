@@ -59,7 +59,6 @@ export default class ProcessList extends React.Component{
     		items: this.state.items,
     	});
     	this.forceUpdate();
-
 	}
 
 	render(){
