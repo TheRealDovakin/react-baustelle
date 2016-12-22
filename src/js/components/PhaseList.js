@@ -50,25 +50,6 @@ export default class PhaseList extends React.Component{
 		this.setProcess();
 	}
 
-	deleteProcess(){
-		//TODO: replace confirm with custom dialog
-		if(confirm("Wenn Sie auf OK drücken wird dieser Process aus der Datenbank gelöscht")){
-			const processId = this.props.location.pathname.split("/")[2];
-			this.deletePhases();
-			var myInit = { method: 'DELETE' }
-			fetch('http://172.22.23.6:3000/processes/'+processId, myInit).then(function(res){
-				if(res.ok){
-					document.location.href = '/';
-					
-				}else{
-					console.log('error in delete Process');
-					console.log(res);
-					
-				}
-			});
-		}
-	}
-
 	deleteItems(phase_id){
 		const self = this;
 		_.each(self.state.items, function(item){
@@ -102,6 +83,24 @@ export default class PhaseList extends React.Component{
 				});
 			}
 		});
+	}
+
+	deleteProcess(){
+		//TODO: replace confirm with custom dialog
+		if(confirm("Wenn Sie auf OK drücken wird dieser Process aus der Datenbank gelöscht")){
+			const processId = this.props.location.pathname.split("/")[2];
+			this.deletePhases();
+			var myInit = { method: 'DELETE' }
+			fetch('http://172.22.23.6:3000/processes/'+processId, myInit).then(function(res){
+				if(res.ok){
+					document.location.href = '/';
+					
+				}else{
+					console.log('error in delete Process');
+					console.log(res);
+				}
+			});
+		}
 	}
 
 	fetchItems(){
@@ -211,7 +210,6 @@ export default class PhaseList extends React.Component{
 				<div>
 					<div class="col-md-12">
 						<h2>{process.person_name}</h2>
-						<button onClick={this.deletePhases}>JO</button>
 					</div>
 					<div> {ItemComponents} </div>
 					<div class="col-md-12">

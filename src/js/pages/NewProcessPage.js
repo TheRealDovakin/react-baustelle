@@ -35,7 +35,6 @@ export default class NewProcessPage extends React.Component{
 	}
 
 	componentDidMount(){
-		console.log("mount");
 		this.setDatepicker();
 	}
 
@@ -98,9 +97,8 @@ export default class NewProcessPage extends React.Component{
   	}
 
   	postPhase(res){
-  		console.log(res._id);
   		const json_data = JSON.stringify({
-  			name: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  			name: "Neue Phase",
   			process_id: res._id,
   			status: 1,
   			r_nr: 1,
@@ -124,7 +122,6 @@ export default class NewProcessPage extends React.Component{
   	}
 
   	postItem(res){
-  		console.log(res._id);
   		const json_data = JSON.stringify({
 			phase_id: res._id,
 			status: 3,

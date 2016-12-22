@@ -35,9 +35,7 @@ class ProcessStore extends EventEmitter {
 	handleActions(action){
 		switch(action.type){
 			case "CREATE_PROCESS": {
-				console.log("create-process-store");
 				this.createProcess(action.status, action.person_name, action.due_date, action.p_type);
-				console.log("create-process-store-actions");
 			};break;
 			case "CHANGE_PROCESS_STATUS": {
 				this.changeProcessStatus(action.id, action.status);
