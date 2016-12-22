@@ -10,10 +10,12 @@ export default class ProcessList extends React.Component{
 
 	constructor(){
 		super();
-		this.getProcesses = this.getProcesses.bind(this);
 		this.fetchProcesses = this.fetchProcesses.bind(this);
+		this.getProcesses = this.getProcesses.bind(this);
+		this.handleSearchChange = this.handleSearchChange.bind(this);
 		this.state = {
 			items: undefined,
+			search_filter: "",
 		};
 	}
 
@@ -51,6 +53,15 @@ export default class ProcessList extends React.Component{
 		});
 	}
 
+	handleSearchChange(event){
+		this.setState({
+    		search_filter: event.target.value,
+    		items: this.state.items,
+    	});
+    	this.forceUpdate();
+
+	}
+
 	render(){
 
 		const btnStyle={
@@ -79,7 +90,9 @@ export default class ProcessList extends React.Component{
 			
 			
 			const ItemComponents = items.map((item) => {
-				return <Process key={item._id} {...item}/>;
+				if(item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
+					return <Process key={item._id} {...item}/>;
+				}
 			});
 
 			return(
@@ -93,7 +106,7 @@ export default class ProcessList extends React.Component{
 					<form>
 					  <div class="form-group">
 					    <label>Suche</label>
-					    <input class="form-control"  placeholder="Suchbegriff"></input>
+					    <input class="form-control"  placeholder="Suchbegriff" onChange={this.handleSearchChange}></input>
 					  </div>
 					</form>
 					<div class="col-md-12"> {ItemComponents} </div>
