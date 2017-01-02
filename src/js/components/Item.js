@@ -1,4 +1,5 @@
 //js
+import Constants from '../values/constants';
 import React from "react";
 
 //css
@@ -7,6 +8,7 @@ import "../../css/spinner.css"
 //own files
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
+import PhaseStore from '../stores/PhaseStore';
 
 export default class Item extends React.Component{
 
@@ -23,8 +25,14 @@ export default class Item extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
 		var self = this;
-		fetch('http://172.22.23.6:3000/items/'+_id, myInit).then(function(res){
-			if(res.ok) res.json().then(function(res){ self.fetchItems(); });
+		fetch(Constants.restApiPath+'items/'+_id, myInit).then(function(res){
+			if(res.ok) res.json().then(function(res){
+				self.fetchItems();
+				dispatcher.dispatch({
+					type: 'ITEM_STATUS_CHANGED',
+					res,
+				})
+			});
 			else{
 				console.log('error in set Items.Status');
 				console.log(res);
@@ -33,11 +41,11 @@ export default class Item extends React.Component{
 	}
 
 	fetchItems(){
-		fetch('http://172.22.23.6:3000/items').then(function(res){
+		fetch(Constants.restApiPath+'items').then(function(res){
 			if(res.ok){
-				res.json().then(function(res){	
+				res.json().then(function(res){
 					dispatcher.dispatch({
-						type: 	"FETCH_ITEMS_FROM_API",
+						type: "FETCH_ITEMS_FROM_API",
 						res,
 					});
 				})
@@ -60,7 +68,7 @@ export default class Item extends React.Component{
 				return(
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h4>{name}   
+						<h4>{name}
 							<a onClick={() => this.changeItemStatus(this, _id, 2)} class="glyphicon glyphicon-chevron-up"></a>
 						</h4>
 					</div>
@@ -71,17 +79,17 @@ export default class Item extends React.Component{
 						<li class="list-group-item list-group-item-success"><a class="btn btn-default" onClick={
 							() => this.changeItemStatus(this, _id, 3)
 						}>auf NICHT ERLEDIGT setzen</a></li>
-					</ul>	
+					</ul>
 				</div>
 				);
 			}if(status==2){//erledigt
 				return(
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h4>{name}   
+						<h4>{name}
 							<a onClick={() => this.changeItemStatus(this, _id, 1)} class="glyphicon glyphicon-chevron-down">  </a>
 						</h4>
-					</div>	
+					</div>
 				</div>
 				);
 			}if(status==3){//nicht erledigt
@@ -98,7 +106,7 @@ export default class Item extends React.Component{
 									() => this.changeItemStatus(this, _id, 2)
 								}>auf ERLEDIGT setzen</a>
 							</li>
-						</ul>	
+						</ul>
 					</div>
 					);
 				}else{
@@ -114,7 +122,7 @@ export default class Item extends React.Component{
 									() => this.changeItemStatus(this, _id, 2)
 								}>auf ERLEDIGT setzen</a>
 							</li>
-						</ul>	
+						</ul>
 					</div>
 					);
 				}
@@ -127,7 +135,7 @@ export default class Item extends React.Component{
 						<li class="list-group-item disabled"><a>Verantwortlicher: {person}</a></li>
 						<li class="list-group-item disabled"><a>Vertretung: {person_spare}</a></li>
 						<li class="list-group-item disabled"><a class="btn btn-success disabled">auf ERLEDIGT setzen</a></li>
-					</ul>	
+					</ul>
 				</div>
 				);
 			}
@@ -137,7 +145,7 @@ export default class Item extends React.Component{
 					<div class="cssload-speeding-wheel"></div>
 				</div>
 			)
-		}	
-		
+		}
+
 	}
 }

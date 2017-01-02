@@ -1,8 +1,9 @@
 //js
+import Constants from '../values/constants';
 import React from "react";
-import _ from "underscore";
-import { withRouter } from "react-router"
 import "whatwg-fetch";
+import { withRouter } from "react-router"
+import _ from "underscore";
 
 //cs
 import "../../css/spinner.css"
@@ -17,6 +18,9 @@ export default class PhaseList extends React.Component{
 
 	constructor(){
 		super();
+
+		dispatcher.register(this.handleActions.bind(this));
+
 		this.deleteItems = this.deleteItems.bind(this);
 		this.deletePhases = this.deletePhases.bind(this);
 		this.deleteProcess = this.deleteProcess.bind(this);
@@ -25,6 +29,7 @@ export default class PhaseList extends React.Component{
 		this.fetchProcess = this.fetchProcess.bind(this);
 		this.getItems = this.getItems.bind(this);
 		this.getPhases = this.getPhases.bind(this);
+		this.setPhaseStatus = this.setPhaseStatus.bind(this);
 		this.setProcess = this.setProcess.bind(this);
 		this.state = {
 			items: undefined,
@@ -55,7 +60,7 @@ export default class PhaseList extends React.Component{
 		_.each(self.state.items, function(item){
 			if(item.phase_id==phase_id){
 				var myInit = { method: 'DELETE' }
-				fetch('http://172.22.23.6:3000/items/'+item._id, myInit).then(function(res){
+				fetch(Constants.restApiPath+'items/'+item._id, myInit).then(function(res){
 					if(res.ok) {}
 					else{
 						console.log('error in delete Process');
@@ -72,9 +77,9 @@ export default class PhaseList extends React.Component{
 			if(phase.process_id==self.state.process._id){
 				self.deleteItems(phase._id);
 				var myInit = { method: 'DELETE' }
-				fetch('http://172.22.23.6:3000/phases/'+phase._id, myInit).then(function(res){
+				fetch(Constants.restApiPath+'phases/'+phase._id, myInit).then(function(res){
 					if(res.ok){
-						
+
 					}
 					else{
 						console.log('error in delete Process');
@@ -91,10 +96,10 @@ export default class PhaseList extends React.Component{
 			const processId = this.props.location.pathname.split("/")[2];
 			this.deletePhases();
 			var myInit = { method: 'DELETE' }
-			fetch('http://172.22.23.6:3000/processes/'+processId, myInit).then(function(res){
+			fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
 				if(res.ok){
 					document.location.href = '/';
-					
+
 				}else{
 					console.log('error in delete Process');
 					console.log(res);
@@ -104,9 +109,9 @@ export default class PhaseList extends React.Component{
 	}
 
 	fetchItems(){
-		fetch('http://172.22.23.6:3000/items').then(function(res){
+		fetch(Constants.restApiPath+'items').then(function(res){
 			if(res.ok){
-				res.json().then(function(res){	
+				res.json().then(function(res){
 					dispatcher.dispatch({
 						type: 	"FETCH_ITEMS_FROM_API",
 						res,
@@ -121,9 +126,9 @@ export default class PhaseList extends React.Component{
 	}
 
 	fetchPhases(){
-		fetch('http://172.22.23.6:3000/phases').then(function(res){
+		fetch(Constants.restApiPath+'phases').then(function(res){
 			if(res.ok){
-				res.json().then(function(res){	
+				res.json().then(function(res){
 					dispatcher.dispatch({
 						type: 	"FETCH_PHASES_FROM_API",
 						res,
@@ -140,9 +145,9 @@ export default class PhaseList extends React.Component{
 	fetchProcess(){
 		const processId = this.props.location.pathname.split("/")[2];
 		var self = this;
-		fetch('http://172.22.23.6:3000/processes/'+processId).then(function(res){
+		fetch(Constants.restApiPath+'processes/'+processId).then(function(res){
 			if(res.ok){
-				res.json().then(function(res){	
+				res.json().then(function(res){
 					self.setProcess(res);
 				})
 			}
@@ -167,6 +172,20 @@ export default class PhaseList extends React.Component{
 			phases: PhaseStore.getAll(),
 			process: this.state.process,
 		});
+	}
+
+	handleActions(action){
+		switch(action.type){
+			case "ITEM_STATUS_CHANGED": {
+			};break;
+			case "PHASE_DONE": {
+				this.setPhaseStatus(action.phase_id);
+			};break;
+		}
+	}
+
+	setPhaseStatus(phase_id){
+		console.log(phase_id);
 	}
 
 	setProcess(res){
@@ -202,13 +221,14 @@ export default class PhaseList extends React.Component{
 				if(item.process_id==processId){
 					return <Phase key={item._id} {...item}/>;
 				}
-				
+
 			});
 
 			return(
-				
 				<div>
 					<div class="col-md-12">
+						{/* space for fixed header */}
+						<h1> .  </h1>
 						<h2>{process.person_name}</h2>
 					</div>
 					<div> {ItemComponents} </div>

@@ -21,12 +21,6 @@ class ItemsStore extends EventEmitter {
 
 	handleActions(action){
 		switch(action.type){
-			case "CREATE_ITEM": {
-				this.createItem(action.phase_id, action.status, action.name, action.person, action.person_spare, action.spare);
-			};break;
-			case "ITEM_STATUS_CHANGED": {
-				this.changeItemStatus(action.id, action.status);
-			};break;
 			case "FETCH_ITEMS_FROM_API": {
 				this.updateItems(action.res);
 			};break;

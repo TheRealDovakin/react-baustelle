@@ -1,4 +1,5 @@
 //js
+import Constants from '../values/constants';
 import React from "react";
 import "whatwg-fetch";
 
@@ -37,9 +38,9 @@ export default class ProcessList extends React.Component{
 	}
 
 	fetchProcesses(){
-		fetch('http://172.22.23.6:3000/processes').then(function(res){
+		fetch(Constants.restApiPath+'processes').then(function(res){
 			if(res.ok){
-				res.json().then(function(res){	
+				res.json().then(function(res){
 					dispatcher.dispatch({
 						type: 	"FETCH_PROCESSES_FROM_API",
 						res,
@@ -75,7 +76,7 @@ export default class ProcessList extends React.Component{
 		const { items } = this.state;
 
 		if(items!=undefined){
-	
+
 			items.sort(function(a, b){
 			    var keyA = a.due_date,
 			        keyB = b.due_date;
@@ -91,8 +92,8 @@ export default class ProcessList extends React.Component{
 			    if(keyA > keyB) return 1;
 			    return 0;
 			});
-			
-			
+
+
 			const ItemComponents = items.map((item) => {
 				if(item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
 					return <Process key={item._id} {...item}/>;
@@ -102,6 +103,8 @@ export default class ProcessList extends React.Component{
 			return(
 				<div>
 					<div class="col-md-12">
+						{/* space for fixed header */}
+						<h1> .  </h1>
 						<h2>Liste aller laufenden und abgeschlossenen Eintritts- und Austrittsprozesse</h2>
 					</div>
 					<div class="" >

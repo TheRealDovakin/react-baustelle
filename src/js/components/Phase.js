@@ -1,4 +1,5 @@
 //js
+import Constants from '../values/constants';
 import React from "react";
 import "whatwg-fetch";
 
@@ -15,7 +16,7 @@ import * as PhaseActions from "../actions/PhaseActions";
 
 
 export default class Phase extends React.Component{
-	
+
 	constructor(props){
 		super(props);
 		this.fetchItems = this.fetchItems.bind(this);
@@ -53,7 +54,7 @@ export default class Phase extends React.Component{
     			max += 1;
     			if(item.status==1||item.status==2){
     				sumDone += 1;
-    			}	
+    			}
 			}
 		}
 		return Math.round((100/max)*sumDone);
@@ -70,9 +71,9 @@ export default class Phase extends React.Component{
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'GET', headers: myHeaders }
-		fetch('http://172.22.23.6:3000/items').then(function(res){
+		fetch(Constants.restApiPath+'items').then(function(res){
 			if(res.ok){
-				res.json().then(function(res){	
+				res.json().then(function(res){
 					dispatcher.dispatch({
 						type: 	"FETCH_ITEMS_FROM_API",
 						res,
@@ -85,12 +86,8 @@ export default class Phase extends React.Component{
 			}
 		});
 	}
-	createItem(){
-		
-	}
 
 	render(){
-
 		const { _id, status, name, r_nr } = this.props;
 		const { items } = this.state;
 		if(items!=undefined){
@@ -105,23 +102,50 @@ export default class Phase extends React.Component{
 				width: progress+'%',
 			};
 
-			const phaseListStyle = {
-				backgroundColor: '#eeeecc',
+			const phaseListStyleBlue = {
+				backgroundColor: '#ddddff',
+				margin: '10px',
 			};
 
-			return(
-				<div class="col-md-12 panel panel-default disabled" style={phaseListStyle}>
-					<Title title={this.props.title} />
-					<div><h3>{name}</h3></div>	
-					<div> {ItemComponents} </div>
-					<h3><span class="">Fortschitt</span></h3>
-					<div class="progress">
-					  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
-					    {progress} %
-					  </div>
+			const phaseListStyleGreen = {
+				backgroundColor: '#ddffdd',
+				margin: '10px',
+			};
+
+			const phaseListStyleYellow = {
+				backgroundColor: '#ffffdd',
+				margin: '10px',
+			};
+
+			if(this.props.status==1){//in progress
+				return(
+					<div class="col-md-12 panel panel-default" style={phaseListStyleYellow}>
+						<Title title={this.props.title} />
+						<div><h3>{name}</h3></div>
+						<div> {ItemComponents} </div>
+						<h3>Fortschitt</h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
+						    {progress} %
+						  </div>
+						</div>
 					</div>
-				</div>
-			);
+				);
+			}if(this.props.status==2){// not editible yet
+				return(
+					<div class="col-md-12 panel panel-default" style={phaseListStyleBlue}>
+						<Title title={this.props.title} />
+						<div><h3>{name}</h3></div>
+					</div>
+				)
+			}else{//dones status: 3
+				return(
+					<div class="col-md-12 panel panel-default" style={phaseListStyleGreen}>
+						<Title title={this.props.title} />
+						<div><h3>{name}</h3></div>
+					</div>
+				)
+			}
 		}else{
 			return(
 				<div class="cssload-container">

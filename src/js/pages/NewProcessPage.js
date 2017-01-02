@@ -1,7 +1,11 @@
 //js
-import React from "react";
-import "whatwg-fetch";
+import Constants from '../values/constants';
 import flatpickr from "flatpickr";
+import ItemValues from '../values/items.js'
+import PhaseValues from '../values/phases';
+import React from "react";
+import _ from 'underscore';
+import "whatwg-fetch";
 
 //css
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -41,8 +45,8 @@ export default class NewProcessPage extends React.Component{
 	createProcess(t, person_name, due_date, p_type){
 		var json_data = JSON.stringify({
 			status: 1,
-			person_name: person_name, 
-			due_date: due_date, 
+			person_name: person_name,
+			due_date: due_date,
 			p_type: p_type
 		});
 		this.postProcess(json_data);
@@ -82,11 +86,12 @@ export default class NewProcessPage extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		const self = this;
-		fetch('http://172.22.23.6:3000/processes/', myInit).then(function(res){
-			if(res.ok){ 
+		fetch(Constants.restApiPath+'processes/', myInit).then(function(res){
+			if(res.ok){
 				dispatcher.dispatch({type: "PROCESS_CREATED"});
-				res.json().then(function(res){	
-					self.postPhase(res);
+				res.json().then(function(res){
+					self.postPhase(res, PhaseValues.itPhase1);
+					self.postPhase(res, PhaseValues.itPhase2);
 				})
 			}
 			else{
@@ -96,22 +101,26 @@ export default class NewProcessPage extends React.Component{
 		});
   	}
 
-  	postPhase(res){
+  	postPhase(res, phaseValue){
   		const json_data = JSON.stringify({
-  			name: "Neue Phase",
+  			name: phaseValue.name,
   			process_id: res._id,
-  			status: 1,
-  			r_nr: 1,
+  			status: phaseValue.status,
+  			r_nr:phaseValue.r_nr,
   		})
   		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
   		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
   		var self = this;
-  		fetch('http://172.22.23.6:3000/phases/', myInit).then(function(res){
-			if(res.ok){ 
+  		fetch(Constants.restApiPath+'phases/', myInit).then(function(res){
+			if(res.ok){
 				dispatcher.dispatch({type: "PHASE_CREATED"});
-				res.json().then(function(res){	
-					self.postItem(res);
+				res.json().then(function(res){
+					_.each(ItemValues, function(itemValue){
+					 if(itemValue.phase==phaseValue.short){
+						 self.postItem(res, itemValue);
+					 }
+					})
 				})
 			}
 			else{
@@ -121,21 +130,21 @@ export default class NewProcessPage extends React.Component{
 		});
   	}
 
-  	postItem(res){
+  	postItem(res, itemValue){
   		const json_data = JSON.stringify({
 			phase_id: res._id,
 			status: 3,
-			name: "Neue Aufgabe",
-			person: "Glurak",
-			person_spare: "Shiggy",
+			name: itemValue.name,
+			person: itemValue.person,
+			person_spare: itemValue.person_spare,
 			spare: false
   		});
   		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
   		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
   		var self = this;
-  		fetch('http://172.22.23.6:3000/items/', myInit).then(function(res){
-			if(res.ok){ 
+  		fetch(Constants.restApiPath+'items/', myInit).then(function(res){
+			if(res.ok){
 				dispatcher.dispatch({type: "ITEM_CREATED"});
 				document.location.href = '/';
 			}
@@ -181,7 +190,7 @@ export default class NewProcessPage extends React.Component{
 				  </div>
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
-				      <a 	class="btn btn-info" 
+				      <a 	class="btn btn-info"
 								onClick={() => this.createProcess(this, this.state.name, this.state.due_date, this.state.p_type)}>
 								neuen Prozess erstellen
 							</a>
