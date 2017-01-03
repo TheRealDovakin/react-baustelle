@@ -1,4 +1,5 @@
 //js
+import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import React from "react";
 import "whatwg-fetch";
@@ -100,10 +101,13 @@ export default class ProcessList extends React.Component{
 
 
 			const ItemComponents = items.map((item) => {
+				var a = 0;
 				if(item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
 					return <Process key={item._id} {...item}/>;
 				}
 			});
+
+			console.log(ItemComponents.length);
 
 			return(
 				<div>
