@@ -107,7 +107,7 @@ export default class Phase extends React.Component{
 			};
 			if(this.props.status==1){
 				phaseColor ={
-					backgroundColor: '#ffffdd',
+					backgroundColor: '#eeeeee',
 				};
 			}
 			if(this.props.status==2){

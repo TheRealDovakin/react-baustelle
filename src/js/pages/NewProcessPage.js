@@ -1,4 +1,5 @@
 //js
+import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import flatpickr from "flatpickr";
 import ItemValues from '../values/items.js'
@@ -97,6 +98,8 @@ export default class NewProcessPage extends React.Component{
 			else{
 				console.log('error in create Process');
 				console.log(res);
+				// HACK: replace hardcoded String
+				alertify.error('Bitte Namen eintragen und Datum auswählen.')
 			}
 		});
   	}

@@ -1,4 +1,5 @@
 //js
+import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import React from "react";
 import "whatwg-fetch";
@@ -67,6 +68,7 @@ export default class PhaseList extends React.Component{
 				fetch(Constants.restApiPath+'items/'+item._id, myInit).then(function(res){
 					if(res.ok) {}
 					else{
+						// HACK: replace hardcoded String
 						console.log('error in delete Process');
 						console.log(res);
 					}
@@ -86,6 +88,7 @@ export default class PhaseList extends React.Component{
 
 					}
 					else{
+						// HACK: replace hardcoded String
 						console.log('error in delete Process');
 						console.log(res);
 					}
@@ -95,20 +98,25 @@ export default class PhaseList extends React.Component{
 	}
 
 	deleteProcess(){
-		//TODO: replace confirm with custom dialog
-		if(confirm("Wenn Sie auf OK drücken wird dieser Process aus der Datenbank gelöscht")){
-			const processId = this.props.location.pathname.split("/")[2];
-			this.deletePhases();
-			var myInit = { method: 'DELETE' }
-			fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
-				if(res.ok){
-					document.location.href = '/';
-				}else{
-					console.log('error in delete Process');
-					console.log(res);
-				}
+
+		const self = this;
+		// HACK: replace hardcoded String
+		alertify.error("Klicken Sie Hier wenn Sie den Prozess wirklich löschen wollen.",
+		 function(ev){
+			 ev.preventDefault();
+				const processId = self.props.location.pathname.split("/")[2];
+				self.deletePhases();
+				var myInit = { method: 'DELETE' }
+				fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
+					if(res.ok){
+						document.location.href = '/';
+					}else{
+						// HACK: replace hardcoded String
+						console.log('error in delete Process');
+						console.log(res);
+					}
+				});
 			});
-		}
 	}
 
 	fetchItems(){
@@ -122,6 +130,7 @@ export default class PhaseList extends React.Component{
 				})
 			}
 			else{
+				// HACK: replace hardcoded String
 				console.log('error in fetch Items');
 				console.log(res);
 			}
@@ -139,6 +148,7 @@ export default class PhaseList extends React.Component{
 				})
 			}
 			else{
+				// HACK: replace hardcoded String
 				console.log('error in fetch Phases');
 				console.log(res);
 			}
@@ -155,6 +165,7 @@ export default class PhaseList extends React.Component{
 				})
 			}
 			else{
+				// HACK: replace hardcoded String
 				console.log('error in fetch Process');
 				console.log(res);
 			}
@@ -164,14 +175,9 @@ export default class PhaseList extends React.Component{
 	finishProcess(){
 		if(this.processCanBeFinished()){
 			this.setProcessStatus(2);
-
 		}else{
-			// HACK: replace with custom alert
-			alert(`Process kann nicht beendet werden.
-
-				Grund:
-
-				Es wurden noch nicht alle Aufgaben abgehakt`)
+			// HACK: replace hardcoded String
+			alertify.error('Prozess kann erst beendet werden wenn alle Aufgaben abgehackt sind');
 		}
 	}
 
@@ -210,7 +216,6 @@ export default class PhaseList extends React.Component{
 				_.each(self.state.items, function(item){
 					if(item.phase_id==phase._id){
 						if(item.status==3)	can = false;
-						console.log(item.status);
 					}
 				});
 			}
@@ -255,6 +260,8 @@ export default class PhaseList extends React.Component{
 
 	reDoProcess(){
 		this.setProcessStatus(1);
+		// HACK: replace hardcoded String
+		alertify.success('Prozess wiederaufgenommen');
 	}
 
 	render(){
@@ -331,7 +338,7 @@ export default class PhaseList extends React.Component{
 								<li><a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
 									onClick={() => this.finishProcess()}>Prozess erfolreich beenden</a></li>
 								<li><a class={"btn btn-info "+(disableBtnReDo)} style={btnStyle}
-									onClick={() => this.reDoProcess()}>Prozess erfolreich beenden</a></li>
+									onClick={() => this.reDoProcess()}>Prozess wiederaufnehmen</a></li>
 								<li><a class="btn btn-danger" style={btnStyle}
 									onClick={() => this.deleteProcess()}>Prozess löschen</a></li>
 							</ul>
