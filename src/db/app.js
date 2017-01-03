@@ -6,7 +6,6 @@ var express = require('express'),
     mongoose = restful.mongoose;
 var app = express();
 
-
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
@@ -24,7 +23,6 @@ ItemModel.register(app, '/items');
 var PhaseModel = require('./models/Phase.js');
 PhaseModel.methods(['get', 'post', 'put', 'delete']),
 PhaseModel.register(app, '/phases');
-
 
 var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),

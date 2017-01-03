@@ -1,11 +1,11 @@
 //js
-import Constants from '../values/constants';
 import React from "react";
 
 //css
 import "../../css/spinner.css"
 
 //own files
+import Constants from '../values/constants';
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
 import PhaseStore from '../stores/PhaseStore';

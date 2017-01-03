@@ -24,6 +24,7 @@ export default class PhaseList extends React.Component{
 		this.deleteItems = this.deleteItems.bind(this);
 		this.deletePhases = this.deletePhases.bind(this);
 		this.deleteProcess = this.deleteProcess.bind(this);
+		this.finishProcess = this.finishProcess.bind(this);
 		this.fetchItems = this.fetchItems.bind(this);
 		this.fetchPhases = this.fetchPhases.bind(this);
 		this.fetchProcess = this.fetchProcess.bind(this);
@@ -158,6 +159,28 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	finishProcess(){
+		const processId = this.props.location.pathname.split("/")[2];
+		var self = this;
+		var json_data = JSON.stringify({
+			status: 2
+		});
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
+		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					document.location.href = '/';
+				})
+			}
+			else{
+				console.log('error in fetch Process');
+				console.log(res);
+			}
+		});
+	}
+
 	getItems(){
 		this.setState({
 			items: ItemsStore.getAll(),
@@ -224,17 +247,51 @@ export default class PhaseList extends React.Component{
 
 			});
 
+			const containerStyle = {
+				minHeight: 720,
+			}
+
+			const btnStyle = {
+				margin: 5,
+				width: '90%',
+			}
+
+			var date = new Date(process.due_date);
+			var day = date.getDate();
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var formatted_date = day+"."+month+"."+year;
+
 			return(
 				<div>
-					<div class="col-md-12">
-						{/* space for fixed header */}
-						<h1> .  </h1>
-						<h2>{process.person_name}</h2>
+				{/* HACK: space for fixed header */}
+				<h1> .  </h1>
+				<h1>{process.person_name}</h1>
+					<div class="col-md-3 col-xs-12 row">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4>Info</h4>
+							</div>
+							<ul class="list-group">
+								<li class="list-group-item"><span>Name: {process.person_name}</span></li>
+								<li class="list-group-item"><span>Typ: {process.p_type}</span></li>
+								<li class="list-group-item"><span>Deadline: {formatted_date}</span></li>
+							</ul>
+							<div class="panel-heading">
+								<h4>Aktionen</h4>
+							</div>
+							<ul class="list-group">
+								<li><a class="btn btn-success" style={btnStyle}
+									onClick={() => this.finishProcess()}>Prozess erfolreich beenden</a></li>
+								<li><a class="btn btn-danger" style={btnStyle}
+									onClick={() => this.deleteProcess()}>Prozess löschen</a></li>
+							</ul>
+						</div>
 					</div>
-					<div> {ItemComponents} </div>
-					<div class="col-md-12">
-						<a class="btn btn-danger" onClick={() => this.deleteProcess()}>Prozess löschen</a>
+					<div class="col-xs-12 col-md-9 pre-scrollable" style={containerStyle} >
+					{ItemComponents}
 					</div>
+
 				</div>
 			);
 		}else{

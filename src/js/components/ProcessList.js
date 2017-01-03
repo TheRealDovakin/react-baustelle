@@ -69,8 +69,13 @@ export default class ProcessList extends React.Component{
 
 	render(){
 
-		const btnStyle={
-			margin: 15,
+		const btnStyle = {
+			marginTop: 15,
+			marginBottom: 15,
+		}
+
+		const containerStyle = {
+			minHeight: 600,
 		}
 
 		const { items } = this.state;
@@ -78,8 +83,8 @@ export default class ProcessList extends React.Component{
 		if(items!=undefined){
 
 			items.sort(function(a, b){
-			    var keyA = a.due_date,
-			        keyB = b.due_date;
+			    var keyA = new Date(a.due_date).getTime(),
+			        keyB = new Date(b.due_date).getTime();
 			    if(keyA < keyB) return -1;
 			    if(keyA > keyB) return 1;
 			    return 0;
@@ -103,20 +108,22 @@ export default class ProcessList extends React.Component{
 			return(
 				<div>
 					<div class="col-md-12">
-						{/* space for fixed header */}
+						{/* HACK: space for fixed-header-class */}
 						<h1> .  </h1>
 						<h2>Liste aller laufenden und abgeschlossenen Eintritts- und Austrittsprozesse</h2>
 					</div>
-					<div class="" >
-						<a class="btn btn-info btn-lg" style={btnStyle} href="#/newProcess">neuen Prozess anlegen</a>
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<a class="btn btn-info btn-lg" style={btnStyle} href="#/newProcess">neuen Prozess anlegen</a>
+							<form>
+							  <div class="form-group">
+							    <label>Suche</label>
+							    <input class="form-control"  placeholder="Suchbegriff" onChange={this.handleSearchChange}></input>
+							  </div>
+							</form>
+						</div>
+						<div class="col-xs-12 col-md-8 pre-scrollable" style={containerStyle}> {ItemComponents} </div>
 					</div>
-					<form>
-					  <div class="form-group">
-					    <label>Suche</label>
-					    <input class="form-control"  placeholder="Suchbegriff" onChange={this.handleSearchChange}></input>
-					  </div>
-					</form>
-					<div class="col-md-12"> {ItemComponents} </div>
 				</div>
 			);
 		}else{

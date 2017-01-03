@@ -2,11 +2,17 @@ import React from "react";
 
 export default class Footer extends React.Component{
 	render(){
-		const name = "Kasper";
+
+		const footerStyle = {
+			backgroundColor: '#dddddd',
+		}
+
 		return(
-			<div class="col-md-12">
-				<footer>Footer</footer>
-			</div>
+			<footer class="footer" style={footerStyle}>
+				<div class="container">
+					<h4>Footer</h4>
+				</div>
+			</footer>
 		);
 	}
 }

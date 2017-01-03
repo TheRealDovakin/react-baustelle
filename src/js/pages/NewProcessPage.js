@@ -159,6 +159,8 @@ export default class NewProcessPage extends React.Component{
 
 		return(
 			<div class="col-md-12">
+				{/* HACK: space for fixed-header-class */}
+				<h1> .  </h1>
 				<h1>New Process Page</h1>
 				<form class="form-horizontal">
 				  <div class="form-group">
