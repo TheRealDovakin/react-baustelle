@@ -241,7 +241,12 @@ export default class PhaseList extends React.Component{
 		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
 		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
 			if(res.ok){
-				if(status==2) document.location.href = '/';
+				if(status==2){
+					document.location.href = '/';
+				}else{
+					self.fetchProcess();
+					self.forceUpdate();
+				}
 			}else{
 				console.log(res);
 			}
@@ -250,8 +255,6 @@ export default class PhaseList extends React.Component{
 
 	reDoProcess(){
 		this.setProcessStatus(1);
-		this.fetchProcess();
-		this.forceUpdate();
 	}
 
 	render(){
