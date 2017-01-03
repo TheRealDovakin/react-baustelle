@@ -250,7 +250,8 @@ export default class PhaseList extends React.Component{
 
 	reDoProcess(){
 		this.setProcessStatus(1);
-		this.setState(this.state);
+		this.fetchProcess();
+		this.forceUpdate();
 	}
 
 	render(){
