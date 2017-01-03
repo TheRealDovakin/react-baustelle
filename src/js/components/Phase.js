@@ -102,50 +102,32 @@ export default class Phase extends React.Component{
 				width: progress+'%',
 			};
 
-			const phaseListStyleBlue = {
-				backgroundColor: '#ddddff',
-				margin: '10px',
-			};
-
-			const phaseListStyleGreen = {
+			var phaseColor = {
 				backgroundColor: '#ddffdd',
-				margin: '10px',
 			};
-
-			const phaseListStyleYellow = {
-				backgroundColor: '#ffffdd',
-				margin: '10px',
-			};
-
-			if(this.props.status==1){//in progress
-				return(
-					<div class="col-md-12 panel panel-default" style={phaseListStyleYellow}>
-						<Title title={this.props.title} />
-						<div><h3>{name}</h3></div>
-						<div> {ItemComponents} </div>
-						<h3>Fortschitt</h3>
-						<div class="progress">
-						  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
-						    {progress} %
-						  </div>
-						</div>
-					</div>
-				);
-			}if(this.props.status==2){// not editible yet
-				return(
-					<div class="col-md-12 panel panel-default" style={phaseListStyleBlue}>
-						<Title title={this.props.title} />
-						<div><h3>{name}</h3></div>
-					</div>
-				)
-			}else{//dones status: 3
-				return(
-					<div class="col-md-12 panel panel-default" style={phaseListStyleGreen}>
-						<Title title={this.props.title} />
-						<div><h3>{name}</h3></div>
-					</div>
-				)
+			if(this.props.status==1){
+				phaseColor ={
+					backgroundColor: '#ffffdd',
+				};
 			}
+			if(this.props.status==2){
+				phaseColor ={
+					backgroundColor: '#ddddff',
+				};
+			}
+			return(
+				<div class="col-md-12 panel panel-default" style={phaseColor}>
+					<Title title={this.props.title} />
+					<div><h3>{name}</h3></div>
+					<div> {ItemComponents} </div>
+					<h3>Fortschitt</h3>
+					<div class="progress">
+					  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
+					    {progress} %
+					  </div>
+					</div>
+				</div>
+			);
 		}else{
 			return(
 				<div class="cssload-container">

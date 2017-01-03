@@ -30,8 +30,11 @@ export default class PhaseList extends React.Component{
 		this.fetchProcess = this.fetchProcess.bind(this);
 		this.getItems = this.getItems.bind(this);
 		this.getPhases = this.getPhases.bind(this);
+		this.processCanBeFinished = this.processCanBeFinished.bind(this);
 		this.setPhaseStatus = this.setPhaseStatus.bind(this);
 		this.setProcess = this.setProcess.bind(this);
+		this.setProcessStatus = this.setProcessStatus.bind(this);
+		this.reDoProcess = this.reDoProcess
 		this.state = {
 			items: undefined,
 			phases: undefined,
@@ -100,7 +103,6 @@ export default class PhaseList extends React.Component{
 			fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
 				if(res.ok){
 					document.location.href = '/';
-
 				}else{
 					console.log('error in delete Process');
 					console.log(res);
@@ -160,25 +162,17 @@ export default class PhaseList extends React.Component{
 	}
 
 	finishProcess(){
-		const processId = this.props.location.pathname.split("/")[2];
-		var self = this;
-		var json_data = JSON.stringify({
-			status: 2
-		});
-		var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
-		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
-			if(res.ok){
-				res.json().then(function(res){
-					document.location.href = '/';
-				})
-			}
-			else{
-				console.log('error in fetch Process');
-				console.log(res);
-			}
-		});
+		if(this.processCanBeFinished()){
+			this.setProcessStatus(2);
+
+		}else{
+			// HACK: replace with custom alert
+			alert(`Process kann nicht beendet werden.
+
+				Grund:
+
+				Es wurden noch nicht alle Aufgaben abgehakt`)
+		}
 	}
 
 	getItems(){
@@ -207,6 +201,23 @@ export default class PhaseList extends React.Component{
 		}
 	}
 
+	processCanBeFinished(){
+		const self = this;
+		var can = true;
+		const processId = this.props.location.pathname.split("/")[2];
+		_.each(self.state.phases, function(phase){
+			if(phase.process_id==processId){
+				_.each(self.state.items, function(item){
+					if(item.phase_id==phase._id){
+						if(item.status==3)	can = false;
+						console.log(item.status);
+					}
+				});
+			}
+		});
+		return can;
+	}
+
 	setPhaseStatus(phase_id){
 		console.log(phase_id);
 	}
@@ -217,6 +228,29 @@ export default class PhaseList extends React.Component{
 			phases: this.state.phases,
 			process: res,
 		});
+	}
+
+	setProcessStatus(status){
+		const processId = this.props.location.pathname.split("/")[2];
+		var self = this;
+		var json_data = JSON.stringify({
+			status: status
+		});
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
+		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
+			if(res.ok){
+				if(status==2) document.location.href = '/';
+			}else{
+				console.log(res);
+			}
+		});
+	}
+
+	reDoProcess(){
+		this.setProcessStatus(1);
+		this.setState(this.state);
 	}
 
 	render(){
@@ -262,6 +296,14 @@ export default class PhaseList extends React.Component{
 			var year = date.getFullYear();
 			var formatted_date = day+"."+month+"."+year;
 
+			var disableBtnFinish = 'disabled';
+			var disableBtnReDo = '';
+			var statusAsString = 'beendet';
+			if(process.status==1) {
+				disableBtnFinish='';
+				disableBtnReDo='disabled';
+				statusAsString='laufend';
+			}
 			return(
 				<div>
 				{/* HACK: space for fixed header */}
@@ -273,7 +315,8 @@ export default class PhaseList extends React.Component{
 								<h4>Info</h4>
 							</div>
 							<ul class="list-group">
-								<li class="list-group-item"><span>Name: {process.person_name}</span></li>
+								<li class="list-group-item"><span>Name:	{process.person_name}</span></li>
+								<li class="list-group-item"><span>Status:	{statusAsString}</span></li>
 								<li class="list-group-item"><span>Typ: {process.p_type}</span></li>
 								<li class="list-group-item"><span>Deadline: {formatted_date}</span></li>
 							</ul>
@@ -281,8 +324,10 @@ export default class PhaseList extends React.Component{
 								<h4>Aktionen</h4>
 							</div>
 							<ul class="list-group">
-								<li><a class="btn btn-success" style={btnStyle}
+								<li><a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
 									onClick={() => this.finishProcess()}>Prozess erfolreich beenden</a></li>
+								<li><a class={"btn btn-info "+(disableBtnReDo)} style={btnStyle}
+									onClick={() => this.reDoProcess()}>Prozess erfolreich beenden</a></li>
 								<li><a class="btn btn-danger" style={btnStyle}
 									onClick={() => this.deleteProcess()}>Prozess löschen</a></li>
 							</ul>
