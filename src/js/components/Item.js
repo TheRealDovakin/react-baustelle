@@ -18,18 +18,18 @@ export default class Item extends React.Component{
 	constructor(){
 		super();
 		//binded functions
-		this.fetchItems = this.fetchItems.bind();
-		this.changeItemStatus = this.changeItemStatus.bind();
+		this.fetchItems = this.fetchItems.bind(this);
 	}
 
 	/**
 	* changes the status for a given Items to a given status and dispatches
 	* an action thta updates the store
-	 * @param {String} _id - ID of Item to be changed
-	 * @param {int} status - status Item will be changed to
-	 *
-	 */
-	changeItemStatus(_id, status){
+	* @param {object} t			this from caller
+	* @param {String} _id			ID of Item to be changed
+	* @param {int} status			status Item will be changed to
+	*
+	*/
+	changeItemStatus(t, _id, status){
 		var json_data = JSON.stringify({
 			status: status
 		});
@@ -82,7 +82,7 @@ export default class Item extends React.Component{
 				<div class="panel panel-success">
 					<div class="panel-heading">
 						<h4>{name}
-							<a onClick={() => this.changeItemStatus(_id, 2)} class="glyphicon glyphicon-chevron-up"></a>
+							<a onClick={() => this.changeItemStatus(this, _id, 2)} class="glyphicon glyphicon-chevron-up"></a>
 						</h4>
 					</div>
 					<ul class="list-group">
@@ -90,7 +90,7 @@ export default class Item extends React.Component{
 						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>Verantwortlicher: {person}</a></li>
 						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>Vertretung: {person_spare}</a></li>
 						<li class="list-group-item list-group-item-success"><a class="btn btn-default" onClick={
-							() => this.changeItemStatus(_id, 3)
+							() => this.changeItemStatus(this, _id, 3)
 						}>auf NICHT ERLEDIGT setzen</a></li>
 					</ul>
 				</div>
@@ -100,7 +100,7 @@ export default class Item extends React.Component{
 				<div class="panel panel-success">
 					<div class="panel-heading">
 						<h4>{name}
-							<a onClick={() => this.changeItemStatus(_id, 1)} class="glyphicon glyphicon-chevron-down">  </a>
+							<a onClick={() => this.changeItemStatus(this, _id, 1)} class="glyphicon glyphicon-chevron-down">  </a>
 						</h4>
 					</div>
 				</div>
@@ -116,7 +116,7 @@ export default class Item extends React.Component{
 							<li class="list-group-item disabled"><span>Vertretung: {person_spare}</span></li>
 							<li class="list-group-item">
 								<a class="btn btn-success" onClick={
-									() => this.changeItemStatus(_id, 2)
+									() => this.changeItemStatus(this, _id, 2)
 								}>auf ERLEDIGT setzen</a>
 							</li>
 						</ul>
@@ -132,7 +132,7 @@ export default class Item extends React.Component{
 							<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>Vertretung: {person_spare}</a></li>
 							<li class="list-group-item">
 								<a class="btn btn-success" onClick={
-									() => this.changeItemStatus(_id, 2)
+									() => this.changeItemStatus(this, _id, 2)
 								}>auf ERLEDIGT setzen</a>
 							</li>
 						</ul>

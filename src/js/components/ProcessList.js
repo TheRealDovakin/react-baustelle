@@ -79,7 +79,7 @@ export default class ProcessList extends React.Component{
 	 */
 	getProcesses(){
 		this.setState({
-			search_filter: this.state.search_filter;
+			search_filter: this.state.search_filter,
 			items: ProcessStore.getAll(),
 		});
 	}

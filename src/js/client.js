@@ -6,7 +6,6 @@ import { Router, Route, IndexRoute, hashHistory} from "react-router";
 //own files
 import Layout from "./components/Layout";
 import NewProcessPage from "./pages/NewProcessPage";
-import Places from "./pages/Places";
 import PhaseList from "./components/PhaseList";
 import ProcessListPage from "./pages/ProcessListPage";
 import ProcessView from "./pages/ProcessView";
@@ -15,7 +14,7 @@ import ProcessView from "./pages/ProcessView";
  * @author Kasper Nadrajkowski
  * react router
  */
-
+ 
 const app = document.getElementById('app');
 
 ReactDOM.render(
