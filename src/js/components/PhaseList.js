@@ -5,23 +5,24 @@ import React from "react";
 import "whatwg-fetch";
 import { withRouter } from "react-router"
 import _ from "underscore";
-
 //cs
 import "../../css/spinner.css"
-
 //own files
 import dispatcher from "../dispatcher";
 import ItemsStore from "../stores/ItemsStore"
 import Phase from "./Phase";
 import PhaseStore from "../stores/PhaseStore"
 
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents a list of Phases for a Process
+ */
 export default class PhaseList extends React.Component{
 
 	constructor(){
 		super();
-
 		dispatcher.register(this.handleActions.bind(this));
-
+		// binded functions
 		this.deleteItems = this.deleteItems.bind(this);
 		this.deletePhases = this.deletePhases.bind(this);
 		this.deleteProcess = this.deleteProcess.bind(this);
@@ -43,16 +44,28 @@ export default class PhaseList extends React.Component{
 		};
 	}
 
+	/**
+	 * will be called before component will mount
+	 * adds change listeners for stores
+	 */
 	componentWillMount(){
 		ItemsStore.on("change", this.getItems);
 		PhaseStore.on("change", this.getPhases);
 	}
 
+	/**
+	 * will be called before component will unmount
+	 * removes changelisteners for stores
+	 */
 	componentWillUnmount(){
 		ItemsStore.removeListener("change", this.getItems);
 		PhaseStore.removeListener("change", this.getPhases);
 	}
 
+	/**
+	 * will be called after component mounted
+	 * call methods for fetching data from DB
+	 */
 	componentDidMount(){
 		this.fetchItems();
 		this.fetchPhases();
@@ -60,6 +73,10 @@ export default class PhaseList extends React.Component{
 		this.setProcess();
 	}
 
+	/**
+	 * this function deletes all Items of a given Phase
+	 *  @param {int} phase_id			ID of the Phase that the Items will be deleted for
+	 */
 	deleteItems(phase_id){
 		const self = this;
 		_.each(self.state.items, function(item){
@@ -77,6 +94,9 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * deletes all Phases of the current process
+	 */
 	deletePhases(){
 		const self = this;
 		_.each(self.state.phases, function(phase){
@@ -97,8 +117,10 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * deletes the current process
+	 */
 	deleteProcess(){
-
 		const self = this;
 		// HACK: replace hardcoded String
 		alertify.error("Klicken Sie Hier wenn Sie den Prozess wirklich löschen wollen.",
@@ -119,6 +141,9 @@ export default class PhaseList extends React.Component{
 			});
 	}
 
+	/**
+	 * fetches Items from DB and dispatches an action that updates the store
+	 */
 	fetchItems(){
 		fetch(Constants.restApiPath+'items').then(function(res){
 			if(res.ok){
@@ -137,6 +162,9 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * fetches Phases from DB and dispatches an action that updates the store
+	 */
 	fetchPhases(){
 		fetch(Constants.restApiPath+'phases').then(function(res){
 			if(res.ok){
@@ -155,6 +183,9 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * fetches the current Process and updates the state
+	 */
 	fetchProcess(){
 		const processId = this.props.location.pathname.split("/")[2];
 		var self = this;
@@ -172,6 +203,9 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * updates the status of the current Process to done
+	 */
 	finishProcess(){
 		if(this.processCanBeFinished()){
 			this.setProcessStatus(2);
@@ -181,6 +215,9 @@ export default class PhaseList extends React.Component{
 		}
 	}
 
+	/**
+	 * updates the state with Items from its store
+	 */
 	getItems(){
 		this.setState({
 			items: ItemsStore.getAll(),
@@ -189,6 +226,9 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * updates the state with Phases from its store
+	 */
 	getPhases(){
 		this.setState({
 			items: this.state.items,
@@ -197,6 +237,9 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * handles dispatches
+	 */
 	handleActions(action){
 		switch(action.type){
 			case "ITEM_STATUS_CHANGED": {
@@ -207,6 +250,10 @@ export default class PhaseList extends React.Component{
 		}
 	}
 
+	/**
+	* checks if all Items for the current Process are done and returns a boolean
+	 * @return {bolean}			true if all Items of Process are marked done
+	 */
 	processCanBeFinished(){
 		const self = this;
 		var can = true;
@@ -223,10 +270,17 @@ export default class PhaseList extends React.Component{
 		return can;
 	}
 
+	/**
+	 *
+	 */
 	setPhaseStatus(phase_id){
 		console.log(phase_id);
 	}
 
+	/**
+	* updates the state with the current Process
+	 * @param {object} res			current Process
+	 */
 	setProcess(res){
 		this.setState({
 			items: this.state.items,
@@ -235,6 +289,10 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	* updates the status of the current Process to the value of a given status
+	 * @param {int} status			status the Process will be changed to
+	 */
 	setProcessStatus(status){
 		const processId = this.props.location.pathname.split("/")[2];
 		var self = this;
@@ -258,16 +316,25 @@ export default class PhaseList extends React.Component{
 		});
 	}
 
+	/**
+	 * updates the status of the current Process to not done
+	 */
 	reDoProcess(){
 		this.setProcessStatus(1);
 		// HACK: replace hardcoded String
 		alertify.success('Prozess wiederaufgenommen');
 	}
 
+	/**
+	 * react default render-method
+	 */
 	render(){
 		const { phases } = this.state;
+		// react renders faster that DB can deliver,
+		// renders a loading-spinner in else case
 		if(phases!=undefined){
 			var process;
+			// simular here
 			if(this.state.process != undefined){
 				process = this.state.process;
 			}else{
@@ -276,6 +343,7 @@ export default class PhaseList extends React.Component{
 				}
 			}
 
+			// sorts Phases by r_nr
 			phases.sort(function(a, b){
 			    var keyA = a.r_nr,
 			        keyB = b.r_nr;
@@ -285,6 +353,7 @@ export default class PhaseList extends React.Component{
 			});
 
 			const processId = this.props.location.pathname.split("/")[2];
+			// fills ItemComponents with Phases from this Process only
 			const ItemComponents = phases.map((item) => {
 				if(item.process_id==processId){
 					return <Phase key={item._id} {...item}/>;
@@ -292,21 +361,18 @@ export default class PhaseList extends React.Component{
 
 			});
 
-			const containerStyle = {
-				minHeight: 720,
-			}
+			// inline styling
+			const containerStyle = { minHeight: 720, }
+			const btnStyle = { margin: 5, width: '90%', }
 
-			const btnStyle = {
-				margin: 5,
-				width: '90%',
-			}
-
+			// converts date to readeble String
 			var date = new Date(process.due_date);
 			var day = date.getDate();
 			var month = date.getMonth()+1;
 			var year = date.getFullYear();
 			var formatted_date = day+"."+month+"."+year;
 
+			//dynamic styles
 			var disableBtnFinish = 'disabled';
 			var disableBtnReDo = '';
 			var statusAsString = 'beendet';
@@ -350,7 +416,7 @@ export default class PhaseList extends React.Component{
 
 				</div>
 			);
-		}else{
+		}else{ // loading spinner
 			return(
 				<div class="cssload-container">
 					<div class="cssload-speeding-wheel"></div>

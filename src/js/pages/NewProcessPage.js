@@ -19,9 +19,11 @@ import PhaseStore from '../stores/PhaseStore';
 import * as ProcessActions from "../actions/ProcessActions";
 import ProcessStore from '../stores/ProcessStore';
 
-
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents a view for a form to create a new Process
+ */
 export default class NewProcessPage extends React.Component{
-
 	constructor(props) {
 	   super(props);
 	   this.state = {
@@ -29,7 +31,8 @@ export default class NewProcessPage extends React.Component{
 	    	due_date:'',
 	    	p_type:'Vertieb',
 	   };
-
+		 // binded functions
+		 this.createProcess = this.createProcess.bind(this);
 	   this.handleNameChange = this.handleNameChange.bind(this);
 	   this.handleDueDateChange = this.handleDueDateChange.bind(this);
 	   this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -39,11 +42,20 @@ export default class NewProcessPage extends React.Component{
 	   this.postItem = this.postItem.bind(this);
 	}
 
+	/**
+	 * wil be called after the component mounted
+	 */
 	componentDidMount(){
 		this.setDatepicker();
 	}
 
-	createProcess(t, person_name, due_date, p_type){
+	/**
+	 * wrapes parameters to a JSON and call post-function with it
+	 * @param {String} person_name			name from input
+	 * @param {String} due_date			date from datepicker
+	 * @param {String} p_type			process type from input
+	 */
+	createProcess(person_name, due_date, p_type){
 		var json_data = JSON.stringify({
 			status: 1,
 			person_name: person_name,
@@ -53,6 +65,10 @@ export default class NewProcessPage extends React.Component{
 		this.postProcess(json_data);
 	}
 
+	/**
+	 * handles name-input changes and upadates state with the value
+	 * @param  {event} event 		input value
+	 */
 	handleNameChange(event) {
     	this.setState({
     		name: event.target.value,
@@ -61,7 +77,11 @@ export default class NewProcessPage extends React.Component{
     	});
   	}
 
-  	handleDueDateChange(event) {
+		/**
+		 * handles date-input changes and upadates state with the value
+		 * @param  {event} event			date value
+		 */
+  	 handleDueDateChange(event) {
     	this.setState({
     		name: this.state.name,
     		due_date: event.target.value,
@@ -69,6 +89,10 @@ export default class NewProcessPage extends React.Component{
     	});
   	}
 
+		/**
+		 * handles pocess-type-input changes and upadates state with the value
+		 * @param  {event} event 		process-type value
+		 */
   	handleTypeChange(event) {
     	this.setState({
     		name: this.state.name,
@@ -77,11 +101,18 @@ export default class NewProcessPage extends React.Component{
     	});
   	}
 
+		/**
+		 * sets the datepicker for date-input
+		 */
   	setDatepicker(){
   		var picker = document.getElementById('datepicker');
   		flatpickr(picker);
   	}
 
+		/**
+		 * creates a new Process in the DB and calls function to create child-Phases
+		 * @param  {object} json_data JSON with data from inputs
+		 */
   	postProcess(json_data){
   		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
@@ -104,6 +135,11 @@ export default class NewProcessPage extends React.Component{
 		});
   	}
 
+		/**
+		 * creates a Phase in the DB and calls functions that create child-Items
+		 * @param  {object} res        parent Process
+		 * @param  {object} phaseValue predifined JSON for specific Phase
+		 */
   	postPhase(res, phaseValue){
   		const json_data = JSON.stringify({
   			name: phaseValue.name,
@@ -133,6 +169,11 @@ export default class NewProcessPage extends React.Component{
 		});
   	}
 
+		/**
+		 * creates an item in the DB
+		 * @param  {object} res       parent Phase
+		 * @param  {object} itemValue predifined JSON for specific Item
+		 */
   	postItem(res, itemValue){
   		const json_data = JSON.stringify({
 			phase_id: res._id,
@@ -159,7 +200,6 @@ export default class NewProcessPage extends React.Component{
   	}
 
 	render(){
-
 		return(
 			<div class="col-md-12">
 				{/* HACK: space for fixed-header-class */}
@@ -196,7 +236,7 @@ export default class NewProcessPage extends React.Component{
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	class="btn btn-info"
-								onClick={() => this.createProcess(this, this.state.name, this.state.due_date, this.state.p_type)}>
+								onClick={() => this.createProcess(this.state.name, this.state.due_date, this.state.p_type)}>
 								neuen Prozess erstellen
 							</a>
 				    </div>

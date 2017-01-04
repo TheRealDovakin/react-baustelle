@@ -1,8 +1,14 @@
-import React from "react";
+//js
 import { Link } from "react-router";
+import React from "react";
 
+//own files
 import Title from "./Header/Title";
 
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents a simple header
+ */
 export default class Header extends React.Component{
 	render(){
 		return(

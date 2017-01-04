@@ -2,6 +2,11 @@ var mongoose = require('mongoose');
 var restful = require('node-restful');
 var mongoose = restful.mongoose;
 
+/**
+ * @author Kasper Nadrajkowski
+ * Model for Item
+ * @type {mongoose}
+ */
 var ItemSchema = new mongoose.Schema({
 	phase_id: {type: String, required: true},
 	status: {type: String, required: true},

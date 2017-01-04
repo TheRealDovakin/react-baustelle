@@ -1,6 +1,10 @@
+//own files
 import dispatcher from "../dispatcher";
 
-
+/**
+ * @author Kasper Nadrajkowski
+ * collection action for Items
+ */
 
 export function deleteItem(id){
 	dispatcher.dispatch({
@@ -14,4 +18,3 @@ export function changeItemStatus(){
 		type: "ITEM_STATUS_CHANGED",
 	});
 }
-

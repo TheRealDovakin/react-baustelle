@@ -4,6 +4,11 @@ var express = require('express'),
     morgan = require('morgan'),
     restful = require('node-restful'),
     mongoose = restful.mongoose;
+
+/**
+ * express rest-api with node-restful
+ * @type {express}
+ */
 var app = express();
 
 app.use(morgan('dev'));

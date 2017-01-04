@@ -1,3 +1,7 @@
+/**
+ * @author Kasper Nadrajkowski
+ * a collection of diffrent predifined Items
+ */
 export default{
   adAccount: {
     phase: "it1",

@@ -1,3 +1,6 @@
+/**
+ * a collection of diffrent predifined Phases
+ */
 export default{
   itPhase1: {
     short: "it1",

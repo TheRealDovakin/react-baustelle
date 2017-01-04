@@ -1,19 +1,20 @@
+//js
 import alertify from 'alertify.js';
 import React from "react";
 
+//own files
 import Constants from '../values/constants';
 
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents a simple footer
+ */
 export default class Footer extends React.Component{
 	render(){
-
-		const footerStyle = {
-			backgroundColor: '#dddddd',
-		}
-
-		const spanStyle = {
-			margin: 5,
-		}
-
+		// inline styling
+		const footerStyle = { backgroundColor: '#dddddd',	}
+		const spanStyle = { margin: 5, }
+		// react default render function
 		return(
 			<footer class="footer" style={footerStyle}>
 				<div class="col-md-4" style={footerStyle}>

@@ -2,6 +2,11 @@ var mongoose = require('mongoose');
 var restful = require('node-restful');
 var mongoose = restful.mongoose;
 
+/**
+ * @author Kasper Nadrajkowski
+ * Model for Process
+ * @type {mongoose}
+ */
 var ProcessSchema = new mongoose.Schema({
 	status: {type: Number, required: true},
 	person_name: {type: String, required: true},

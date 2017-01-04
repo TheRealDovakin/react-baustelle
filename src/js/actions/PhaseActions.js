@@ -1,11 +1,17 @@
+//js
 import dispatcher from "../dispatcher";
+
+/**
+ * @author Kasper Nadrajkowski
+ * collection action for Phases
+ */
 
 export function createPhase(process_id, status, name, r_nr){
 	dispatcher.dispatch({
 		type: "CREATE_PHASE",
-		process_id, 
-		status, 
-		name, 
+		process_id,
+		status,
+		name,
 		r_nr,
 	});
 }

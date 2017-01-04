@@ -1,6 +1,12 @@
+//js
 import { EventEmitter } from "events";
+//own files
 import dispatcher from "../dispatcher";
 
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents a store for Processes
+ */
 class ProcessStore extends EventEmitter {
 	constructor(){
 		super();
@@ -9,29 +15,28 @@ class ProcessStore extends EventEmitter {
 		}
 	}
 
+	/**
+	 * getter function for all Processes
+	 * @return {array}			all Processes in store
+	 */
 	getAll(){
 		return this.state.items;
 	}
 
-	getProcess(id){
-		
-	}
-
+	/**
+	 * updates the state with given array of Processes
+	 * @param  {array} data upadated Processes
+	 */
 	updateProcesses(data){
 		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
 		this.emit('change');
 	}
 
-	changeProcessStatus(id, status){
-		const it = this.state.items;
-		for (var index = 0; index < it.length; ++index) {
-    		if(it[index].id==id){
-    			it[index].status = status;
-    		}
-		}
-		this.emit('change');
-	}
 
+	/**
+	 * handles dispatches
+	 * @param {action} action			action of dispatch
+	 */
 	handleActions(action){
 		switch(action.type){
 			case "CREATE_PROCESS": {

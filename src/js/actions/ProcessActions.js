@@ -1,4 +1,10 @@
+//js
 import dispatcher from "../dispatcher";
+
+/**
+ * @author Kasper Nadrajkowski
+ * collection action for Processes
+ */
 
 export function createProcess(status, person_name, due_date, p_type){
 	dispatcher.dispatch({

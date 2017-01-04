@@ -13,10 +13,15 @@ import Process from "./Process";
 import ProcessStore from "../stores/ProcessStore";
 import ProcessActions from "../actions/ProcessActions";
 
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents a searchable List of all Processes
+ */
 export default class ProcessList extends React.Component{
 
 	constructor(){
 		super();
+		//binded functions
 		this.fetchProcesses = this.fetchProcesses.bind(this);
 		this.getProcesses = this.getProcesses.bind(this);
 		this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -26,18 +31,33 @@ export default class ProcessList extends React.Component{
 		};
 	}
 
+	/**
+	 * will be called before the component mounted,
+	 * adds changelisteners for stores
+	 */
 	componentWillMount(){
 		ProcessStore.on("change", this.getProcesses);
 	}
 
+	/**
+	 * will be called before the component will unmount,
+	 * removes changelisteners for stores
+	 */
 	componentWillUnmount(){
 		ProcessStore.removeListener("change", this.getProcesses);
 	}
 
+	/**
+	 * will be called after the component mounted
+	 */
 	componentDidMount(){
 		this.fetchProcesses();
 	}
 
+	/**
+	 * fetches all Processes from the DB and dispatches an action that updates
+	 * its store
+	 */
 	fetchProcesses(){
 		fetch(Constants.restApiPath+'processes').then(function(res){
 			if(res.ok){
@@ -54,35 +74,34 @@ export default class ProcessList extends React.Component{
 		});
 	}
 
+	/**
+	 * updates the state with Processes from its Store
+	 */
 	getProcesses(){
 		this.setState({
+			search_filter: this.state.search_filter;
 			items: ProcessStore.getAll(),
 		});
 	}
 
+	/**
+	 * handles changes of the search-bar and updates the state
+	 */
 	handleSearchChange(event){
 		this.setState({
-    		search_filter: event.target.value,
-    		items: this.state.items,
-    	});
-    	this.forceUpdate();
+  		search_filter: event.target.value,
+  		items: this.state.items,
+  	});
+  	this.forceUpdate();
 	}
 
 	render(){
-
-		const btnStyle = {
-			marginTop: 15,
-			marginBottom: 15,
-		}
-
-		const containerStyle = {
-			minHeight: 600,
-		}
-
+		const btnStyle = {	marginTop: 15, marginBottom: 15, }
+		const containerStyle = { minHeight: 600, }
 		const { items } = this.state;
-
+		// makes sure data from DB is loaded, else render a loading spinner
 		if(items!=undefined){
-
+			//sorts Proesses by due_date
 			items.sort(function(a, b){
 			    var keyA = new Date(a.due_date).getTime(),
 			        keyB = new Date(b.due_date).getTime();
@@ -90,7 +109,7 @@ export default class ProcessList extends React.Component{
 			    if(keyA > keyB) return 1;
 			    return 0;
 			});
-
+			//sorts Processes by status
 			items.sort(function(a, b){
 			    var keyA = a.status,
 			        keyB = b.status;
@@ -98,17 +117,13 @@ export default class ProcessList extends React.Component{
 			    if(keyA > keyB) return 1;
 			    return 0;
 			});
-
-
+			// fills ItemComponents with Processes that match the search only
 			const ItemComponents = items.map((item) => {
 				var a = 0;
 				if(item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
 					return <Process key={item._id} {...item}/>;
 				}
 			});
-
-			console.log(ItemComponents.length);
-
 			return(
 				<div>
 					<div class="col-md-12">
@@ -130,7 +145,7 @@ export default class ProcessList extends React.Component{
 					</div>
 				</div>
 			);
-		}else{
+		}else{// spinner
 			return(
 				<div class="cssload-container">
 					<div class="cssload-speeding-wheel"></div>
