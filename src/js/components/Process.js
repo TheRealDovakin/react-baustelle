@@ -8,6 +8,12 @@ export default class Process extends React.Component{
 
 	constructor(props){
 		super();
+
+		this.goToProcess = this.goToProcess.bind(this);
+	}
+
+	goToProcess(link){
+		document.location.href = link;
 	}
 
 	render(){
@@ -19,17 +25,24 @@ export default class Process extends React.Component{
 		var year = date.getFullYear();
 		var formatted_date = day+"."+month+"."+year;
 		// dynamic styling
-		var panelStyle = 'panel-default';
-		if(status==2) panelStyle = 'panel-success';
+		var rowStyle = '';
+		var statusAsString = 'laufend';
+		var date = new Date(Date.now());
+		var datePlus5 = new Date(Date.now());
+		datePlus5.setDate(date.getDate()+5);
+		if(new Date(due_date).getTime()<=datePlus5) rowStyle = 'warning';
+		if(new Date(due_date).getTime()<=date) rowStyle = 'danger';
+		if(status==2){
+			rowStyle = 'success';
+			statusAsString = 'geschlossen';
+		}
 		return(
-			<div class={"panel "+(panelStyle)}>
-				<div class="panel-heading"><a href={"#/processView/"+_id}>{person_name}</a></div>
-				<ul class="list-group">
-					<a class="list-group-item">Status: in progress</a>
-					<a class="list-group-item">Deadline: {formatted_date}</a>
-					<a class="list-group-item">Typ: {p_type}</a>
-				</ul>
-			</div>
+			<tr class={rowStyle} onClick={() => this.goToProcess("#/processView/"+_id)}>
+				<td>{person_name}</td>
+				<td>{statusAsString}</td>
+				<td>{formatted_date}</td>
+				<td>{p_type}</td>
+			</tr>
 		);
 	}
 }

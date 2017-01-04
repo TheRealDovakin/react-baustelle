@@ -141,7 +141,19 @@ export default class ProcessList extends React.Component{
 							  </div>
 							</form>
 						</div>
-						<div class="col-xs-12 col-md-8 pre-scrollable" style={containerStyle}> {ItemComponents} </div>
+						<div class="col-xs-12 col-md-8 pre-scrollable" style={containerStyle}>
+							<table class="table table-hover table-striped table-bordered">
+							<tbody>
+									<tr>
+										<th>Name</th>
+										<th>Status</th>
+										<th>Deadline</th>
+										<th>Typ</th>
+									</tr>
+								 	{ItemComponents}
+								</tbody>
+						 	</table>
+						</div>
 					</div>
 				</div>
 			);

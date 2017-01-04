@@ -5,11 +5,13 @@ import React from "react";
 //own files
 import Title from "./Header/Title";
 
+
+export default
 /**
  * @author Kasper Nadrajkowski
  * this class represents a simple header
  */
-export default class Header extends React.Component{
+class Header extends React.Component{
 	render(){
 		return(
 			<div>

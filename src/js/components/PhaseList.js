@@ -13,12 +13,12 @@ import ItemsStore from "../stores/ItemsStore"
 import Phase from "./Phase";
 import PhaseStore from "../stores/PhaseStore"
 
+
 /**
  * @author Kasper Nadrajkowski
  * this class represents a list of Phases for a Process
  */
-export default class PhaseList extends React.Component{
-
+ export default class PhaseList extends React.Component{
 	constructor(){
 		super();
 		dispatcher.register(this.handleActions.bind(this));

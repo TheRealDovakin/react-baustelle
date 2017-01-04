@@ -27,4 +27,10 @@ export default{
     person: "Franz Rene",
     person_spare: "Rene Franz",
   },
+  elo: {
+    phase: "it2",
+    name: "ELO",
+    person: "Franz Rene",
+    person_spare: "Rene Franz",
+  },
 }
