@@ -12,6 +12,7 @@ import Item from "./Item";
 import ItemsStore from "../stores/ItemsStore";
 import * as ItemsActions from "../actions/ItemsActions";
 import * as PhaseActions from "../actions/PhaseActions";
+import Strings from '../values/strings_de';
 import Title from "./Header/Title";
 
 /**
@@ -101,8 +102,7 @@ export default class Phase extends React.Component{
 				})
 			}
 			else{
-				// HACK: replace hardcoded String
-				console.log('error in fetch Items');
+				console.log(Strings.error.restApi);
 				console.log(res);
 			}
 		});
@@ -132,7 +132,7 @@ export default class Phase extends React.Component{
 					<Title title={this.props.title} />
 					<div><h3>{name}</h3></div>
 					<div> {ItemComponents} </div>
-					<h3>Fortschitt</h3>
+					<h3>{Strings.phase.progress}</h3>
 					<div class="progress">
 					  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
 					    {progress} %

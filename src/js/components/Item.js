@@ -9,6 +9,7 @@ import Constants from '../values/constants';
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
 import PhaseStore from '../stores/PhaseStore';
+import Strings from '../values/strings_de';
 
 /**
  * @author Kasper Nadrajkowski
@@ -86,12 +87,12 @@ export default class Item extends React.Component{
 						</h4>
 					</div>
 					<ul class="list-group">
-						<li class="list-group-item list-group-item-success"><span>Status: erledigt</span></li>
-						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>Verantwortlicher: {person}</a></li>
-						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>Vertretung: {person_spare}</a></li>
+						<li class="list-group-item list-group-item-success"><span>{Strings.status}: erledigt</span></li>
+						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
 						<li class="list-group-item list-group-item-success"><a class="btn btn-default" onClick={
 							() => this.changeItemStatus(this, _id, 3)
-						}>auf NICHT ERLEDIGT setzen</a></li>
+						}>{Strings.item.setToNotDone}</a></li>
 					</ul>
 				</div>
 				);
@@ -111,13 +112,13 @@ export default class Item extends React.Component{
 					<div class="panel panel-default">
 						<div class="panel-heading"><h4>{name}</h4></div>
 						<ul class="list-group">
-							<li class="list-group-item"><span>Status: laufend</span></li>
-							<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>Verantwortlicher: {person}</a></li>
-							<li class="list-group-item disabled"><span>Vertretung: {person_spare}</span></li>
+							<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
+							<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+							<li class="list-group-item disabled"><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
 							<li class="list-group-item">
 								<a class="btn btn-success" onClick={
 									() => this.changeItemStatus(this, _id, 2)
-								}>auf ERLEDIGT setzen</a>
+								}>{Strings.item.setToDone}</a>
 							</li>
 						</ul>
 					</div>
@@ -127,13 +128,13 @@ export default class Item extends React.Component{
 					<div class="panel panel-default">
 						<div class="panel-heading"><h4>{name}</h4></div>
 						<ul class="list-group">
-							<li class="list-group-item"><span>Status: laufend</span></li>
-							<li class="list-group-item disabled"><span>Verantwortlicher: {person}</span></li>
-							<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>Vertretung: {person_spare}</a></li>
+							<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
+							<li class="list-group-item disabled"><span>{Strings.item.responsablePerson}: {person}</span></li>
+							<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
 							<li class="list-group-item">
 								<a class="btn btn-success" onClick={
 									() => this.changeItemStatus(this, _id, 2)
-								}>auf ERLEDIGT setzen</a>
+								}>{Strings.item.setToDone}</a>
 							</li>
 						</ul>
 					</div>
@@ -144,10 +145,10 @@ export default class Item extends React.Component{
 				<div class="panel panel-default">
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
-						<li class="list-group-item disabled"><span>Status: in Warteschlage</span></li>
-						<li class="list-group-item disabled"><a>Verantwortlicher: {person}</a></li>
-						<li class="list-group-item disabled"><a>Vertretung: {person_spare}</a></li>
-						<li class="list-group-item disabled"><a class="btn btn-success disabled">auf ERLEDIGT setzen</a></li>
+						<li class="list-group-item disabled"><span>{Strings.status}: in Warteschlage</span></li>
+						<li class="list-group-item disabled"><a>{Strings.item.responsablePerson}: {person}</a></li>
+						<li class="list-group-item disabled"><a>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
+						<li class="list-group-item disabled"><a class="btn btn-success disabled">{Strings.item.setToDone}</a></li>
 					</ul>
 				</div>
 				);

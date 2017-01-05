@@ -8,10 +8,12 @@ import _ from "underscore";
 //cs
 import "../../css/spinner.css"
 //own files
+import DateUtils from '../utils/DateUtils';
 import dispatcher from "../dispatcher";
 import ItemsStore from "../stores/ItemsStore"
 import Phase from "./Phase";
 import PhaseStore from "../stores/PhaseStore"
+import Strings from '../values/strings_de';
 
 
 /**
@@ -85,8 +87,7 @@ import PhaseStore from "../stores/PhaseStore"
 				fetch(Constants.restApiPath+'items/'+item._id, myInit).then(function(res){
 					if(res.ok) {}
 					else{
-						// HACK: replace hardcoded String
-						console.log('error in delete Process');
+						console.log(Strings.error.restApi);
 						console.log(res);
 					}
 				});
@@ -108,8 +109,7 @@ import PhaseStore from "../stores/PhaseStore"
 
 					}
 					else{
-						// HACK: replace hardcoded String
-						console.log('error in delete Process');
+						console.log(Strings.error.restApi);
 						console.log(res);
 					}
 				});
@@ -122,8 +122,7 @@ import PhaseStore from "../stores/PhaseStore"
 	 */
 	deleteProcess(){
 		const self = this;
-		// HACK: replace hardcoded String
-		alertify.error("Klicken Sie Hier wenn Sie den Prozess wirklich löschen wollen.",
+		alertify.error(Strings.process.confirmDelete,
 		 function(ev){
 			 ev.preventDefault();
 				const processId = self.props.location.pathname.split("/")[2];
@@ -133,8 +132,7 @@ import PhaseStore from "../stores/PhaseStore"
 					if(res.ok){
 						document.location.href = '/';
 					}else{
-						// HACK: replace hardcoded String
-						console.log('error in delete Process');
+						console.log(Strings.error.restApi);
 						console.log(res);
 					}
 				});
@@ -155,8 +153,7 @@ import PhaseStore from "../stores/PhaseStore"
 				})
 			}
 			else{
-				// HACK: replace hardcoded String
-				console.log('error in fetch Items');
+				console.log(Strings.error.restApi);
 				console.log(res);
 			}
 		});
@@ -176,8 +173,7 @@ import PhaseStore from "../stores/PhaseStore"
 				})
 			}
 			else{
-				// HACK: replace hardcoded String
-				console.log('error in fetch Phases');
+				console.log(Strings.error.restApi);
 				console.log(res);
 			}
 		});
@@ -196,8 +192,7 @@ import PhaseStore from "../stores/PhaseStore"
 				})
 			}
 			else{
-				// HACK: replace hardcoded String
-				console.log('error in fetch Process');
+				console.log(Strings.error.restApi);
 				console.log(res);
 			}
 		});
@@ -210,8 +205,7 @@ import PhaseStore from "../stores/PhaseStore"
 		if(this.processCanBeFinished()){
 			this.setProcessStatus(2);
 		}else{
-			// HACK: replace hardcoded String
-			alertify.error('Prozess kann erst beendet werden wenn alle Aufgaben abgehackt sind');
+			alertify.error(Strings.process.error.finishProcess);
 		}
 	}
 
@@ -312,6 +306,7 @@ import PhaseStore from "../stores/PhaseStore"
 				}
 			}else{
 				console.log(res);
+				console.log(Strings.error.restApi);
 			}
 		});
 	}
@@ -321,8 +316,7 @@ import PhaseStore from "../stores/PhaseStore"
 	 */
 	reDoProcess(){
 		this.setProcessStatus(1);
-		// HACK: replace hardcoded String
-		alertify.success('Prozess wiederaufgenommen');
+		alertify.success(Strings.process.reDoLog);
 	}
 
 	/**
@@ -361,17 +355,11 @@ import PhaseStore from "../stores/PhaseStore"
 
 			});
 
+			var formatted_date = DateUtils.getDateAsString(process.due_date);
 			// inline styling
-			const containerStyle = { minHeight: 720, }
-			const btnStyle = { margin: 5, width: '90%', }
-
-			// converts date to readeble String
-			var date = new Date(process.due_date);
-			var day = date.getDate();
-			var month = date.getMonth()+1;
-			var year = date.getFullYear();
-			var formatted_date = day+"."+month+"."+year;
-
+			const containerStyle = { minHeight: 720, };
+			const btnStyle = { margin: 5, width: '90%', };
+      const headlineStyle = { marginTop: 70 };
 			//dynamic styles
 			var disableBtnFinish = 'disabled';
 			var disableBtnReDo = '';
@@ -383,30 +371,28 @@ import PhaseStore from "../stores/PhaseStore"
 			}
 			return(
 				<div>
-				{/* HACK: space for fixed header */}
-				<h1> .  </h1>
-				<h1>{process.person_name}</h1>
+				<h1 style={headlineStyle}>{process.person_name}</h1>
 					<div class="col-md-3 col-xs-12 row">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h4>Info</h4>
+								<h4>{Strings.info}</h4>
 							</div>
 							<ul class="list-group">
-								<li class="list-group-item"><span>Name:	{process.person_name}</span></li>
-								<li class="list-group-item"><span>Status:	{statusAsString}</span></li>
-								<li class="list-group-item"><span>Typ: {process.p_type}</span></li>
-								<li class="list-group-item"><span>Deadline: {formatted_date}</span></li>
+								<li class="list-group-item"><span>{Strings.name}:	{process.person_name}</span></li>
+								<li class="list-group-item"><span>{Strings.status}:	{statusAsString}</span></li>
+								<li class="list-group-item"><span>{Strings.type}: {process.p_type}</span></li>
+								<li class="list-group-item"><span>{Strings.dueDate}: {formatted_date}</span></li>
 							</ul>
 							<div class="panel-heading">
-								<h4>Aktionen</h4>
+								<h4>{Strings.process.actions}</h4>
 							</div>
 							<ul class="list-group">
 								<li><a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
-									onClick={() => this.finishProcess()}>Prozess erfolreich beenden</a></li>
+									onClick={() => this.finishProcess()}>{Strings.process.finish}</a></li>
 								<li><a class={"btn btn-info "+(disableBtnReDo)} style={btnStyle}
-									onClick={() => this.reDoProcess()}>Prozess wiederaufnehmen</a></li>
+									onClick={() => this.reDoProcess()}>{Strings.process.reDo}</a></li>
 								<li><a class="btn btn-danger" style={btnStyle}
-									onClick={() => this.deleteProcess()}>Prozess löschen</a></li>
+									onClick={() => this.deleteProcess()}>{Strings.process.delete}</a></li>
 							</ul>
 						</div>
 					</div>

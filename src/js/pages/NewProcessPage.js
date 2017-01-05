@@ -18,6 +18,7 @@ import * as PhaseActions from "../actions/PhaseActions";
 import PhaseStore from '../stores/PhaseStore';
 import * as ProcessActions from "../actions/ProcessActions";
 import ProcessStore from '../stores/ProcessStore';
+import Strings from '../values/strings_de';
 
 /**
  * @author Kasper Nadrajkowski
@@ -127,10 +128,9 @@ export default class NewProcessPage extends React.Component{
 				})
 			}
 			else{
-				console.log('error in create Process');
+				console.log(Strings.error.restApi);
 				console.log(res);
-				// HACK: replace hardcoded String
-				alertify.error('Bitte Namen eintragen und Datum auswählen.')
+				alertify.error(Strings.newProcess.error.wrongInput);
 			}
 		});
   	}
@@ -163,7 +163,7 @@ export default class NewProcessPage extends React.Component{
 				})
 			}
 			else{
-				console.log('error in create Phase');
+				console.log(Strings.error.restApi);
 				console.log(res);
 			}
 		});
@@ -193,40 +193,40 @@ export default class NewProcessPage extends React.Component{
 				document.location.href = '/';
 			}
 			else{
-				console.log('error in create Phase');
+				console.log(String.error.restApi);
 				console.log(res);
 			}
 		});
   	}
 
 	render(){
+		const headlineStyle = { marginTop: 70 };
 		return(
 			<div class="col-md-12">
-				{/* HACK: space for fixed-header-class */}
-				<h1> .  </h1>
-				<h1>New Process Page</h1>
+				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
 				<form class="form-horizontal">
 				  <div class="form-group">
-				    <label class="col-sm-2 control-label">Name</label>
+				    <label class="col-sm-2 control-label">{Strings.name}</label>
 				    <div class="col-sm-10">
-				      <input class="form-control" placeholder="Name" value={this.state.name} onChange={this.handleNameChange}></input>
+				      <input class="form-control" placeholder={Strings.name} value={this.state.name} onChange={this.handleNameChange}></input>
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label class="col-sm-2 control-label">Deadline</label>
+				    <label class="col-sm-2 control-label">{Strings.dueDate}</label>
 				    <div class="col-sm-10">
 				    	<div class="input-group">
 				    		<span class="input-group-addon" id="sizing-addon1">
 				    			<a class="glyphicon glyphicon-calendar"></a>
 				    		</span>
-				      		<input  id="datepicker" aria-describedby="sizing-addon1" class="form-control" placeholder="Deadline" value={this.state.due_date} onChange={this.handleDueDateChange}></input>
+				      		<input  id="datepicker" aria-describedby="sizing-addon1" class="form-control" placeholder={Strings.dueDate} value={this.state.due_date} onChange={this.handleDueDateChange}></input>
 				    	</div>
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label class="col-sm-2 control-label">Typ</label>
+				    <label class="col-sm-2 control-label">{Strings.type}</label>
 				    <div class="col-sm-10">
 				      <select class="form-control" value={this.state.p_type} onChange={this.handleTypeChange}>
+							/* TODO: will probable be replaced by list */
 						  <option>Vertieb</option>
 						  <option>Techniker</option>
 						  <option>Zentrale</option>
@@ -237,7 +237,7 @@ export default class NewProcessPage extends React.Component{
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	class="btn btn-info"
 								onClick={() => this.createProcess(this.state.name, this.state.due_date, this.state.p_type)}>
-								neuen Prozess erstellen
+								{Strings.processList.createNewProcess}
 							</a>
 				    </div>
 				  </div>

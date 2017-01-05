@@ -12,6 +12,7 @@ import dispatcher from "../dispatcher";
 import Process from "./Process";
 import ProcessStore from "../stores/ProcessStore";
 import ProcessActions from "../actions/ProcessActions";
+import Strings from '../values/strings_de';
 
 /**
  * @author Kasper Nadrajkowski
@@ -69,7 +70,8 @@ export default class ProcessList extends React.Component{
 				})
 			}
 			else{
-				console.log('error');
+				console.log(res);
+				console.log(Strings.error.restApi);
 			}
 		});
 	}
@@ -96,8 +98,10 @@ export default class ProcessList extends React.Component{
 	}
 
 	render(){
-		const btnStyle = {	marginTop: 15, marginBottom: 15, }
-		const containerStyle = { minHeight: 600, }
+		const btnStyle = { marginTop: 15, marginBottom: 15, width: '55%' }
+		const searchBarStyle = { width: '55%' };
+		const containerStyle = { minHeight: 700 }
+		const headlineStyle = { marginTop: 70 };
 		const { items } = this.state;
 		// makes sure data from DB is loaded, else render a loading spinner
 		if(items!=undefined){
@@ -127,17 +131,15 @@ export default class ProcessList extends React.Component{
 			return(
 				<div>
 					<div class="col-md-12">
-						{/* HACK: space for fixed-header-class */}
-						<h1> .  </h1>
-						<h2>Liste aller laufenden und abgeschlossenen Eintritts- und Austrittsprozesse</h2>
+						<h1 style={headlineStyle}>{Strings.processList.headline}</h1>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-md-4">
-							<a class="btn btn-info btn-lg" style={btnStyle} href="#/newProcess">neuen Prozess anlegen</a>
+							<a class="btn btn-info" style={btnStyle} href="#/newProcess">{Strings.processList.createNewProcess}</a>
 							<form>
 							  <div class="form-group">
-							    <label>Suche</label>
-							    <input class="form-control"  placeholder="Suchbegriff" onChange={this.handleSearchChange}></input>
+							    <label>{Strings.processList.search}</label>
+							    <input class="form-control"  style={searchBarStyle} placeholder={Strings.processList.searchString} onChange={this.handleSearchChange}></input>
 							  </div>
 							</form>
 						</div>
@@ -145,10 +147,10 @@ export default class ProcessList extends React.Component{
 							<table class="table table-hover table-striped table-bordered">
 							<tbody>
 									<tr>
-										<th>Name</th>
-										<th>Status</th>
-										<th>Deadline</th>
-										<th>Typ</th>
+										<th>{Strings.name}</th>
+										<th>{Strings.status}</th>
+										<th>{Strings.dueDate}</th>
+										<th>{Strings.type}</th>
 									</tr>
 								 	{ItemComponents}
 								</tbody>

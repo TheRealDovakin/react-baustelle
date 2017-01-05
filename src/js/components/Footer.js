@@ -4,6 +4,7 @@ import React from "react";
 
 //own files
 import Constants from '../values/constants';
+import Strings from '../values/strings_de';
 
 /**
  * @author Kasper Nadrajkowski
@@ -27,9 +28,9 @@ export default class Footer extends React.Component{
 				</div>
 				<div class="col-md-8">
 					{/* TODO: replace hardcoded strings */}
-					<h4 class="pull-right" style={spanStyle}><a href='#' >Home</a></h4>
-					<h4 class="pull-right" style={spanStyle}><a href="#/info">Info</a></h4>
-					<h4 class="pull-right" style={spanStyle}><a href={"mailto:"+Constants.myMail}>Contact</a></h4>
+					<h4 class="pull-right" style={spanStyle}><a href='#' >{Strings.footer.home}</a></h4>
+					<h4 class="pull-right" style={spanStyle}><a href="#/info">{Strings.info}</a></h4>
+					<h4 class="pull-right" style={spanStyle}><a href={"mailto:"+Constants.myMail}>{Strings.footer.contact}</a></h4>
 				</div>
 			</footer>
 		);
