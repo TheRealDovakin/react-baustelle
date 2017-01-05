@@ -357,8 +357,8 @@ import Strings from '../values/strings_de';
 
 			var formatted_date = DateUtils.getDateAsString(process.due_date);
 			// inline styling
-			const containerStyle = { minHeight: 720, };
-			const btnStyle = { margin: '2%', width: '96%', };
+			const containerStyle = { overflowY: 'scroll', minHeigth: '100px', maxHeigth: '4000px' };
+			const btnStyle = { margin: '0%', width: '100%', };
       const headlineStyle = { marginTop: 70 };
 			//dynamic styles
 			var disableBtnFinish = 'disabled';
@@ -396,7 +396,7 @@ import Strings from '../values/strings_de';
 							</ul>
 						</div>
 					</div>
-					<div class="col-xs-12 col-md-9 pre-scrollable" style={containerStyle} >
+					<div class="col-xs-12 col-md-9" style={containerStyle} >
 					{ItemComponents}
 					</div>
 

@@ -13,12 +13,13 @@ export default
  */
 class Header extends React.Component{
 	render(){
+		const margin={margin: 8}
 		return(
 			<div>
 				<nav class="navbar navbar-default navbar-fixed-top">
 				    <div>
 				      <ul class="nav navbar-nav">
-				      	<a class="navbar-brand" href="#">Kieback & Peter</a>
+				      	<a style={margin} class="navbar-brand" href="#">Kieback & Peter</a>
 				      </ul>
 				    </div>
 				</nav>

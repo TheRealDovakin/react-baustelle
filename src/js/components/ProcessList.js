@@ -98,9 +98,9 @@ export default class ProcessList extends React.Component{
 	}
 
 	render(){
-		const btnStyle = { width: '100%' }
+		const panelElementStyle = { margin: '0%', width: '100%', };
 		const searchBarStyle = { width: '100%' };
-		const containerStyle = { minHeight: 700 }
+		const containerStyle = { overflow: 'auto' }
 		const headlineStyle = { marginTop: 70 };
 		const { items } = this.state;
 		// makes sure data from DB is loaded, else render a loading spinner
@@ -139,15 +139,15 @@ export default class ProcessList extends React.Component{
 							</ul>
 							<div class="panel-heading"><h4>{Strings.process.actions}</h4></div>
 							<ul class="list-group">
-								<li class="list-group-item"><a class="btn btn-primary" style={btnStyle} href="#/newProcess">{Strings.processList.createNewProcess}</a></li>
+								<li><a class="btn btn-primary" style={panelElementStyle} href="#/newProcess">{Strings.processList.createNewProcess}</a></li>
 							</ul>
 							<div class="panel-heading"><h4>{Strings.processList.filter}</h4></div>
 							<ul class="list-group">
-								<li class="list-group-item">
+								<li>
 									<form>
 									  <div class="form-group">
 									    <label>{Strings.processList.search}</label>
-									    <input class="form-control"  style={searchBarStyle} placeholder={Strings.processList.searchString} onChange={this.handleSearchChange}></input>
+									    <input class="form-control"  style={panelElementStyle} placeholder={Strings.processList.searchString} onChange={this.handleSearchChange}></input>
 									  </div>
 									</form>
 									<div class="checkbox">
@@ -164,7 +164,7 @@ export default class ProcessList extends React.Component{
 							</ul>
 						</div>
 					</div>
-					<div class="col-xs-12 col-md-9 pre-scrollable" style={containerStyle}>
+					<div class="col-xs-12 col-md-9" style={containerStyle}>
 						<table class="table table-hover table-striped table-bordered">
 						<tbody>
 								<tr>

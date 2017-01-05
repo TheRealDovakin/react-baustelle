@@ -74,6 +74,7 @@ export default class Item extends React.Component{
 	}
 
 	render(){
+		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const { _id, status, name, place, person, person_spare, spare } = this.props;
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
@@ -90,9 +91,9 @@ export default class Item extends React.Component{
 						<li class="list-group-item"><span>{Strings.status}: erledigt</span></li>
 						<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
 						<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
-						<li class="list-group-item"><a class="btn btn-default" onClick={
+						<a class="btn btn-default" style={btnStyle} onClick={
 							() => this.changeItemStatus(this, _id, 3)
-						}>{Strings.item.setToNotDone}</a></li>
+						}>{Strings.item.setToNotDone}</a>
 					</ul>
 				</div>
 				);
@@ -115,11 +116,9 @@ export default class Item extends React.Component{
 							<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
 							<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
 							<li class="list-group-item disabled"><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
-							<li class="list-group-item">
-								<a class="btn btn-success" onClick={
-									() => this.changeItemStatus(this, _id, 2)
-								}>{Strings.item.setToDone}</a>
-							</li>
+							<a class="btn btn-success" style={btnStyle} onClick={
+								() => this.changeItemStatus(this, _id, 2)
+							}>{Strings.item.setToDone}</a>
 						</ul>
 					</div>
 					);
