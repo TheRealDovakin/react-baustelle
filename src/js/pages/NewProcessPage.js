@@ -235,7 +235,7 @@ export default class NewProcessPage extends React.Component{
 				  </div>
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
-				      <a 	class="btn btn-info"
+				      <a 	class="btn btn-primary"
 								onClick={() => this.createProcess(this.state.name, this.state.due_date, this.state.p_type)}>
 								{Strings.processList.createNewProcess}
 							</a>

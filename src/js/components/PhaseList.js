@@ -358,7 +358,7 @@ import Strings from '../values/strings_de';
 			var formatted_date = DateUtils.getDateAsString(process.due_date);
 			// inline styling
 			const containerStyle = { minHeight: 720, };
-			const btnStyle = { margin: 5, width: '90%', };
+			const btnStyle = { margin: '2%', width: '96%', };
       const headlineStyle = { marginTop: 70 };
 			//dynamic styles
 			var disableBtnFinish = 'disabled';
@@ -389,7 +389,7 @@ import Strings from '../values/strings_de';
 							<ul class="list-group">
 								<li><a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
 									onClick={() => this.finishProcess()}>{Strings.process.finish}</a></li>
-								<li><a class={"btn btn-info "+(disableBtnReDo)} style={btnStyle}
+								<li><a class={"btn btn-primary "+(disableBtnReDo)} style={btnStyle}
 									onClick={() => this.reDoProcess()}>{Strings.process.reDo}</a></li>
 								<li><a class="btn btn-danger" style={btnStyle}
 									onClick={() => this.deleteProcess()}>{Strings.process.delete}</a></li>

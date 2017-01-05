@@ -98,8 +98,8 @@ export default class ProcessList extends React.Component{
 	}
 
 	render(){
-		const btnStyle = { marginTop: 15, marginBottom: 15, width: '55%' }
-		const searchBarStyle = { width: '55%' };
+		const btnStyle = { width: '100%' }
+		const searchBarStyle = { width: '100%' };
 		const containerStyle = { minHeight: 700 }
 		const headlineStyle = { marginTop: 70 };
 		const { items } = this.state;
@@ -130,32 +130,52 @@ export default class ProcessList extends React.Component{
 			});
 			return(
 				<div>
-					<div class="col-md-12">
-						<h1 style={headlineStyle}>{Strings.processList.headline}</h1>
+					<h1 style={headlineStyle}>{Strings.processList.headline}</h1>
+					<div class="col-xs-12 col-md-3 row">
+						<div class="panel panel-default">
+							<div class="panel-heading"><h4>{Strings.info}</h4></div>
+							<ul class="list-group">
+								<li class="list-group-item"><span>Some Info</span></li>
+							</ul>
+							<div class="panel-heading"><h4>{Strings.process.actions}</h4></div>
+							<ul class="list-group">
+								<li class="list-group-item"><a class="btn btn-primary" style={btnStyle} href="#/newProcess">{Strings.processList.createNewProcess}</a></li>
+							</ul>
+							<div class="panel-heading"><h4>{Strings.processList.filter}</h4></div>
+							<ul class="list-group">
+								<li class="list-group-item">
+									<form>
+									  <div class="form-group">
+									    <label>{Strings.processList.search}</label>
+									    <input class="form-control"  style={searchBarStyle} placeholder={Strings.processList.searchString} onChange={this.handleSearchChange}></input>
+									  </div>
+									</form>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox"></input> Some Filter 1
+										</label>
+									</div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox"></input> Some Filter 2
+										</label>
+									</div>
+								</li>
+							</ul>
+						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-12 col-md-4">
-							<a class="btn btn-info" style={btnStyle} href="#/newProcess">{Strings.processList.createNewProcess}</a>
-							<form>
-							  <div class="form-group">
-							    <label>{Strings.processList.search}</label>
-							    <input class="form-control"  style={searchBarStyle} placeholder={Strings.processList.searchString} onChange={this.handleSearchChange}></input>
-							  </div>
-							</form>
-						</div>
-						<div class="col-xs-12 col-md-8 pre-scrollable" style={containerStyle}>
-							<table class="table table-hover table-striped table-bordered">
-							<tbody>
-									<tr>
-										<th>{Strings.name}</th>
-										<th>{Strings.status}</th>
-										<th>{Strings.dueDate}</th>
-										<th>{Strings.type}</th>
-									</tr>
-								 	{ItemComponents}
-								</tbody>
-						 	</table>
-						</div>
+					<div class="col-xs-12 col-md-9 pre-scrollable" style={containerStyle}>
+						<table class="table table-hover table-striped table-bordered">
+						<tbody>
+								<tr>
+									<th><h4>{Strings.name}</h4></th>
+									<th><h4>{Strings.status}</h4></th>
+									<th><h4>{Strings.dueDate}</h4></th>
+									<th><h4>{Strings.type}</h4></th>
+								</tr>
+							 	{ItemComponents}
+							</tbody>
+					 	</table>
 					</div>
 				</div>
 			);

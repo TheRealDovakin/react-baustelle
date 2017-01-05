@@ -50,6 +50,7 @@ export default{
   },
   processList:{
     createNewProcess: 'neuen Prozess anlegen',
+    filter: 'Filter',
     headline: 'Prozess-Liste',
     search: 'Suche',
     searchString: 'Suchbegriff',

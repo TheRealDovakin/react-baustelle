@@ -87,10 +87,10 @@ export default class Item extends React.Component{
 						</h4>
 					</div>
 					<ul class="list-group">
-						<li class="list-group-item list-group-item-success"><span>{Strings.status}: erledigt</span></li>
-						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-						<li class="list-group-item list-group-item-success"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
-						<li class="list-group-item list-group-item-success"><a class="btn btn-default" onClick={
+						<li class="list-group-item"><span>{Strings.status}: erledigt</span></li>
+						<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+						<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
+						<li class="list-group-item"><a class="btn btn-default" onClick={
 							() => this.changeItemStatus(this, _id, 3)
 						}>{Strings.item.setToNotDone}</a></li>
 					</ul>
