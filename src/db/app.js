@@ -4,6 +4,7 @@ var express = require('express'),
     morgan = require('morgan'),
     restful = require('node-restful'),
     mongoose = restful.mongoose;
+    cors = require('cors');
 
 /**
  * express rest-api with node-restful
@@ -16,6 +17,8 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
+app.use(cors());
+
 
 mongoose.connect("mongodb://localhost/kup");
 
