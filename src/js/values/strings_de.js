@@ -13,6 +13,7 @@ export default{
   running: 'laufend',
   status: 'Status',
   type: 'Typ',
+  companyCar: 'Firmenwagen',
   //grouped strings
   footer:{
     contact: 'Kontakt',
@@ -54,5 +55,10 @@ export default{
     headline: 'Prozess-Liste',
     search: 'Suche',
     searchString: 'Suchbegriff',
+  },
+  processTypes:{
+    techniker: "Techniker",
+    vertrieb: "Vertrieb",
+    zentrale: "Zentrale",
   },
 }

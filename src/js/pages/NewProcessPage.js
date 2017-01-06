@@ -32,7 +32,7 @@ export default class NewProcessPage extends React.Component{
 			 car: false,
 	    	name: '',
 	    	due_date:'',
-	    	p_type:'Vertieb',
+	    	p_type: Strings.processTypes.vetrieb,
 	   };
 		 // binded functions
 		 this.createProcess = this.createProcess.bind(this);
@@ -149,9 +149,9 @@ export default class NewProcessPage extends React.Component{
 				self.postPhase(res, PhaseValues.basic);
 				const options = JSON.parse(json_data);
 				switch(options.p_type){
-					case 'Vertrieb': {self.postPhase(res, PhaseValues.vertrieb)}; break;
-					case 'Zentrale': {self.postPhase(res, PhaseValues.zentrale)}; break;
-					case 'Techniker': {self.postPhase(res, PhaseValues.techniker)}; break;
+					case Strings.processTypes.vertrieb: {self.postPhase(res, PhaseValues.vertrieb)}; break;
+					case Strings.processTypes.zentrale: {self.postPhase(res, PhaseValues.zentrale)}; break;
+					case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
 				}
 				if (options.car==true) self.postPhase(res, PhaseValues.auto);
 			})
@@ -225,7 +225,7 @@ export default class NewProcessPage extends React.Component{
 				car: false,
  	    	name: '',
  	    	due_date:'',
- 	    	p_type:'Vertieb',
+ 	    	p_type: Strings.processTypes.vertrieb,
 			});
 			document.getElementById('carCheckbox').checked = false;
 		}
@@ -264,14 +264,14 @@ export default class NewProcessPage extends React.Component{
 				    <div class="col-sm-10">
 				      <select class="form-control" value={this.state.p_type} onChange={this.handleTypeChange}>
 							/* TODO: will probable be replaced by list */
-						  <option>Vertieb</option>
-						  <option>Techniker</option>
-						  <option>Zentrale</option>
+						  <option>{Strings.processTypes.vertrieb}</option>
+						  <option>{Strings.processTypes.techniker}</option>
+						  <option>{Strings.processTypes.zentrale}</option>
 						</select>
 				    </div>
 				  </div>
 					<div class="form-group">
-				    <label class="col-sm-2 control-label">Firmenwagen</label>
+				    <label class="col-sm-2 control-label">{Strings.companyCar}</label>
 				    <div class="col-sm-10">
 							<div class="checkbox">
 				        <label>
