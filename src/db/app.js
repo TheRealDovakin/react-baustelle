@@ -17,7 +17,11 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
-app.use(cors());
+
+var corsOptions = {
+  origin: 'http://172.22.23.6:25555',
+}
+app.use(cors(corsOptions));
 
 
 mongoose.connect("mongodb://localhost/kup");
