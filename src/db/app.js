@@ -3,8 +3,11 @@ var express = require('express'),
     methodOverride = require('method-override'),
     morgan = require('morgan'),
     restful = require('node-restful'),
+    cors = require('cors'),
+    nodemailer = require('nodemailer'),
     mongoose = restful.mongoose;
-    cors = require('cors');
+
+
 
 /**
  * express rest-api with node-restful
@@ -17,12 +20,7 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
-
-var corsOptions = {
-  origin: 'http://172.22.23.6:25555',
-}
-app.use(cors(corsOptions));
-
+app.use(cors({origin:'http://172.22.23.6:25555'}));
 
 mongoose.connect("mongodb://localhost/kup");
 
@@ -39,6 +37,37 @@ PhaseModel.register(app, '/phases');
 var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),
 ProcessModel.register(app, '/processes');
+
+function sendMail(adress, subject, body){
+  var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'nadrajkowskii@gmail.com', // Your email id
+      pass: 'zzzzzzzzz' // Your password
+    }
+  });
+  var mailOptions = {
+    from: 'nadrajkowskii@gmail.com>', // sender address
+    to: adress, // list of receivers
+    subject: subject, // Subject line
+    text: body //, // plaintext body
+    // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+      console.log(error);
+      res.json({yo: 'error'});
+    }else{
+      console.log('Message sent: ' + info.response);
+      res.json({yo: info.response});
+    };
+  });
+}
+
+app.put('/sendMail', function(_req, res){
+  var req = _req.body;
+  sendMail(req.adress, req.subject, req.body);
+});
 
 console.log('app listens at localhost:3000');
 app.listen(3000);

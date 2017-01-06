@@ -202,6 +202,22 @@ import Strings from '../values/strings_de';
 	 * updates the status of the current Process to done
 	 */
 	finishProcess(){
+    const json_data = JSON.stringify({
+      adress: "nadrajkowski@live.de",
+      subject: "K&P",
+      body: "hallo"
+    });
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
+		fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
+			if(res.ok){
+        console.log('ok');
+			}else{
+				console.log(res);
+				console.log(Strings.error.restApi);
+			}
+		});
 		if(this.processCanBeFinished()){
 			this.setProcessStatus(2);
 		}else{
@@ -219,6 +235,14 @@ import Strings from '../values/strings_de';
 			process: this.state.process,
 		});
 	}
+
+  sendMail() {
+    var link = "mailto:nadrajkowskii@gmail.com"
+             + "&subject=" + escape("This is my subject")
+             + "&body=" + escape(document.getElementById('myText').value)
+    ;
+    window.location.href = link;
+}
 
 	/**
 	 * updates the state with Phases from its store
