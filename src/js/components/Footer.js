@@ -13,21 +13,36 @@ import Strings from '../values/strings_de';
 export default class Footer extends React.Component{
 	render(){
 		// inline styling
+		const aStyle = {
+			marginRight: '15px',
+			fontSize: '15pt',
+			color: 'white',
+		}
+
+		const linkStyle = {
+			color: 'white',
+		}
+
+		const footerStyle = {
+			width: '100%',
+			bottom: 0,
+			position: 'fixed',
+			backgroundColor: 'black',
+			opacity: '0.5',
+		}
 		// react default render function
 		return(
 			//TODO: footer overlaps alertify-alerts
-			<nav class="navbar navbar-default navbar-fixed-bottom">
-				<ul class="nav navbar-nav">
-					<li>
-						<a target="_blank" href={Constants.githubPath}>{'\u00A9'} 2017 Kasper Nadrajkowski</a>
-					</li>
-				</ul>
-				<ul class="nav navbar-nav pull-right">
-					<li><a class="navbar-brand" href='#' >{Strings.footer.home}</a></li>
-					<li><a class="navbar-brand" href="#/info">{Strings.info}</a></li>
-					<li><a class="navbar-brand" href={"mailto:"+Constants.myMail}>{Strings.footer.contact}</a></li>
-				</ul>
-			</nav>
+			<footer style={footerStyle}>
+				<div class="pull-left">
+					<a style={linkStyle} target="_blank" href={Constants.githubPath}>{'\u00A9'} 2017 Kasper Nadrajkowski</a>
+				</div>
+				<div class="pull-right">
+					<a style={aStyle} href='#' >{Strings.footer.home}</a>
+					<a style={aStyle} href="#/info">{Strings.info}</a>
+					<a style={aStyle} href={"mailto:"+Constants.myMail}>{Strings.footer.contact}</a>
+				</div>
+			</footer>
 		);
 	}
 }

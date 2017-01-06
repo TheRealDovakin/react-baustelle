@@ -132,11 +132,9 @@ export default class Phase extends React.Component{
 					<Title title={this.props.title} />
 					<div><h3>{name}</h3></div>
 					<div> {ItemComponents} </div>
-					<h3>{Strings.phase.progress}</h3>
+					<h3>{Strings.phase.progress}: {progress} %</h3>
 					<div class="progress">
-					  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}>
-					    {progress} %
-					  </div>
+					  <div class="progress-bar progress-bar-success" role="progressbar" style={progressStyle}></div>
 					</div>
 				</div>
 			);

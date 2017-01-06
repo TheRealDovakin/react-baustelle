@@ -357,9 +357,9 @@ import Strings from '../values/strings_de';
 
 			var formatted_date = DateUtils.getDateAsString(process.due_date);
 			// inline styling
-			const containerStyle = { overflowY: 'scroll', minHeigth: '100px', maxHeigth: '4000px' };
 			const btnStyle = { margin: '0%', width: '100%', };
       const headlineStyle = { marginTop: 70 };
+      const leftNavStyle = { top: '120px', left: '0px', position: 'fixed' }
 			//dynamic styles
 			var disableBtnFinish = 'disabled';
 			var disableBtnReDo = '';
@@ -372,7 +372,7 @@ import Strings from '../values/strings_de';
 			return(
 				<div>
 				<h1 style={headlineStyle}>{process.person_name}</h1>
-					<div class="col-md-3 col-xs-12 row">
+					<div class="col-md-3 col-xs-3" style={leftNavStyle}>
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h4>{Strings.info}</h4>
@@ -387,16 +387,16 @@ import Strings from '../values/strings_de';
 								<h4>{Strings.process.actions}</h4>
 							</div>
 							<ul class="list-group">
-								<li><a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
-									onClick={() => this.finishProcess()}>{Strings.process.finish}</a></li>
-								<li><a class={"btn btn-primary "+(disableBtnReDo)} style={btnStyle}
-									onClick={() => this.reDoProcess()}>{Strings.process.reDo}</a></li>
-								<li><a class="btn btn-danger" style={btnStyle}
-									onClick={() => this.deleteProcess()}>{Strings.process.delete}</a></li>
+          			<a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
+          									onClick={() => this.finishProcess()}>{Strings.process.finish}</a>
+          			<a class={"btn btn-primary "+(disableBtnReDo)} style={btnStyle}
+          									onClick={() => this.reDoProcess()}>{Strings.process.reDo}</a>
+          			<a class="btn btn-danger" style={btnStyle}
+          									onClick={() => this.deleteProcess()}>{Strings.process.delete}</a>
 							</ul>
 						</div>
 					</div>
-					<div class="col-xs-12 col-md-9" style={containerStyle} >
+					<div class="col-md-9 col-xs-9 pull-right">
 					{ItemComponents}
 					</div>
 

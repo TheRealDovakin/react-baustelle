@@ -76,6 +76,7 @@ export default class Item extends React.Component{
 	render(){
 		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const { _id, status, name, place, person, person_spare, spare } = this.props;
+		const headlineStyle = { marginLeft: '10px'	};
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
 		if(true){ // TODO: should check if items not undefined
@@ -84,7 +85,7 @@ export default class Item extends React.Component{
 				<div class="panel panel-success">
 					<div class="panel-heading">
 						<h4>{name}
-							<a onClick={() => this.changeItemStatus(this, _id, 2)} class="glyphicon glyphicon-chevron-up"></a>
+							<a style={headlineStyle} onClick={() => this.changeItemStatus(this, _id, 2)} class="glyphicon glyphicon-chevron-up"></a>
 						</h4>
 					</div>
 					<ul class="list-group">
@@ -101,8 +102,8 @@ export default class Item extends React.Component{
 				return(
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h4>{name}
-							<a onClick={() => this.changeItemStatus(this, _id, 1)} class="glyphicon glyphicon-chevron-down">  </a>
+						<h4 >{name}
+							<a style={headlineStyle} onClick={() => this.changeItemStatus(this, _id, 1)} class="glyphicon glyphicon-chevron-down">  </a>
 						</h4>
 					</div>
 				</div>
