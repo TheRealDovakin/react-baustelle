@@ -29,7 +29,7 @@ export default{
   },
   item:{
     setToDone: 'auf ERLEDIGT setzten',
-    setToNotDone: 'aud NICHT ERLEDIGT setzten',
+    setToNotDone: 'auf NICHT ERLEDIGT setzten',
     responsablePerson: 'Verantwortlicher',
     responsablePersonSpare: 'Vertretung',
   },

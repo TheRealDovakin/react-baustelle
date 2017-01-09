@@ -7,6 +7,7 @@ module.exports = {
   entry: [
     "./js/client.js",
     "webpack-dev-server/client?http://0.0.0.0:25555",
+    "babel-polyfill"
   ],
   module: {
     loaders: [

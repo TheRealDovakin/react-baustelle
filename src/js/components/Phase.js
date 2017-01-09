@@ -1,7 +1,8 @@
 //js
 import Constants from '../values/constants';
 import React from "react";
-import "whatwg-fetch";
+import ES6Promise from 'es6-promise';
+import "isomorphic-fetch";
 
 //css
 import "../../css/spinner.css"

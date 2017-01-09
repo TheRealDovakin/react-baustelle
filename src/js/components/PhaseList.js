@@ -2,9 +2,10 @@
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import React from "react";
-import "whatwg-fetch";
 import { withRouter } from "react-router"
 import _ from "underscore";
+import ES6Promise from 'es6-promise';
+import "whatwg-fetch";
 //cs
 import "../../css/spinner.css"
 //own files
@@ -22,6 +23,8 @@ import Strings from '../values/strings_de';
  */
  export default class PhaseList extends React.Component{
 	constructor(){
+    //IE promise-support
+    ES6Promise.polyfill();
 		super();
 		dispatcher.register(this.handleActions.bind(this));
 		// binded functions
@@ -405,14 +408,14 @@ import Strings from '../values/strings_de';
 								<h4>{Strings.info}</h4>
 							</div>
 							<ul class="list-group">
+                <li class="list-group-item"><span>{Strings.status}:	{statusAsString}</span></li>
 								<li class="list-group-item"><span>{Strings.name}:	{process.person_name}</span></li>
                 <li class="list-group-item"><span>{Strings.personNr}: {process.person_nr}</span></li>
                 <li class="list-group-item"><span>{Strings.short}: {process.short}</span></li>
-								<li class="list-group-item"><span>{Strings.status}:	{statusAsString}</span></li>
                 <li class="list-group-item"><span>{Strings.place}: {process.place}</span></li>
-								<li class="list-group-item"><span>{Strings.type}: {process.p_type}</span></li>
-								<li class="list-group-item"><span>{Strings.job}: {process.job}</span></li>
-								<li class="list-group-item"><span>{Strings.department}: {process.department}</span></li>
+                <li class="list-group-item"><span>{Strings.department}: {process.department}</span></li>
+                <li class="list-group-item"><span>{Strings.type}: {process.p_type}</span></li>
+                <li class="list-group-item"><span>{Strings.job}: {process.job}</span></li>
 							</ul>
 							<div class="panel-heading">
 								<h4>{Strings.process.actions}</h4>

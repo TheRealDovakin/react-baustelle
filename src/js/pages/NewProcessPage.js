@@ -4,6 +4,7 @@ import Constants from '../values/constants';
 import flatpickr from "flatpickr";
 import React from "react";
 import _ from 'underscore';
+import ES6Promise from 'es6-promise';
 import "whatwg-fetch";
 
 //css
@@ -27,6 +28,8 @@ import Strings from '../values/strings_de';
  */
 export default class NewProcessPage extends React.Component{
 	constructor(props) {
+		//IE promise-support
+		ES6Promise.polyfill();
 	   super(props);
 	   this.state = {
 			 car: false,

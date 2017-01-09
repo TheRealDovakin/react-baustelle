@@ -2,6 +2,7 @@
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import React from "react";
+import ES6Promise from 'es6-promise';
 import "whatwg-fetch";
 
 //css
@@ -21,6 +22,8 @@ import Strings from '../values/strings_de';
 export default class ProcessList extends React.Component{
 
 	constructor(){
+		//IE promise-support
+		ES6Promise.polyfill();
 		super();
 		//binded functions
 		this.fetchProcesses = this.fetchProcesses.bind(this);
