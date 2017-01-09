@@ -5,8 +5,8 @@ var express = require('express'),
     restful = require('node-restful'),
     cors = require('cors'),
     nodemailer = require('nodemailer'),
+    gmailLogin = require('../js/values/gmailLogin'),
     mongoose = restful.mongoose;
-
 
 
 /**
@@ -42,12 +42,12 @@ function sendMail(adress, subject, body){
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'nadrajkowskii@gmail.com', // Your email id
-      pass: 'zzzzzzzzz' // Your password
+      user: gmailLogin.user, // Your email id
+      pass: gmailLogin.pass // Your password
     }
   });
   var mailOptions = {
-    from: 'nadrajkowskii@gmail.com>', // sender address
+    from: gmailLogin.user, // sender address
     to: adress, // list of receivers
     subject: subject, // Subject line
     text: body //, // plaintext body
@@ -56,10 +56,10 @@ function sendMail(adress, subject, body){
   transporter.sendMail(mailOptions, function(error, info){
     if(error){
       console.log(error);
-      res.json({yo: 'error'});
+      //res.json({yo: 'error'});
     }else{
-      console.log('Message sent: ' + info.response);
-      res.json({yo: info.response});
+      console.log('Message sent: ');
+      //res.json({yo: info.response});
     };
   });
 }

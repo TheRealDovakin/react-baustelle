@@ -202,6 +202,7 @@ import Strings from '../values/strings_de';
 	 * updates the status of the current Process to done
 	 */
 	finishProcess(){
+    /* //port 465 not open
     const json_data = JSON.stringify({
       adress: "nadrajkowski@live.de",
       subject: "K&P",
@@ -218,6 +219,7 @@ import Strings from '../values/strings_de';
 				console.log(Strings.error.restApi);
 			}
 		});
+    */
 		if(this.processCanBeFinished()){
 			this.setProcessStatus(2);
 		}else{
@@ -393,6 +395,7 @@ import Strings from '../values/strings_de';
 				disableBtnReDo='disabled';
 				statusAsString='laufend';
 			}
+      //TODO: replace hardcoded strings
 			return(
 				<div>
 				<h1 style={headlineStyle}>{process.person_name}</h1>
@@ -403,9 +406,13 @@ import Strings from '../values/strings_de';
 							</div>
 							<ul class="list-group">
 								<li class="list-group-item"><span>{Strings.name}:	{process.person_name}</span></li>
+                <li class="list-group-item"><span>{Strings.personNr}: {process.person_nr}</span></li>
+                <li class="list-group-item"><span>{Strings.short}: {process.short}</span></li>
 								<li class="list-group-item"><span>{Strings.status}:	{statusAsString}</span></li>
+                <li class="list-group-item"><span>{Strings.place}: {process.place}</span></li>
 								<li class="list-group-item"><span>{Strings.type}: {process.p_type}</span></li>
-								<li class="list-group-item"><span>{Strings.dueDate}: {formatted_date}</span></li>
+								<li class="list-group-item"><span>{Strings.job}: {process.job}</span></li>
+								<li class="list-group-item"><span>{Strings.department}: {process.department}</span></li>
 							</ul>
 							<div class="panel-heading">
 								<h4>{Strings.process.actions}</h4>

@@ -31,14 +31,24 @@ export default class NewProcessPage extends React.Component{
 	   this.state = {
 			 car: false,
 	    	name: '',
+				person_nr: '',
+				short: '',
+				job: '',
+				place: '',
+				department: '',
 	    	due_date:'',
 	    	p_type: Strings.processTypes.vetrieb,
 	   };
 		 // binded functions
 		 this.createProcess = this.createProcess.bind(this);
 	   this.handleCarChange = this.handleCarChange.bind(this);
-	   this.handleNameChange = this.handleNameChange.bind(this);
-	   this.handleDueDateChange = this.handleDueDateChange.bind(this);
+		 this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
+		 this.handleDueDateChange = this.handleDueDateChange.bind(this);
+	   this.handleJobChange = this.handleJobChange.bind(this);
+		 this.handleNameChange = this.handleNameChange.bind(this);
+		 this.handlePersonNrChange = this.handlePersonNrChange.bind(this);
+		 this.handlePlaceChange = this.handlePlaceChange.bind(this);
+		 this.handleShortChange = this.handleShortChange.bind(this);
 	   this.handleTypeChange = this.handleTypeChange.bind(this);
 	   this.setDatepicker = this.setDatepicker.bind(this);
 	   this.postProcess = this.postProcess.bind(this);
@@ -59,10 +69,15 @@ export default class NewProcessPage extends React.Component{
 	 * @param {String} due_date			date from datepicker
 	 * @param {String} p_type			process type from input
 	 */
-	createProcess(person_name, due_date, p_type, car){
+	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car){
 		var json_data = JSON.stringify({
 			status: 1,
 			person_name: person_name,
+			person_nr: person_nr,
+			short: short,
+			job: job,
+			place: place,
+			department: department,
 			due_date: due_date,
 			p_type: p_type,
 			car: car,
@@ -81,6 +96,11 @@ export default class NewProcessPage extends React.Component{
   	this.setState({
 			car: car,
   		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: this.state.job,
+			place: this.state.place,
+			department: this.state.department,
   		due_date: this.state.due_date,
   		p_type: this.state.p_type,
   	});
@@ -94,6 +114,62 @@ export default class NewProcessPage extends React.Component{
   	this.setState({
 			car: this.state.car,
   		name: event.target.value,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: this.state.job,
+			place: this.state.place,
+			department: this.state.department,
+  		due_date: this.state.due_date,
+  		p_type: this.state.p_type,
+  	});
+	}
+	/**
+	 * handles job-input changes and upadates state with the value
+	 * @param  {event} event 		input value
+	 */
+	handleJobChange(event) {
+  	this.setState({
+			car: this.state.car,
+  		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: event.target.value,
+			place: this.state.place,
+			department: this.state.department,
+  		due_date: this.state.due_date,
+  		p_type: this.state.p_type,
+  	});
+	}
+	/**
+	 * handles place-input changes and upadates state with the value
+	 * @param  {event} event 		input value
+	 */
+	handlePlaceChange(event) {
+  	this.setState({
+			car: this.state.car,
+  		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: this.state.job,
+			place: event.target.value,
+			department: this.state.department,
+  		due_date: this.state.due_date,
+  		p_type: this.state.p_type,
+  	});
+	}
+	/**
+	 * handles department-input changes and upadates state with the value
+	 * @param  {event} event 		input value
+	 */
+	handleDepartmentChange(event) {
+  	this.setState({
+			car: this.state.car,
+  		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: this.state.job,
+			place: this.state.place,
+			department: event.target.value,
   		due_date: this.state.due_date,
   		p_type: this.state.p_type,
   	});
@@ -107,6 +183,11 @@ export default class NewProcessPage extends React.Component{
   	this.setState({
 			car: this.state.car,
   		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: this.state.job,
+			place: this.state.place,
+			department: this.state.department,
   		due_date: event.target.value,
   		p_type: this.state.p_type,
   	});
@@ -120,8 +201,47 @@ export default class NewProcessPage extends React.Component{
   	this.setState({
 			car: this.state.car,
   		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: this.state.short,
+			job: this.state.job,
+			place: this.state.place,
+			department: this.state.department,
   		due_date: this.state.due_date,
   		p_type: event.target.value,
+  	});
+	}
+	/**
+	 * handles person_nr-input changes and upadates state with the value
+	 * @param  {event} event 		process-type value
+	 */
+	handlePersonNrChange(event) {
+  	this.setState({
+			car: this.state.car,
+  		name: this.state.name,
+			person_nr: event.target.value,
+			short: this.state.short,
+			job: this.state.job,
+			place: this.state.place,
+			department: this.state.department,
+  		due_date: this.state.due_date,
+  		p_type: this.state.p_type,
+  	});
+	}
+	/**
+	 * handles short-input changes and upadates state with the value
+	 * @param  {event} event 		process-type value
+	 */
+	handleShortChange(event) {
+  	this.setState({
+			car: this.state.car,
+  		name: this.state.name,
+			person_nr: this.state.person_nr,
+			short: event.target.value,
+			job: this.state.job,
+			place: this.state.place,
+			department: this.state.department,
+  		due_date: this.state.due_date,
+  		p_type: this.state.p_type,
   	});
 	}
 
@@ -154,11 +274,24 @@ export default class NewProcessPage extends React.Component{
 					case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
 				}
 				if (options.car==true) self.postPhase(res, PhaseValues.auto);
+				alertify.success('Process wurde erstellt'); // TODO: replace hardcoded string
+				self.setState({
+					car: false,
+	 	    	name: '',
+					person_nr: '',
+					short: '',
+					job: '',
+					place: '',
+					department:'',
+	 	    	due_date:'',
+	 	    	p_type: Strings.processTypes.vertrieb,
+				});
+				document.getElementById('carCheckbox').checked = false;
 			})
 		}
 		else{
 			console.log(Strings.error.restApi);
-			console.log(res);
+			console.log(res.json());
 			alertify.error(Strings.newProcess.error.wrongInput);
 		}
 	});
@@ -193,7 +326,7 @@ export default class NewProcessPage extends React.Component{
 		}
 		else{
 			console.log(Strings.error.restApi);
-			console.log(res);
+			console.log(res.json());
 		}
 	});
 	}
@@ -217,23 +350,16 @@ export default class NewProcessPage extends React.Component{
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
 		fetch(Constants.restApiPath+'items/', myInit).then(function(res){
-		if(res.ok){
-			dispatcher.dispatch({type: "ITEM_CREATED"});
-			//document.location.href = '/';
-			alertify.success('Process wurde erstellt'); // TODO: replace hardcoded string
-			self.setState({
-				car: false,
- 	    	name: '',
- 	    	due_date:'',
- 	    	p_type: Strings.processTypes.vertrieb,
-			});
-			document.getElementById('carCheckbox').checked = false;
-		}
+		if(res.ok){dispatcher.dispatch({type: "ITEM_CREATED"});}
 		else{
 			console.log(String.error.restApi);
-			console.log(res);
+			console.log(res.json());
 		}
 	});
+	}
+
+	resetForm(){
+
 	}
 
 	render(){
@@ -246,6 +372,36 @@ export default class NewProcessPage extends React.Component{
 				    <label class="col-sm-2 control-label">{Strings.name}</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.name} value={this.state.name} onChange={this.handleNameChange}></input>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">{Strings.personNr}</label>
+				    <div class="col-sm-10">
+				      <input class="form-control" placeholder={Strings.personNr} value={this.state.person_nr} onChange={this.handlePersonNrChange}></input>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">{Strings.short}</label>
+				    <div class="col-sm-10">
+				      <input class="form-control" placeholder={Strings.short} value={this.state.short} onChange={this.handleShortChange}></input>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">{Strings.job}</label>
+				    <div class="col-sm-10">
+				      <input class="form-control" placeholder={Strings.job} value={this.state.job} onChange={this.handleJobChange}></input>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">{Strings.place}</label>
+				    <div class="col-sm-10">
+				      <input class="form-control" placeholder={Strings.place} value={this.state.place} onChange={this.handlePlaceChange}></input>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">{Strings.department}</label>
+				    <div class="col-sm-10">
+				      <input class="form-control" placeholder={Strings.department} value={this.state.department} onChange={this.handleDepartmentChange}></input>
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -283,7 +439,16 @@ export default class NewProcessPage extends React.Component{
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	class="btn btn-primary"
-								onClick={() => this.createProcess(this.state.name, this.state.due_date, this.state.p_type, this.state.car)}>
+								onClick={() => this.createProcess(
+									this.state.name,
+									this.state.person_nr,
+									this.state.short,
+									this.state.job,
+									this.state.place,
+									this.state.department,
+									this.state.due_date,
+									this.state.p_type,
+									this.state.car)}>
 								{Strings.processList.createNewProcess}
 							</a>
 				    </div>

@@ -7,12 +7,17 @@
 export default{
   //global strings
   closed: 'geschlossen',
-  dueDate: 'Daedline',
+  dueDate: 'Deadline',
   info: 'Info',
   name: 'Name',
   running: 'laufend',
   status: 'Status',
   type: 'Typ',
+  job: 'Tätigkeit',
+  place: 'Standort',
+  department: 'Abteilung/KST',
+  personNr : 'Personal Nr.',
+  short: 'Kürzel',
   companyCar: 'Firmenwagen',
   //grouped strings
   footer:{
