@@ -1,10 +1,10 @@
 //js
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
+import ES6Promise from 'es6-promise';
 import React from "react";
 import { withRouter } from "react-router"
 import _ from "underscore";
-import ES6Promise from 'es6-promise';
 import "whatwg-fetch";
 //cs
 import "../../css/spinner.css"
@@ -91,7 +91,7 @@ import Strings from '../values/strings_de';
 					if(res.ok) {}
 					else{
 						console.log(Strings.error.restApi);
-						console.log(res);
+						console.log(res.json());
 					}
 				});
 			}
@@ -113,7 +113,7 @@ import Strings from '../values/strings_de';
 					}
 					else{
 						console.log(Strings.error.restApi);
-						console.log(res);
+						console.log(res.json());
 					}
 				});
 			}
@@ -136,7 +136,7 @@ import Strings from '../values/strings_de';
 						document.location.href = '/';
 					}else{
 						console.log(Strings.error.restApi);
-						console.log(res);
+						console.log(res.json());
 					}
 				});
 			});
@@ -157,7 +157,7 @@ import Strings from '../values/strings_de';
 			}
 			else{
 				console.log(Strings.error.restApi);
-				console.log(res);
+				console.log(res.json());
 			}
 		});
 	}
@@ -177,7 +177,7 @@ import Strings from '../values/strings_de';
 			}
 			else{
 				console.log(Strings.error.restApi);
-				console.log(res);
+				console.log(res.json());
 			}
 		});
 	}
@@ -196,7 +196,7 @@ import Strings from '../values/strings_de';
 			}
 			else{
 				console.log(Strings.error.restApi);
-				console.log(res);
+				console.log(res.json());
 			}
 		});
 	}
@@ -240,14 +240,6 @@ import Strings from '../values/strings_de';
 			process: this.state.process,
 		});
 	}
-
-  sendMail() {
-    var link = "mailto:nadrajkowskii@gmail.com"
-             + "&subject=" + escape("This is my subject")
-             + "&body=" + escape(document.getElementById('myText').value)
-    ;
-    window.location.href = link;
-}
 
 	/**
 	 * updates the state with Phases from its store
@@ -334,8 +326,8 @@ import Strings from '../values/strings_de';
 					self.forceUpdate();
 				}
 			}else{
-				console.log(res);
-				console.log(Strings.error.restApi);
+        console.log(Strings.error.restApi);
+				console.log(res.json());
 			}
 		});
 	}
@@ -398,7 +390,6 @@ import Strings from '../values/strings_de';
 				disableBtnReDo='disabled';
 				statusAsString='laufend';
 			}
-      //TODO: replace hardcoded strings
 			return(
 				<div>
 				<h1 style={headlineStyle}>{process.person_name}</h1>

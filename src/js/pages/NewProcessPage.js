@@ -1,10 +1,10 @@
 //js
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
+import ES6Promise from 'es6-promise';
 import flatpickr from "flatpickr";
 import React from "react";
 import _ from 'underscore';
-import ES6Promise from 'es6-promise';
 import "whatwg-fetch";
 
 //css
@@ -88,166 +88,29 @@ export default class NewProcessPage extends React.Component{
 		this.postProcess(json_data);
 	}
 
-	/**
-	 * handles car-input changes and upadates state with the value
-	 * @param  {event} event 		input value
-	 */
-	handleCarChange() {
-		var car;
-		if(this.state.car==false) car = true;
-		else car = false;
-  	this.setState({
-			car: car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: this.state.job,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
 
 	/**
-	 * handles name-input changes and upadates state with the value
+	* eventhandler for car-input, toggles true and false
+	* @param  {event} event 		input value
+	*/
+	 handleCarChange() {
+		 var car;
+		 if(this.state.car==false) car = true;
+		 else car = false;
+		 this.setState({ car: car });
+	 }
+	 /**
+	 * eventhandlers for remaining inputs
 	 * @param  {event} event 		input value
 	 */
-	handleNameChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: event.target.value,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: this.state.job,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
-	/**
-	 * handles job-input changes and upadates state with the value
-	 * @param  {event} event 		input value
-	 */
-	handleJobChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: event.target.value,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
-	/**
-	 * handles place-input changes and upadates state with the value
-	 * @param  {event} event 		input value
-	 */
-	handlePlaceChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: this.state.job,
-			place: event.target.value,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
-	/**
-	 * handles department-input changes and upadates state with the value
-	 * @param  {event} event 		input value
-	 */
-	handleDepartmentChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: this.state.job,
-			place: this.state.place,
-			department: event.target.value,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
-
-	/**
-	 * handles date-input changes and upadates state with the value
-	 * @param  {event} event			date value
-	 */
-	 handleDueDateChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: this.state.job,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: event.target.value,
-  		p_type: this.state.p_type,
-  	});
-	}
-
-	/**
-	 * handles pocess-type-input changes and upadates state with the value
-	 * @param  {event} event 		process-type value
-	 */
-	handleTypeChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: this.state.short,
-			job: this.state.job,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: event.target.value,
-  	});
-	}
-	/**
-	 * handles person_nr-input changes and upadates state with the value
-	 * @param  {event} event 		process-type value
-	 */
-	handlePersonNrChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: event.target.value,
-			short: this.state.short,
-			job: this.state.job,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
-	/**
-	 * handles short-input changes and upadates state with the value
-	 * @param  {event} event 		process-type value
-	 */
-	handleShortChange(event) {
-  	this.setState({
-			car: this.state.car,
-  		name: this.state.name,
-			person_nr: this.state.person_nr,
-			short: event.target.value,
-			job: this.state.job,
-			place: this.state.place,
-			department: this.state.department,
-  		due_date: this.state.due_date,
-  		p_type: this.state.p_type,
-  	});
-	}
-
+	handleDepartmentChange(event) {	this.setState({ department: event.target.value }); }
+	handleDueDateChange(event) {	this.setState({	due_date: event.target.value }); }
+	handleJobChange(event) {	this.setState({	job: event.target.value	});	}
+	handleNameChange(event) {	this.setState({	name: event.target.value });}
+	handlePersonNrChange(event) {	this.setState({	person_nr: event.target.value	});	}
+	handlePlaceChange(event) {	this.setState({	place: event.target.value	});	}
+	handleShortChange(event) {	this.setState({	short: event.target.value	});	}
+	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
 	/**
 	 * sets the datepicker for date-input
 	 */
@@ -277,7 +140,7 @@ export default class NewProcessPage extends React.Component{
 					case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
 				}
 				if (options.car==true) self.postPhase(res, PhaseValues.auto);
-				alertify.success('Process wurde erstellt'); // TODO: replace hardcoded string
+				alertify.success(Strings.newProcess.success);
 				self.setState({
 					car: false,
 	 	    	name: '',
@@ -313,7 +176,7 @@ export default class NewProcessPage extends React.Component{
 			r_nr:phaseValue.r_nr,
 		})
 		var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
 		fetch(Constants.restApiPath+'phases/', myInit).then(function(res){
@@ -341,28 +204,24 @@ export default class NewProcessPage extends React.Component{
 	 */
 	postItem(res, itemValue){
 		const json_data = JSON.stringify({
-		phase_id: res._id,
-		status: 3,
-		name: itemValue.name,
-		person: itemValue.person,
-		person_spare: itemValue.person_spare,
-		spare: false
+			phase_id: res._id,
+			status: 3,
+			name: itemValue.name,
+			person: itemValue.person,
+			person_spare: itemValue.person_spare,
+			spare: false
 		});
 		var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
 		fetch(Constants.restApiPath+'items/', myInit).then(function(res){
-		if(res.ok){dispatcher.dispatch({type: "ITEM_CREATED"});}
-		else{
-			console.log(String.error.restApi);
-			console.log(res.json());
-		}
-	});
-	}
-
-	resetForm(){
-
+			if(res.ok){dispatcher.dispatch({type: "ITEM_CREATED"});}
+			else{
+				console.log(String.error.restApi);
+				console.log(res.json());
+			}
+		});
 	}
 
 	render(){

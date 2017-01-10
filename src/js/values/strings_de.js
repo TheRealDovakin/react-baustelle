@@ -35,6 +35,7 @@ export default{
   },
   newProcess:{
     headline: "Neuer Prozess",
+    success: 'Prozess wurde erstellt',
     error:{
       wrongInput: 'Bitte Namen eintragen und Datum auswählen',
     },

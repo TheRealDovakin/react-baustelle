@@ -1,8 +1,8 @@
 //js
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
-import React from "react";
 import ES6Promise from 'es6-promise';
+import React from "react";
 import "whatwg-fetch";
 
 //css
