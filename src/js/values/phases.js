@@ -43,5 +43,11 @@ export default{
     name: "Fuhrparkphase",
     status: 1,
     r_nr: 2,
+  },
+  itKonten: {
+    short: "itk",
+    name: "Zusätzliche Konten",
+    status: 1,
+    r_nr: 1,
   }
 }

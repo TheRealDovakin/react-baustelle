@@ -6,19 +6,20 @@
 
 export default{
   //global strings
+  additionalAccounts: 'Zusätzliche Konten',
   closed: 'geschlossen',
+  companyCar: 'Firmenwagen',
+  department: 'Abteilung/KST',
   dueDate: 'Deadline',
   info: 'Info',
+  job: 'Tätigkeit',
   name: 'Name',
+  personNr : 'Personal Nr.',
+  place: 'Standort',
   running: 'laufend',
   status: 'Status',
   type: 'Typ',
-  job: 'Tätigkeit',
-  place: 'Standort',
-  department: 'Abteilung/KST',
-  personNr : 'Personal Nr.',
   short: 'Kürzel',
-  companyCar: 'Firmenwagen',
   //grouped strings
   footer:{
     contact: 'Kontakt',
@@ -37,7 +38,7 @@ export default{
     headline: "Neuer Prozess",
     success: 'Prozess wurde erstellt',
     error:{
-      wrongInput: 'Bitte Namen eintragen und Datum auswählen',
+      wrongInput: 'Bitte alle mit Felder mit die mit einem * Markiert sind ausfüllen',
     },
   },
   phase:{

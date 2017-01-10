@@ -10,19 +10,19 @@ export default{
     person_spare: "Peter Hans",
   },
   baumann: {
-    phase: "it2",
+    phase: "itk",
     name: "Baumann",
     person: "Hans Peter",
     person_spare: "Peter Hans",
   },
   adito: {
-    phase: "it2",
+    phase: "itk",
     name: "Adito",
     person: "Klaus Horst",
     person_spare: "Horst Klaus",
   },
   pps: {
-    phase: "it2",
+    phase: "itk",
     name: "PPS",
     person: "Franz Rene",
     person_spare: "Rene Franz",
