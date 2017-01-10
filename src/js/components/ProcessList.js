@@ -3,6 +3,7 @@ import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import ES6Promise from 'es6-promise';
 import React from "react";
+import _ from 'underscore';
 import "whatwg-fetch";
 
 //css
@@ -84,7 +85,6 @@ export default class ProcessList extends React.Component{
 	 */
 	getProcesses(){
 		this.setState({
-			search_filter: this.state.search_filter,
 			items: ProcessStore.getAll(),
 		});
 	}
@@ -95,7 +95,6 @@ export default class ProcessList extends React.Component{
 	handleSearchChange(event){
 		this.setState({
   		search_filter: event.target.value,
-  		items: this.state.items,
   	});
   	this.forceUpdate();
 	}
@@ -108,6 +107,19 @@ export default class ProcessList extends React.Component{
 		const { items } = this.state;
 		// makes sure data from DB is loaded, else render a loading spinner
 		if(items!=undefined){
+			var processCount = 0;
+			var processCountDue = 0;
+			var processCountSoonDue = 0;
+			var date = new Date(Date.now());
+			var datePlus5 = new Date(date);
+			datePlus5.setDate(date.getDate()+5);
+			_.each(items, function(item){
+				if (item.status==1) {
+					processCount++;
+					if(new Date(item.due_date).getTime()<=date) processCountDue++;
+					else if(new Date(item.due_date).getTime()<=datePlus5) processCountSoonDue++;
+				}
+			});
 			//sorts Proesses by due_date
 			items.sort(function(a, b){
 			    var keyA = new Date(a.due_date).getTime(),
@@ -136,15 +148,38 @@ export default class ProcessList extends React.Component{
 					<h1 style={headlineStyle}>{Strings.processList.headline}</h1>
 					<div class="col-xs-12 col-md-3 row">
 						<div class="panel panel-default">
-							<div class="panel-heading"><h4>{Strings.info}</h4></div>
+							<div class="panel-heading"><h4>
+								<span class="glyphicon glyphicon-info-sign pull-right"></span>
+								{Strings.info}
+							</h4></div>
 							<ul class="list-group">
-								<li class="list-group-item"><span>Some Info</span></li>
+								<li class="list-group-item"><span>
+									{Strings.newProcess.running}:
+									<span class="label label-default pull-right">{processCount}</span>
+								</span></li>
+								<li class="list-group-item"><span>
+									{Strings.newProcess.soonDue}:
+									<span class="label label-warning pull-right"> {processCountSoonDue}</span>
+								</span></li>
+								<li class="list-group-item"><span>
+									{Strings.newProcess.due}:
+									<span class="label label-danger pull-right">{processCountDue}</span>
+								</span></li>
 							</ul>
-							<div class="panel-heading"><h4>{Strings.process.actions}</h4></div>
+							<div class="panel-heading"><h4>
+								<span class="glyphicon glyphicon-flash pull-right"></span>
+								{Strings.process.actions}
+							</h4></div>
 							<ul class="list-group">
-								<li><a class="btn btn-primary" style={panelElementStyle} href="#/newProcess">{Strings.processList.createNewProcess}</a></li>
+								<li><a class="btn btn-primary" style={panelElementStyle} href="#/newProcess">
+								<span class="glyphicon glyphicon-plus pull-left"></span>
+								{Strings.processList.createNewProcess}
+								</a></li>
 							</ul>
-							<div class="panel-heading"><h4>{Strings.processList.filter}</h4></div>
+							<div class="panel-heading"><h4>
+								<span class="glyphicon glyphicon-filter pull-right"></span>
+								{Strings.processList.filter}
+							</h4></div>
 							<ul class="list-group">
 								<li>
 									<form>

@@ -35,7 +35,10 @@ export default{
     responsablePersonSpare: 'Vertretung',
   },
   newProcess:{
+    due: 'fällige Prozesse',
     headline: "Neuer Prozess",
+    running: 'laufende Prozesse',
+    soonDue: 'bald fällige Prozesse',
     success: 'Prozess wurde erstellt',
     error:{
       wrongInput: 'Bitte alle mit Felder mit die mit einem * Markiert sind ausfüllen',

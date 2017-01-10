@@ -38,9 +38,15 @@ export default class Footer extends React.Component{
 					<a style={linkStyle} target="_blank" href={Constants.githubPath}>{'\u00A9'} 2017 Kasper Nadrajkowski</a>
 				</div>
 				<div class="pull-right">
-					<a style={aStyle} href='#' >{Strings.footer.home}</a>
-					<a style={aStyle} href="#/info">{Strings.info}</a>
-					<a style={aStyle} href={"mailto:"+Constants.myMail}>{Strings.footer.contact}</a>
+					<a style={aStyle} href='#' >
+					<span class="glyphicon glyphicon-home"></span>
+					_{Strings.footer.home}</a>
+					<a style={aStyle} href="#/info">
+					<span class="glyphicon glyphicon-info-sign"></span>
+					_{Strings.info}</a>
+					<a style={aStyle} href={"mailto:"+Constants.myMail}>
+					<span class="glyphicon glyphicon-envelope"></span>
+					_{Strings.footer.contact}</a>
 				</div>
 			</footer>
 		);

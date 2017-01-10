@@ -88,7 +88,6 @@ export default class NewProcessPage extends React.Component{
 			short: short,
 			status: 1,
 		});
-		console.log(json_data);
 		this.postProcess(json_data);
 	}
 
@@ -127,9 +126,7 @@ export default class NewProcessPage extends React.Component{
 	setDatepicker(){
 		flatpickr.localize(flatpickr_de.de);
 		var picker = document.getElementById('datepicker');
-		var datepicker = flatpickr(picker, {
-			locale: flatpickr_de.de
-		});
+		flatpickr(picker, {	locale: flatpickr_de.de	});
 	}
 
 	/**
@@ -242,6 +239,8 @@ export default class NewProcessPage extends React.Component{
 
 	render(){
 		const headlineStyle = { marginTop: 70 };
+		const btnStyle = { width: '30%' };
+		const dueDateStyle = { backgroundColor: '#ffffff' };
 		return(
 			<div class="col-md-12">
 				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
@@ -286,10 +285,10 @@ export default class NewProcessPage extends React.Component{
 				    <label class="col-sm-2 control-label">{Strings.dueDate}*</label>
 				    <div class="col-sm-10">
 				    	<div class="input-group">
-				    		<span class="input-group-addon" id="sizing-addon1">
-				    			<a class="glyphicon glyphicon-calendar"></a>
+				    		<span class="input-group-addon" style={dueDateStyle}>
+				    			<span class="glyphicon glyphicon-calendar"></span>
 				    		</span>
-				      		<input  id="datepicker" aria-describedby="sizing-addon1" class="form-control" placeholder={Strings.dueDate} value={this.state.due_date} onChange={this.handleDueDateChange}></input>
+			      		<input style={dueDateStyle} id="datepicker" aria-describedby="sizing-addon1" class="form-control" placeholder={Strings.dueDate} value={this.state.due_date} onChange={this.handleDueDateChange}></input>
 				    	</div>
 				    </div>
 				  </div>
@@ -326,7 +325,7 @@ export default class NewProcessPage extends React.Component{
 				  </div>
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
-				      <a 	class="btn btn-primary"
+				      <a 	style={btnStyle} class="btn btn-primary"
 								onClick={() => this.createProcess(
 									this.state.name,
 									this.state.person_nr,
@@ -338,7 +337,8 @@ export default class NewProcessPage extends React.Component{
 									this.state.p_type,
 									this.state.car,
 									this.state.addAccounts)}>
-								{Strings.processList.createNewProcess}
+									<span class="glyphicon glyphicon-plus pull-left"></span>
+									{Strings.processList.createNewProcess}
 							</a>
 				    </div>
 				  </div>

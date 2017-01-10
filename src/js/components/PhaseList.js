@@ -396,7 +396,10 @@ import Strings from '../values/strings_de';
 					<div class="col-md-3 col-xs-3" style={leftNavStyle}>
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h4>{Strings.info}</h4>
+								<h4>
+                  <span class="glyphicon glyphicon-info-sign pull-right"></span>
+                  {Strings.info}
+                </h4>
 							</div>
 							<ul class="list-group">
                 <li class="list-group-item"><span>{Strings.status}:	{statusAsString}</span></li>
@@ -409,15 +412,24 @@ import Strings from '../values/strings_de';
                 <li class="list-group-item"><span>{Strings.job}: {process.job}</span></li>
 							</ul>
 							<div class="panel-heading">
-								<h4>{Strings.process.actions}</h4>
+								<h4>
+                  <span class="glyphicon glyphicon-flash pull-right"></span>
+                  {Strings.process.actions}
+                </h4>
 							</div>
 							<ul class="list-group">
           			<a class={"btn btn-success "+(disableBtnFinish)} style={btnStyle}
-          									onClick={() => this.finishProcess()}>{Strings.process.finish}</a>
+          									onClick={() => this.finishProcess()}>
+                            <span class="glyphicon glyphicon-ok pull-left"></span>
+                            {Strings.process.finish}</a>
           			<a class={"btn btn-primary "+(disableBtnReDo)} style={btnStyle}
-          									onClick={() => this.reDoProcess()}>{Strings.process.reDo}</a>
+          									onClick={() => this.reDoProcess()}>
+                            <span class="glyphicon glyphicon-retweet pull-left"></span>
+                            {Strings.process.reDo}</a>
           			<a class="btn btn-danger" style={btnStyle}
-          									onClick={() => this.deleteProcess()}>{Strings.process.delete}</a>
+          									onClick={() => this.deleteProcess()}>
+                            <span class="glyphicon glyphicon-remove pull-left"></span>
+                            {Strings.process.delete}</a>
 							</ul>
 						</div>
 					</div>
