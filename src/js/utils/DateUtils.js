@@ -15,5 +15,15 @@ export default{
     var month = date.getMonth()+1;
     var year = date.getFullYear();
     return day+"."+month+"."+year;
-  }
+  },
+
+  getDateAndTimeAsString: function(date){
+    var date = new Date(date);
+    var minute = date.getMinutes();
+    var hour = date. getHours();
+    var day = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+    return hour+":"+minute+" "+day+"."+month+"."+year;
+  },
 }

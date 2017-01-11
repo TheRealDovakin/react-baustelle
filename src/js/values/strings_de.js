@@ -25,6 +25,9 @@ export default{
     contact: 'Kontakt',
     home: 'Home',
   },
+  comment:{
+    error: 'Der Kommentar kann nicht leer sein',
+  },
   error:{
     restApi: 'Fehler beim Senden der Daten an die Datenbank. Für genauere Informationen schauen Sie bitte in den Response der API',
   },

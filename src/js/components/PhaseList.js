@@ -9,6 +9,7 @@ import "whatwg-fetch";
 //cs
 import "../../css/spinner.css"
 //own files
+import CommentStore from '../stores/CommentStore';
 import DateUtils from '../utils/DateUtils';
 import dispatcher from "../dispatcher";
 import ItemsStore from "../stores/ItemsStore"
@@ -28,13 +29,16 @@ import Strings from '../values/strings_de';
 		super();
 		dispatcher.register(this.handleActions.bind(this));
 		// binded functions
+		this.deleteComments = this.deleteComments.bind(this);
 		this.deleteItems = this.deleteItems.bind(this);
 		this.deletePhases = this.deletePhases.bind(this);
 		this.deleteProcess = this.deleteProcess.bind(this);
 		this.finishProcess = this.finishProcess.bind(this);
+		this.fetchComments = this.fetchComments.bind(this);
 		this.fetchItems = this.fetchItems.bind(this);
 		this.fetchPhases = this.fetchPhases.bind(this);
 		this.fetchProcess = this.fetchProcess.bind(this);
+		this.getComments = this.getComments.bind(this);
 		this.getItems = this.getItems.bind(this);
 		this.getPhases = this.getPhases.bind(this);
 		this.processCanBeFinished = this.processCanBeFinished.bind(this);
@@ -43,6 +47,7 @@ import Strings from '../values/strings_de';
 		this.setProcessStatus = this.setProcessStatus.bind(this);
 		this.reDoProcess = this.reDoProcess
 		this.state = {
+      comments: undefined,
 			items: undefined,
 			phases: undefined,
 			process: undefined,
@@ -54,8 +59,9 @@ import Strings from '../values/strings_de';
 	 * adds change listeners for stores
 	 */
 	componentWillMount(){
+    CommentStore.on("change", this.getComments);
 		ItemsStore.on("change", this.getItems);
-		PhaseStore.on("change", this.getPhases);
+    PhaseStore.on("change", this.getPhases);
 	}
 
 	/**
@@ -63,8 +69,9 @@ import Strings from '../values/strings_de';
 	 * removes changelisteners for stores
 	 */
 	componentWillUnmount(){
+    CommentStore.removeListener("change", this.getComments);
 		ItemsStore.removeListener("change", this.getItems);
-		PhaseStore.removeListener("change", this.getPhases);
+    PhaseStore.removeListener("change", this.getPhases);
 	}
 
 	/**
@@ -72,12 +79,33 @@ import Strings from '../values/strings_de';
 	 * call methods for fetching data from DB
 	 */
 	componentDidMount(){
+    this.fetchComments();
 		this.fetchItems();
 		this.fetchPhases();
 		this.fetchProcess();
 		this.setProcess();
 	}
 
+	/**
+	 * this function deletes all Comments of an given Item
+	 *  @param {int} phase_id			ID of the Item that the Comments will be deleted for
+	 */
+	deleteComments(item_id){
+		const self = this;
+		_.each(self.state.comments, function(comment){
+			if(comment.item_id==item_id){
+        console.log(comment.commentor);
+				var myInit = { method: 'DELETE' }
+				fetch(Constants.restApiPath+'comments/'+comment._id, myInit).then(function(res){
+					if(res.ok) {}
+					else{
+						console.log(Strings.error.restApi);
+						console.log(res.json());
+					}
+				});
+			}
+		});
+	}
 	/**
 	 * this function deletes all Items of a given Phase
 	 *  @param {int} phase_id			ID of the Phase that the Items will be deleted for
@@ -88,7 +116,7 @@ import Strings from '../values/strings_de';
 			if(item.phase_id==phase_id){
 				var myInit = { method: 'DELETE' }
 				fetch(Constants.restApiPath+'items/'+item._id, myInit).then(function(res){
-					if(res.ok) {}
+					if(res.ok) { self.deleteComments(item._id); }
 					else{
 						console.log(Strings.error.restApi);
 						console.log(res.json());
@@ -140,6 +168,23 @@ import Strings from '../values/strings_de';
 					}
 				});
 			});
+	}
+
+  fetchComments(){
+		fetch(Constants.restApiPath+'comments').then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					dispatcher.dispatch({
+						type: 	"FETCH_COMMENTS_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log(res);
+				console.log(Strings.error.restApi);
+			}
+		});
 	}
 
 	/**
@@ -233,24 +278,9 @@ import Strings from '../values/strings_de';
 	/**
 	 * updates the state with Items from its store
 	 */
-	getItems(){
-		this.setState({
-			items: ItemsStore.getAll(),
-			phases: this.state.phases,
-			process: this.state.process,
-		});
-	}
-
-	/**
-	 * updates the state with Phases from its store
-	 */
-	getPhases(){
-		this.setState({
-			items: this.state.items,
-			phases: PhaseStore.getAll(),
-			process: this.state.process,
-		});
-	}
+	getItems(){ this.setState({	items: ItemsStore.getAll() }); }
+	getComments(){ this.setState({ comments: CommentStore.getAll() }); }
+	getPhases(){ this.setState({	phases: PhaseStore.getAll() }); }
 
 	/**
 	 * handles dispatches

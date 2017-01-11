@@ -38,6 +38,10 @@ var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),
 ProcessModel.register(app, '/processes');
 
+var CommentModel = require('./models/Comment.js');
+CommentModel.methods(['get', 'post', 'delete']),
+CommentModel.register(app, '/comments');
+
 function sendMail(adress, subject, body){
   var transporter = nodemailer.createTransport({
     service: 'Gmail',

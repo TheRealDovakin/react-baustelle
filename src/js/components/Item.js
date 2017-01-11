@@ -1,10 +1,12 @@
 //js
+import alertify from 'alertify.js'
 import React from "react";
-
 //css
 import "../../css/spinner.css"
 
 //own files
+import Comment from './Comment';
+import CommentStore from '../stores/CommentStore';
 import Constants from '../values/constants';
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
@@ -20,6 +22,67 @@ export default class Item extends React.Component{
 		super();
 		//binded functions
 		this.fetchItems = this.fetchItems.bind(this);
+		this.fetchComments = this.fetchComments.bind(this);
+		this.getComments = this.getComments.bind(this);
+		this.handleCommentChange = this.handleCommentChange.bind(this);
+		//this.postComment = postComment.bind(this);
+		this.state = {
+			items: [],
+			comment: '',
+		}
+	}
+
+	/**
+	 * will be called before the component mounted,
+	 * adds changelisteners for stores
+	 */
+	componentWillMount(){
+		CommentStore.on("change", this.getComments);
+	}
+
+	/**
+	 * will be called before the component will unmount,
+	 * removes changelisteners for stores
+	 */
+	componentWillUnmount(){
+		CommentStore.removeListener("change", this.getComments);
+	}
+
+	/**
+	 * will be called after the component mounted
+	 */
+	componentDidMount(){
+		this.fetchComments();
+	}
+
+	/**
+	 * fetches all Processes from the DB and dispatches an action that updates
+	 * its store
+	 */
+	fetchComments(){
+		fetch(Constants.restApiPath+'comments').then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					dispatcher.dispatch({
+						type: 	"FETCH_COMMENTS_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log(res);
+				console.log(Strings.error.restApi);
+			}
+		});
+	}
+
+	/**
+	 * updates the state with Processes from its Store
+	 */
+	getComments(){
+		this.setState({
+			items: CommentStore.getAll(),
+		});
 	}
 
 	/**
@@ -56,6 +119,7 @@ export default class Item extends React.Component{
 	/**
 	 * fetches Items from the DB and dispatches an action that updates its store
 	 */
+
 	fetchItems(){
 		fetch(Constants.restApiPath+'items').then(function(res){
 			if(res.ok){
@@ -73,6 +137,44 @@ export default class Item extends React.Component{
 		});
 	}
 
+
+	handleCommentChange(event){
+		this.setState({
+			comment: event.target.value
+		});
+	}
+
+	postComment(_id, body){
+		//TODO: commentor will be replaced as soon as app gets auth
+		const commentor = 'Kasper Nadrajkowski';
+		const json_data = JSON.stringify({
+			item_id: _id,
+			commentor: commentor,
+			body: body,
+		});
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
+		var self = this;
+		fetch(Constants.restApiPath+'comments/', myInit).then(function(res){
+			if(res.ok){
+				self.fetchComments();
+				self.setState({
+					comment: '',
+				})
+				dispatcher.dispatch({type: "COMMENT_CREATED"});
+			}else{
+				alertify.logPosition("top right");
+				alertify.error(Strings.comment.error);
+				alertify.reset();
+				console.log(Strings.error.restApi);
+				console.log(res.json());
+			}
+		});
+	}
+
+
+
 	render(){
 		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const btnSendStyle = { margin: '0%', minWidth: '60px', maxWidth: '8%' }
@@ -81,6 +183,13 @@ export default class Item extends React.Component{
 		const inputStyle = { width: '100%', height: '100%' }
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
+		const { items } = this.state;
+		const ItemComponents = items.map((item) => {
+			var a = 0;
+			if(item.item_id==_id){
+				return <Comment key={item._id} {...item}/>;
+			}
+		});
 		if(true){ // TODO: should check if items not undefined
 			if(status==1){//erledigt collapse
 				return(
@@ -124,30 +233,19 @@ export default class Item extends React.Component{
 							<span class="glyphicon glyphicon-ok pull-left"></span>
 							{Strings.item.setToDone}</a>
 							<li class="list-group-item">
-								<span>Kommentare</span>
+								<h4>Kommentare</h4>
 								<div class="panel panel-default">
 									<ul class="list-group">
-										<li class="list-group-item">
-											<span class="label label-default">Franz Rene</span>
-											<p>
-												Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-											</p>
-										</li>
-										<li class="list-group-item">
-											<span class="label label-default">Rene Franz</span>
-											<p>
-												Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-											</p>
-										</li>
+										{ItemComponents}
 										<li class="list-group-item">
 											<div class="form-inline">
 												<div class="form-group">
-													<input class="form-control" type="text" placeholder="Kommentar Text"></input>
+													<input class="form-control" type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange}></input>
 												</div>
 												<div class="form-group">
-													<span class="btn btn-default" style={btnSendStyle} onClick={
-														() => this.newComment(this, _id, 2)}>
-														<span class="glyphicon glyphicon-send"></span></span>
+													<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>
+														<span class="glyphicon glyphicon-send"></span>
+													</span>
 												</div>
 											</div>
 										</li>
