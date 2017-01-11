@@ -25,6 +25,7 @@ export default class Item extends React.Component{
 		this.fetchComments = this.fetchComments.bind(this);
 		this.getComments = this.getComments.bind(this);
 		this.handleCommentChange = this.handleCommentChange.bind(this);
+		this.handleEnter = this.handleEnter.bind(this);
 		//this.postComment = postComment.bind(this);
 		this.state = {
 			items: [],
@@ -144,6 +145,13 @@ export default class Item extends React.Component{
 		});
 	}
 
+	handleEnter(event){
+		//cross browser
+		if (event.keyCode == 13 || event.which == 13 ){
+			this.postComment(this.props._id, this.state.comment);
+		}
+	}
+
 	postComment(_id, body){
 		//TODO: commentor will be replaced as soon as app gets auth
 		const commentor = 'Kasper Nadrajkowski';
@@ -180,7 +188,7 @@ export default class Item extends React.Component{
 		const btnSendStyle = { margin: '0%', minWidth: '60px', maxWidth: '8%' }
 		const { _id, status, name, place, person, person_spare, spare } = this.props;
 		const headlineStyle = { marginLeft: '10px'	};
-		const inputStyle = { width: '100%', height: '100%' }
+		const inputStyle = { width: '600px', height: '100%' }
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
 		const { items } = this.state;
@@ -240,7 +248,8 @@ export default class Item extends React.Component{
 										<li class="list-group-item">
 											<div class="form-inline">
 												<div class="form-group">
-													<input class="form-control" type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange}></input>
+													{/* width is fixed, needs to be dynamic */}
+													<input class="form-control" style={inputStyle} type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange} onKeyPress={this.handleEnter}></input>
 												</div>
 												<div class="form-group">
 													<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>
