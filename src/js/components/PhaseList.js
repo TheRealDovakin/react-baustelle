@@ -72,6 +72,9 @@ import Strings from '../values/strings_de';
     CommentStore.removeListener("change", this.getComments);
 		ItemsStore.removeListener("change", this.getItems);
     PhaseStore.removeListener("change", this.getPhases);
+    clearInterval(fetchCommentsInterval);
+    clearInterval(fetchItemsInterval);
+    clearInterval(fetchProcessInterval);
 	}
 
 	/**
@@ -84,6 +87,9 @@ import Strings from '../values/strings_de';
 		this.fetchPhases();
 		this.fetchProcess();
 		this.setProcess();
+    var fetchCommentsInterval = setInterval(this.fetchComments, 10000);
+    var fetchItemsInterval = setInterval(this.fetchItems, 30000);
+    var fetchProcessInterval = setInterval(this.fetchProcess, 60000);
 	}
 
 	/**

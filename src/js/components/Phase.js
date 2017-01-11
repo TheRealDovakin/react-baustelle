@@ -51,7 +51,6 @@ export default class Phase extends React.Component{
 	 * will be called after the component mounted
 	 */
 	componentDidMount(){
-		this.fetchItems();
 		this.getItems();
 	}
 

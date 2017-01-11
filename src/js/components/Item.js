@@ -53,7 +53,7 @@ export default class Item extends React.Component{
 	 * will be called after the component mounted
 	 */
 	componentDidMount(){
-		this.fetchComments();
+		this.getComments();
 	}
 
 	/**
