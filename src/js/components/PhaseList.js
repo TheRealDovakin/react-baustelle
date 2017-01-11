@@ -51,6 +51,9 @@ import Strings from '../values/strings_de';
 			items: undefined,
 			phases: undefined,
 			process: undefined,
+      fetchCommentsInterval: undefined,
+      fetchItemsInterval: undefined,
+      fetchProcessesInterval: undefined,
 		};
 	}
 
@@ -72,9 +75,9 @@ import Strings from '../values/strings_de';
     CommentStore.removeListener("change", this.getComments);
 		ItemsStore.removeListener("change", this.getItems);
     PhaseStore.removeListener("change", this.getPhases);
-    clearInterval(fetchCommentsInterval);
-    clearInterval(fetchItemsInterval);
-    clearInterval(fetchProcessInterval);
+    clearInterval(this.state.fetchCommentsInterval);
+    clearInterval(this.state.fetchItemsInterval);
+    clearInterval(this.state.fetchProcessInterval);
 	}
 
 	/**
@@ -87,9 +90,9 @@ import Strings from '../values/strings_de';
 		this.fetchPhases();
 		this.fetchProcess();
 		this.setProcess();
-    var fetchCommentsInterval = setInterval(this.fetchComments, 10000);
-    var fetchItemsInterval = setInterval(this.fetchItems, 30000);
-    var fetchProcessInterval = setInterval(this.fetchProcess, 60000);
+    this.state.fetchCommentsInterval = setInterval(this.fetchComments, 10000);
+    this.state.fetchItemsInterval = setInterval(this.fetchItems, 30000);
+    this.state.fetchProcessInterval = setInterval(this.fetchProcess, 60000);
 	}
 
 	/**

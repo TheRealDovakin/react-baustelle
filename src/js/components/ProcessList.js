@@ -34,6 +34,7 @@ export default class ProcessList extends React.Component{
 		this.state = {
 			items: undefined,
 			search_filter: "",
+			fetchProccessesInterval: undefined,
 		};
 	}
 
@@ -51,7 +52,7 @@ export default class ProcessList extends React.Component{
 	 */
 	componentWillUnmount(){
 		ProcessStore.removeListener("change", this.getProcesses);
-		clearInterval(fetchProcessesInterval);
+		clearInterval(this.state.fetchProcessesInterval);
 	}
 
 	/**
@@ -59,7 +60,7 @@ export default class ProcessList extends React.Component{
 	 */
 	componentDidMount(){
 		this.fetchProcesses();
-		var fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
+	this.state.fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
 	}
 
 	/**
