@@ -21,6 +21,7 @@ export default class Item extends React.Component{
 	constructor(){
 		super();
 		//binded functions
+		this.changeCollapsed = this.changeCollapsed.bind(this);
 		this.fetchItems = this.fetchItems.bind(this);
 		this.fetchComments = this.fetchComments.bind(this);
 		this.getComments = this.getComments.bind(this);
@@ -30,6 +31,7 @@ export default class Item extends React.Component{
 		this.state = {
 			items: [],
 			comment: '',
+			collapsed: true,
 		}
 	}
 
@@ -87,6 +89,16 @@ export default class Item extends React.Component{
 	}
 
 	/**
+	* changes the collapsed-state of an Item
+	* @param {boolean} collapse			true: collapsed, false: not collapsed
+	*/
+	changeCollapsed(collapse){
+		this.setState({
+			collapsed: collapse,
+		})
+	}
+
+	/**
 	* changes the status for a given Items to a given status and dispatches
 	* an action thta updates the store
 	* @param {object} t			this from caller
@@ -138,7 +150,10 @@ export default class Item extends React.Component{
 		});
 	}
 
-
+	/**
+	 * handles changeEvnet on comment-input
+	 * @param {event} envent
+	 */
 	handleCommentChange(event){
 		this.setState({
 			comment: event.target.value
@@ -184,11 +199,19 @@ export default class Item extends React.Component{
 
 
 	render(){
+		const { _id, status, name, place, person, person_spare, spare } = this.props;
+		//constant styling
 		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const btnSendStyle = { margin: '0%', minWidth: '60px', maxWidth: '8%' }
-		const { _id, status, name, place, person, person_spare, spare } = this.props;
 		const headlineStyle = { marginLeft: '10px'	};
 		const inputStyle = { width: '600px', height: '100%' }
+		//dynamic styling
+		var responsablePerson = ' disabled';
+		var sparePerson = '';
+		if(spare == false){
+			responsablePerson = '';
+			sparePerson = ' disabled';
+		}
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
 		const { items } = this.state;
@@ -199,85 +222,70 @@ export default class Item extends React.Component{
 			}
 		});
 		if(true){ // TODO: should check if items not undefined
-			if(status==1){//erledigt collapse
+			if(status==3){//nicht erledigt
 				return(
-				<div class="panel panel-success">
-					<div class="panel-heading">
-						<h4>{name}
-							<span style={headlineStyle} onClick={() => this.changeItemStatus(this, _id, 2)} class="glyphicon glyphicon-triangle-top pull-right"></span>
-						</h4>
-					</div>
+				<div class="panel panel-default">
+					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
-						<li class="list-group-item"><span>{Strings.status}: erledigt</span></li>
-						<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-						<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
-						<a class="btn btn-default" style={btnStyle} onClick={
-							() => this.changeItemStatus(this, _id, 3)
-						}>{Strings.item.setToNotDone}</a>
+						<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
+						<li class={"list-group-item"+responsablePerson}><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+						<li class={"list-group-item"+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
+						<a class="btn btn-success" style={btnStyle} onClick={
+							() => this.changeItemStatus(this, _id, 2)}>
+						<span class="glyphicon glyphicon-ok pull-left"></span>
+						{Strings.item.setToDone}</a>
+						<li class="list-group-item">
+							<h4>Kommentare</h4>
+							<div class="panel panel-default">
+								<ul class="list-group">
+									{ItemComponents}
+									<li class="list-group-item">
+										<div class="form-inline">
+											<div class="form-group">
+												{/* width is fixed, needs to be dynamic */}
+												<input class="form-control" style={inputStyle} type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange} onKeyPress={this.handleEnter}></input>
+											</div>
+											<div class="form-group">
+												<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>
+													<span class="glyphicon glyphicon-send"></span>
+												</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</li>
 					</ul>
 				</div>
 				);
-			}if(status==2){//erledigt
-				return(
-				<div class="panel panel-success">
-					<div class="panel-heading">
-						<h4 >{name}
-							<span style={headlineStyle} onClick={() => this.changeItemStatus(this, _id, 1)} class="glyphicon glyphicon-menu-hamburger pull-right">  </span>
-						</h4>
-					</div>
-				</div>
-				);
-			}if(status==3){//nicht erledigt
-				if(spare==false){
+			}
+			else if (status==2) {
+				if(this.state.collapsed==false){//erledigt
 					return(
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>{name}</h4></div>
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h4>{name}
+								<span style={headlineStyle} onClick={() => this.changeCollapsed(true)} class="glyphicon glyphicon-triangle-top pull-right"></span>
+							</h4>
+						</div>
 						<ul class="list-group">
-							<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
+							<li class="list-group-item"><span>{Strings.status}: erledigt</span></li>
 							<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-							<li class="list-group-item disabled"><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
-							<a class="btn btn-success" style={btnStyle} onClick={
-								() => this.changeItemStatus(this, _id, 2)}>
-							<span class="glyphicon glyphicon-ok pull-left"></span>
-							{Strings.item.setToDone}</a>
-							<li class="list-group-item">
-								<h4>Kommentare</h4>
-								<div class="panel panel-default">
-									<ul class="list-group">
-										{ItemComponents}
-										<li class="list-group-item">
-											<div class="form-inline">
-												<div class="form-group">
-													{/* width is fixed, needs to be dynamic */}
-													<input class="form-control" style={inputStyle} type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange} onKeyPress={this.handleEnter}></input>
-												</div>
-												<div class="form-group">
-													<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>
-														<span class="glyphicon glyphicon-send"></span>
-													</span>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-							</li>
+							<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
+							<a class="btn btn-default" style={btnStyle} onClick={
+								() => this.changeItemStatus(this, _id, 3)
+							}>{Strings.item.setToNotDone}</a>
 						</ul>
 					</div>
 					);
-				}else{
+				}else{//erledigt collapsed
 					return(
-					<div class="panel panel-default">
-						<div class="panel-heading"><h4>{name}</h4></div>
-						<ul class="list-group">
-							<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
-							<li class="list-group-item disabled"><span>{Strings.item.responsablePerson}: {person}</span></li>
-							<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
-							<li class="list-group-item">
-								<a class="btn btn-success" onClick={
-									() => this.changeItemStatus(this, _id, 2)
-								}>{Strings.item.setToDone}</a>
-							</li>
-						</ul>
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h4 >{name}
+								<span style={headlineStyle} onClick={() => this.changeCollapsed(false)} class="glyphicon glyphicon-menu-hamburger pull-right">  </span>
+							</h4>
+						</div>
 					</div>
 					);
 				}

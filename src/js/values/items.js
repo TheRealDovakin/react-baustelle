@@ -3,12 +3,7 @@
  * a collection of diffrent predifined Items
  */
 export default{
-  adAccount: {
-    phase: "it1",
-    name: "AD-Account",
-    person: "Hans Peter",
-    person_spare: "Peter Hans",
-  },
+  //additional accounts phase
   baumann: {
     phase: "itk",
     name: "Baumann",
@@ -27,12 +22,7 @@ export default{
     person: "Franz Rene",
     person_spare: "Rene Franz",
   },
-  elo: {
-    phase: "it2",
-    name: "ELO",
-    person: "Franz Rene",
-    person_spare: "Rene Franz",
-  },
+  //basic phase
   adAccount: {
     phase: "b",
     name: "AD-Account",
@@ -45,6 +35,7 @@ export default{
     person: "Franz Rene",
     person_spare: "Rene Franz",
   },
+  //laptop phases
   laptopVertrieb: {
     phase: "v",
     name: "Laptop-Vertrieb",
@@ -63,10 +54,17 @@ export default{
     person: "Christoph",
     person_spare: "Dominik",
   },
+  //car phase
   auto: {
     phase: "car",
     name: "Firmenwagen",
     person: "Niko Hamilton",
     person_spare: "Louis Rossberg",
+  },
+  tempAuto: {
+    phase: "car",
+    name: "Temporärer Firmenwagen",
+    person: "Louis Rossberg",
+    person_spare: "Niko Hamilton",
   },
 }

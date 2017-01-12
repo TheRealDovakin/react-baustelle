@@ -122,6 +122,7 @@ export default class Phase extends React.Component{
 
 			// inline styling
 			const progressStyle = { width: progress+'%', };
+			const hStyle = {fontWeight: 'bold'};
 			// dynamic styling
 			var phaseColor = { backgroundColor: '#ddffdd', };
 			if(this.props.status==1) phaseColor ={ backgroundColor: '#eeeeee', };
@@ -130,7 +131,7 @@ export default class Phase extends React.Component{
 			return(
 				<div class="col-md-12 panel panel-default" style={phaseColor}>
 					<Title title={this.props.title} />
-					<div><h3>{name}</h3></div>
+					<div><h2 style={hStyle}>{name}</h2></div>
 					<div> {ItemComponents} </div>
 					<h3>{Strings.phase.progress}: {progress} %</h3>
 					<div class="progress">

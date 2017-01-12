@@ -46,14 +46,16 @@ import Strings from '../values/strings_de';
 		this.setProcess = this.setProcess.bind(this);
 		this.setProcessStatus = this.setProcessStatus.bind(this);
 		this.reDoProcess = this.reDoProcess
+    //variables
+    this.fetchCommentsInterval = undefined;
+    this.fetchItemsInterval = undefined;
+    this.fetchProcessesInterval = undefined;
 		this.state = {
       comments: undefined,
 			items: undefined,
 			phases: undefined,
 			process: undefined,
-      fetchCommentsInterval: undefined,
-      fetchItemsInterval: undefined,
-      fetchProcessesInterval: undefined,
+
 		};
 	}
 
@@ -75,9 +77,9 @@ import Strings from '../values/strings_de';
     CommentStore.removeListener("change", this.getComments);
 		ItemsStore.removeListener("change", this.getItems);
     PhaseStore.removeListener("change", this.getPhases);
-    clearInterval(this.state.fetchCommentsInterval);
-    clearInterval(this.state.fetchItemsInterval);
-    clearInterval(this.state.fetchProcessInterval);
+    clearInterval(this.fetchCommentsInterval);
+    clearInterval(this.fetchItemsInterval);
+    clearInterval(this.fetchProcessInterval);
 	}
 
 	/**
@@ -90,9 +92,9 @@ import Strings from '../values/strings_de';
 		this.fetchPhases();
 		this.fetchProcess();
 		this.setProcess();
-    this.state.fetchCommentsInterval = setInterval(this.fetchComments, 10000);
-    this.state.fetchItemsInterval = setInterval(this.fetchItems, 30000);
-    this.state.fetchProcessInterval = setInterval(this.fetchProcess, 60000);
+    this.fetchCommentsInterval = setInterval(this.fetchComments, 10000);
+    this.fetchItemsInterval = setInterval(this.fetchItems, 30000);
+    this.fetchProcessInterval = setInterval(this.fetchProcess, 60000);
 	}
 
 	/**
