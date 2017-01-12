@@ -21,7 +21,8 @@ export default class Comment extends React.Component{
     const { commentor, body, createdAt } = this.props;
     const date = new Date(createdAt);
     const readebleDate = DateUtils.getDateAndTimeAsString(date);
-    const glyphStyle = { color: '#ffffff' }
+    const glyphStyle = { color: '#ffffff', };
+    const spanStyle = { marginLeft: '10px', };
 
     // TODO: replace _ with space
     return(
@@ -29,11 +30,11 @@ export default class Comment extends React.Component{
         <h4>
           <span class="label label-default">
             <a><i style={glyphStyle} class="glyphicon glyphicon-user"></i></a>
-            <span>_{commentor}</span>
+            <span style={spanStyle}>{commentor}</span>
           </span>
           <span class="label label-primary">
             <a><i style={glyphStyle} class="glyphicon glyphicon-time"></i></a>
-            <span>_{readebleDate}</span>
+            <span style={spanStyle}>{readebleDate}</span>
           </span>
         </h4>
         <p>{body}</p>

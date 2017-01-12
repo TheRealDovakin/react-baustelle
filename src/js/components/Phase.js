@@ -55,6 +55,36 @@ export default class Phase extends React.Component{
 	}
 
 	/**
+	 * fetches Items from the DB an dispatches an action that updates the ItemsStore
+	 */
+	fetchItems(){
+		fetch(Constants.restApiPath+'items').then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					dispatcher.dispatch({
+						type: 	"FETCH_ITEMS_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log(Strings.error.restApi);
+				console.log(res);
+			}
+		});
+	}
+
+	/**
+	 * updates the state with items from its store
+	 */
+	getItems(){
+		this.setState({
+			items: ItemsStore.getAll(),
+			progess: this.getProgress(),
+		});
+	}
+
+	/**
 	 *
 	 * loops throught all Items counting how much Items of this Phase are done
 	 * and returns a percent value
@@ -76,36 +106,6 @@ export default class Phase extends React.Component{
 			}
 		}
 		return Math.round((100/max)*sumDone);
-	}
-
-	/**
-	 * updates the state with tems from its store
-	 */
-	getItems(){
-		this.setState({
-			items: ItemsStore.getAll(),
-			progess: this.getProgress(),
-		});
-	}
-
-	/**
-	 * fetches Items from the DB and dispatches an action that updates the store
-	 */
-	fetchItems(){
-		fetch(Constants.restApiPath+'items').then(function(res){
-			if(res.ok){
-				res.json().then(function(res){
-					dispatcher.dispatch({
-						type: 	"FETCH_ITEMS_FROM_API",
-						res,
-					});
-				})
-			}
-			else{
-				console.log(Strings.error.restApi);
-				console.log(res);
-			}
-		});
 	}
 
 	render(){

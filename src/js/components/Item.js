@@ -240,15 +240,17 @@ export default class Item extends React.Component{
 								<ul class="list-group">
 									{ItemComponents}
 									<li class="list-group-item">
-										<div class="form-inline">
-											<div class="form-group">
-												{/* width is fixed, needs to be dynamic */}
-												<input class="form-control" style={inputStyle} type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange} onKeyPress={this.handleEnter}></input>
-											</div>
-											<div class="form-group">
-												<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>
-													<span class="glyphicon glyphicon-send"></span>
-												</span>
+										<div class="row">
+											<div class="col-xs-12">
+												<div class="input-group input-group-sm">
+													<input class="form-control" type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange}
+												  onKeyPress={this.handleEnter}></input>
+													<div class="input-group-btn">
+														<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>
+															<span class="glyphicon glyphicon-send"></span>
+														</span>
+													</div>
+												</div>
 											</div>
 										</div>
 									</li>

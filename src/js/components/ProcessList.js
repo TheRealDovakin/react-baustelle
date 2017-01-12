@@ -28,7 +28,6 @@ export default class ProcessList extends React.Component{
 		super();
 		//binded functions
 		this.fetchProcesses = this.fetchProcesses.bind(this);
-		this.fetchComments = this.fetchComments.bind(this);
 		this.getProcesses = this.getProcesses.bind(this);
 		this.handleSearchChange = this.handleSearchChange.bind(this);
 		//variables
@@ -61,7 +60,7 @@ export default class ProcessList extends React.Component{
 	 */
 	componentDidMount(){
 		this.fetchProcesses();
-	this.fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
+		this.fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
 	}
 
 	/**
@@ -84,24 +83,7 @@ export default class ProcessList extends React.Component{
 			}
 		});
 	}
-
-	fetchComments(){
-		fetch(Constants.restApiPath+'comments').then(function(res){
-			if(res.ok){
-				res.json().then(function(res){
-					dispatcher.dispatch({
-						type: 	"FETCH_COMMENTS_FROM_API",
-						res,
-					});
-				})
-			}
-			else{
-				console.log(res);
-				console.log(Strings.error.restApi);
-			}
-		});
-	}
-
+	
 	/**
 	 * updates the state with Processes from its Store
 	 */

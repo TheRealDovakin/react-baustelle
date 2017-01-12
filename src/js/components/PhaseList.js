@@ -99,7 +99,7 @@ import Strings from '../values/strings_de';
 
 	/**
 	 * this function deletes all Comments of an given Item
-	 *  @param {int} phase_id			ID of the Item that the Comments will be deleted for
+	 *  @param {String} phase_id			ID of the Item that the Comments will be deleted for
 	 */
 	deleteComments(item_id){
 		const self = this;
@@ -119,7 +119,7 @@ import Strings from '../values/strings_de';
 	}
 	/**
 	 * this function deletes all Items of a given Phase
-	 *  @param {int} phase_id			ID of the Phase that the Items will be deleted for
+	 *  @param {String} phase_id			ID of the Phase that the Items will be deleted for
 	 */
 	deleteItems(phase_id){
 		const self = this;
@@ -287,16 +287,17 @@ import Strings from '../values/strings_de';
 	}
 
 	/**
-	 * updates the state with Items from its store
+	 * updates the state with items from its store
 	 */
+  getComments(){ this.setState({ comments: CommentStore.getAll() }); }
 	getItems(){ this.setState({	items: ItemsStore.getAll() }); }
-	getComments(){ this.setState({ comments: CommentStore.getAll() }); }
 	getPhases(){ this.setState({	phases: PhaseStore.getAll() }); }
 
 	/**
 	 * handles dispatches
 	 */
 	handleActions(action){
+
 		switch(action.type){
 			case "ITEM_STATUS_CHANGED": {
 			};break;
@@ -425,11 +426,11 @@ import Strings from '../values/strings_de';
 			//dynamic styles
 			var disableBtnFinish = 'disabled';
 			var disableBtnReDo = '';
-			var statusAsString = 'beendet';
+			var statusAsString = Strings.done;
 			if(process.status==1) {
-				disableBtnFinish='';
-				disableBtnReDo='disabled';
-				statusAsString='laufend';
+				disableBtnFinish = '';
+				disableBtnReDo = 'disabled';
+				statusAsString = Strings.running;
 			}
 			return(
 				<div>

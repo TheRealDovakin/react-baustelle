@@ -120,14 +120,6 @@ export default class NewProcessPage extends React.Component{
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
 	handleShortChange(event) { this.setState({ short: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
-	/**
-	 * sets the datepicker for date-input
-	 */
-	setDatepicker(){
-		flatpickr.localize(flatpickr_de.de);
-		var picker = document.getElementById('datepicker');
-		flatpickr(picker, {	locale: flatpickr_de.de	});
-	}
 
 	/**
 	 * creates a new Process in the DB and calls function to create child-Phases
@@ -235,6 +227,15 @@ export default class NewProcessPage extends React.Component{
 				console.log(res.json());
 			}
 		});
+	}
+
+	/**
+	 * sets the datepicker for date-input
+	 */
+	setDatepicker(){
+		flatpickr.localize(flatpickr_de.de);
+		var picker = document.getElementById('datepicker');
+		flatpickr(picker, {	locale: flatpickr_de.de	});
 	}
 
 	render(){

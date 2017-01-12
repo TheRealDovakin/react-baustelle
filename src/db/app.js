@@ -6,6 +6,7 @@ var express = require('express'),
     cors = require('cors'),
     nodemailer = require('nodemailer'),
     gmailLogin = require('../js/values/gmailLogin'),
+    Constants = require('../js/values/constants'),
     mongoose = restful.mongoose;
 
 
@@ -20,7 +21,7 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
-app.use(cors({origin:'http://172.22.23.6:25555'}));
+app.use(cors({origin:Constants.appPath}));
 
 mongoose.connect("mongodb://localhost/kup");
 

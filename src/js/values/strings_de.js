@@ -11,6 +11,7 @@ export default{
   companyCar: 'Firmenwagen',
   department: 'Abteilung/KST',
   dueDate: 'Deadline',
+  done: 'beendet',
   info: 'Info',
   job: 'Tätigkeit',
   name: 'Name',

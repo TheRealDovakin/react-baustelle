@@ -26,7 +26,7 @@ export default class Process extends React.Component{
 		const { _id, status, person_name, due_date, p_type } = this.props;
 		var formatted_date = DateUtils.getDateAsString(due_date);
 		// dynamic styling
-		var rowStyle = '';
+		var rowStyle = 'default';
 		var statusAsString = Strings.running;
 		var date = new Date(Date.now());
 		var datePlus5 = new Date(date);
