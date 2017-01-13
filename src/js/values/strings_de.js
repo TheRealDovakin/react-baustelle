@@ -7,11 +7,14 @@
 export default{
   //global strings
   additionalAccounts: 'Zusätzliche Konten',
+  basicInfo: 'Grundinformationen',
   closed: 'geschlossen',
   companyCar: 'Firmenwagen',
   department: 'Abteilung/KST',
   dueDate: 'Deadline',
   done: 'beendet',
+  equipment: 'Ausstattung',
+  finish: 'Abschließen',
   info: 'Info',
   job: 'Tätigkeit',
   name: 'Name',
@@ -21,6 +24,7 @@ export default{
   status: 'Status',
   type: 'Typ',
   short: 'Kürzel',
+  tablePhone: 'Tischtelefon',
   //grouped strings
   footer:{
     contact: 'Kontakt',

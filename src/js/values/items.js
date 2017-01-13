@@ -7,64 +7,73 @@ export default{
   baumann: {
     phase: "itk",
     name: "Baumann",
-    person: "Hans Peter",
+    person: "Sascha Motschmann",
     person_spare: "Peter Hans",
   },
   adito: {
     phase: "itk",
     name: "Adito",
-    person: "Klaus Horst",
+    person: "Norman Krämer",
     person_spare: "Horst Klaus",
   },
   pps: {
     phase: "itk",
     name: "PPS",
-    person: "Franz Rene",
+    person: "Andreas Lein",
     person_spare: "Rene Franz",
   },
   //basic phase
   adAccount: {
     phase: "b",
     name: "AD-Account",
-    person: "Hans Peter",
+    person: "Ali Atef",
     person_spare: "Peter Hans",
+    mail: "nadrajkowski@kieback-peter.de",
   },
-  elo: {
+  mobile: {
     phase: "b",
-    name: "ELO",
-    person: "Franz Rene",
-    person_spare: "Rene Franz",
+    name: "Mobiltelefon",
+    person: "Ali Atef",
+    person_spare: "Peter Hans",
+    mail: "nadrajkowski@kieback-peter.de",
   },
   //laptop phases
   laptopVertrieb: {
     phase: "v",
     name: "Laptop-Vertrieb",
-    person: "Christoph",
-    person_spare: "Dominik",
+    person: "Christopher Kuhn",
+    person_spare: "Dominik Hohmann",
   },
   laptopZentrale: {
     phase: "c",
     name: "Laptop-Zentrale",
-    person: "Christoph",
-    person_spare: "Dominik",
+    person: "Christopher Kuhn",
+    person_spare: "Dominik Hohmann",
   },
   laptopTechniker: {
     phase: "t",
     name: "Laptop-Techniker",
-    person: "Christoph",
-    person_spare: "Dominik",
+    person: "Christopher Kuhn",
+    person_spare: "Dominik Hohmann",
   },
   //car phase
   auto: {
     phase: "car",
     name: "Firmenwagen",
-    person: "Niko Hamilton",
+    person: "Ringo Möwe",
     person_spare: "Louis Rossberg",
   },
   tempAuto: {
     phase: "car",
     name: "Temporärer Firmenwagen",
-    person: "Louis Rossberg",
+    person: "Ringo Möwe",
     person_spare: "Niko Hamilton",
   },
+  //table phone phase
+  tablePhone: {
+    phase: "tp",
+    name: "Tischtelefon",
+    person: "Ali Atef",
+    person_spare: "Peter Pan",
+  }
 }

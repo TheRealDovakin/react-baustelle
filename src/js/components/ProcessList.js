@@ -83,7 +83,7 @@ export default class ProcessList extends React.Component{
 			}
 		});
 	}
-	
+
 	/**
 	 * updates the state with Processes from its Store
 	 */

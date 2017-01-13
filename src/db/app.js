@@ -1,14 +1,15 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
+    childProcess = require('child_process'),
+    Constants = require('../js/values/constants'),
+    cors = require('cors'),
+    gmailLogin = require('../js/values/gmailLogin'),
     methodOverride = require('method-override'),
     morgan = require('morgan'),
-    restful = require('node-restful'),
-    cors = require('cors'),
     nodemailer = require('nodemailer'),
-    gmailLogin = require('../js/values/gmailLogin'),
-    Constants = require('../js/values/constants'),
-    mongoose = restful.mongoose;
+    restful = require('node-restful');
 
+var mongoose = restful.mongoose;
 
 /**
  * express rest-api with node-restful
@@ -44,34 +45,19 @@ CommentModel.methods(['get', 'post', 'delete']),
 CommentModel.register(app, '/comments');
 
 function sendMail(adress, subject, body){
-  var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-      user: gmailLogin.user, // Your email id
-      pass: gmailLogin.pass // Your password
-    }
-  });
-  var mailOptions = {
-    from: gmailLogin.user, // sender address
-    to: adress, // list of receivers
-    subject: subject, // Subject line
-    text: body //, // plaintext body
-    // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
-  };
-  transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-      console.log(error);
-      //res.json({yo: 'error'});
-    }else{
-      console.log('Message sent: ');
-      //res.json({yo: info.response});
-    };
-  });
+  const command = getSendMailCommand(adress, subject, body);
+  console.log("execute: "+command);
+  childProcess.exec(command);
 }
 
-app.put('/sendMail', function(_req, res){
+function getSendMailCommand(adress, subject, body){
+  return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
+}
+
+app.post('/sendMail', function(_req, res){
   var req = _req.body;
   sendMail(req.adress, req.subject, req.body);
+  res.send('hallo');
 });
 
 console.log('app listens at localhost:3000');

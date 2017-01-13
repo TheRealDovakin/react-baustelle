@@ -24,7 +24,6 @@ export default class Comment extends React.Component{
     const glyphStyle = { color: '#ffffff', };
     const spanStyle = { marginLeft: '10px', };
 
-    // TODO: replace _ with space
     return(
       <li class="list-group-item">
         <h4>

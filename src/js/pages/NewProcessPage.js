@@ -31,35 +31,38 @@ export default class NewProcessPage extends React.Component{
 	constructor(props) {
 		//IE promise-support
 		ES6Promise.polyfill();
-	   super(props);
-	   this.state = {
-			 	car: false,
-				addAccounts: false,
-	    	name: '',
-				person_nr: '',
-				short: '',
-				job: '',
-				place: '',
-				department: '',
-	    	due_date:'',
-	    	p_type: 'Vertrieb',
-	   };
-		 // binded functions
-		 this.createProcess = this.createProcess.bind(this);
-	   this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
-	   this.handleCarChange = this.handleCarChange.bind(this);
-		 this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
-		 this.handleDueDateChange = this.handleDueDateChange.bind(this);
-	   this.handleJobChange = this.handleJobChange.bind(this);
-		 this.handleNameChange = this.handleNameChange.bind(this);
-		 this.handlePersonNrChange = this.handlePersonNrChange.bind(this);
-		 this.handlePlaceChange = this.handlePlaceChange.bind(this);
-		 this.handleShortChange = this.handleShortChange.bind(this);
-	   this.handleTypeChange = this.handleTypeChange.bind(this);
-	   this.setDatepicker = this.setDatepicker.bind(this);
-	   this.postProcess = this.postProcess.bind(this);
-	   this.postPhase = this.postPhase.bind(this);
-	   this.postItem = this.postItem.bind(this);
+	  super(props);
+		this.mailList = [[]];
+	  this.state = {
+		 	addAccounts: false,
+		 	car: false,
+			department: '',
+			due_date:'',
+	  	name: '',
+			job: '',
+			person_nr: '',
+			p_type: 'Vertrieb',
+			place: '',
+			short: '',
+			tablePhone: false,
+	  };
+		// binded functions
+		this.createProcess = this.createProcess.bind(this);
+	  this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
+	  this.handleCarChange = this.handleCarChange.bind(this);
+		this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
+		this.handleDueDateChange = this.handleDueDateChange.bind(this);
+	  this.handleJobChange = this.handleJobChange.bind(this);
+		this.handleNameChange = this.handleNameChange.bind(this);
+		this.handlePersonNrChange = this.handlePersonNrChange.bind(this);
+		this.handlePlaceChange = this.handlePlaceChange.bind(this);
+		this.handleShortChange = this.handleShortChange.bind(this);
+	  this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
+	  this.handleTypeChange = this.handleTypeChange.bind(this);
+	  this.setDatepicker = this.setDatepicker.bind(this);
+	  this.postProcess = this.postProcess.bind(this);
+	  this.postPhase = this.postPhase.bind(this);
+	  this.postItem = this.postItem.bind(this);
 	}
 
 	/**
@@ -74,7 +77,8 @@ export default class NewProcessPage extends React.Component{
 	 * @param {String} due_date			date from datepicker
 	 * @param {String} p_type			process type from input
 	 */
-	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts){
+	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts, tablePhone){
+
 		var json_data = JSON.stringify({
 			addAccounts: addAccounts,
 			car: car,
@@ -87,6 +91,7 @@ export default class NewProcessPage extends React.Component{
 			p_type: p_type,
 			short: short,
 			status: 1,
+			tablePhone: tablePhone,
 		});
 		this.postProcess(json_data);
 	}
@@ -107,6 +112,12 @@ export default class NewProcessPage extends React.Component{
 		 if(this.state.car==false) car = true;
 		 else car = false;
 		 this.setState({ car: car });
+	 }
+	 handleTablePhoneChange() {
+		 var tablePhone;
+		 if(this.state.tablePhone==false) tablePhone = true;
+		 else tablePhone = false;
+		 this.setState({ tablePhone: tablePhone });
 	 }
 	 /**
 	 * eventhandlers for remaining inputs
@@ -134,7 +145,6 @@ export default class NewProcessPage extends React.Component{
 		if(res.ok){
 			dispatcher.dispatch({type: "PROCESS_CREATED"});
 			res.json().then(function(res){
-				self.postPhase(res, PhaseValues.basic);
 				const options = JSON.parse(json_data);
 				switch(options.p_type){
 					case Strings.processTypes.vertrieb: {self.postPhase(res, PhaseValues.vertrieb)}; break;
@@ -143,18 +153,22 @@ export default class NewProcessPage extends React.Component{
 				}
 				if (options.addAccounts==true) self.postPhase(res, PhaseValues.itKonten);
 				if (options.car==true) self.postPhase(res, PhaseValues.auto);
+				if (options.tablePhone==true) self.postPhase(res, PhaseValues.tablePhone);
+				// HACK:
+				self.postPhase(res, PhaseValues.basic, true);
 				alertify.success(Strings.newProcess.success);
 				self.setState({
-					car: false,
 					addAccounts: false,
-	 	    	name: '',
-					person_nr: '',
-					short: '',
-					job: '',
-					place: '',
+					car: false,
 					department:'',
 	 	    	due_date:'',
+					name: '',
+					job: '',
 	 	    	p_type: Strings.processTypes.vertrieb,
+					person_nr: '',
+					place: '',
+					short: '',
+					tablePhone: false,
 				});
 				document.getElementById('carCheckbox').checked = false;
 				document.getElementById('addAccountsCheckbox').checked = false;
@@ -173,7 +187,7 @@ export default class NewProcessPage extends React.Component{
 	 * @param  {object} res        parent Process
 	 * @param  {object} phaseValue predifined JSON for specific Phase
 	 */
-	postPhase(res, phaseValue){
+	postPhase(res, phaseValue, last){
 		const json_data = JSON.stringify({
 			name: phaseValue.name,
 			process_id: res._id,
@@ -184,15 +198,39 @@ export default class NewProcessPage extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
+		var p_id = res._id;
+		var p_name = res.person_name
 		fetch(Constants.restApiPath+'phases/', myInit).then(function(res){
 		if(res.ok){
 			dispatcher.dispatch({type: "PHASE_CREATED"});
 			res.json().then(function(res){
 				_.each(ItemValues, function(itemValue){
 				 if(itemValue.phase==phaseValue.short){
+					 self.mailList[0].push(itemValue.mail);
 					 self.postItem(res, itemValue);
 				 }
 				})
+				// HACK:
+				if (last) {
+					_.each(_.uniq(self.mailList[0]), function(mail){
+						const json_data = JSON.stringify({
+							adress: mail,
+							subject: "Eintrittsprocess: "+p_name,
+							body: "Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: http://172.22.23.6:25555/#/processView/"+p_id
+						});
+						var myHeaders = new Headers();
+						myHeaders.append("Content-Type", "application/json");
+						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
+						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
+							if(res.ok){
+								console.log('ok');
+							}else{
+								console.log(res);
+								console.log(Strings.error.restApi);
+							}
+						});
+					})
+				}
 			})
 		}
 		else{
@@ -240,11 +278,15 @@ export default class NewProcessPage extends React.Component{
 
 	render(){
 		const headlineStyle = { marginTop: 70 };
-		const btnStyle = { width: '30%' };
+		const btnStyle = { width: '30%', marginBottom: "50px" };
 		const dueDateStyle = { backgroundColor: '#ffffff' };
+		const marginRight5Style = { marginRight: '5px', paddingBottom: '30px' }
+		const marginRight15Style = { marginRight: '50px', paddingBottom: '30px' }
+		const paddingLeft50Style = { paddingLeft: '17%' }
 		return(
 			<div class="col-md-12">
 				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
+				<h2>{Strings.basicInfo}</h2>
 				<form class="form-horizontal">
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.name}*</label>
@@ -304,26 +346,36 @@ export default class NewProcessPage extends React.Component{
 						</select>
 				    </div>
 				  </div>
+				</form>
+				<h2>{Strings.equipment}</h2>
+				<form style={paddingLeft50Style} class="form-inline">
 					<div class="form-group">
-				    <label class="col-sm-2 control-label">{Strings.additionalAccounts}</label>
-				    <div class="col-sm-10">
-							<div class="checkbox">
-				        <label>
-			            <input id="carCheckbox" type='checkbox' value={this.state.addAccounts} onChange={this.handleAddAccountsChange}></input>
-				        </label>
-				      </div>
-				    </div>
+						<div class="checkbox">
+			        <label style={marginRight5Style}>
+		            <input id="carCheckbox" type='checkbox' value={this.state.addAccounts} onChange={this.handleAddAccountsChange}></input>
+			        </label>
+			      </div>
+						<label style={marginRight15Style} class="control-label">{Strings.additionalAccounts}</label>
 				  </div>
 					<div class="form-group">
-				    <label class="col-sm-2 control-label">{Strings.companyCar}</label>
-				    <div class="col-sm-10">
-							<div class="checkbox">
-				        <label>
-			            <input id="addAccountsCheckbox" type='checkbox' value={this.state.car} onChange={this.handleCarChange}></input>
-				        </label>
-				      </div>
-				    </div>
+						<div class="checkbox">
+			        <label style={marginRight5Style}>
+		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.car} onChange={this.handleCarChange}></input>
+			        </label>
+			    	</div>
+						<label style={marginRight15Style} class="control-label">{Strings.companyCar}</label>
 				  </div>
+					<div class="form-group">
+						<div class="checkbox">
+			        <label style={marginRight5Style}>
+		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.tablePhone} onChange={this.handleTablePhoneChange}></input>
+			        </label>
+			      </div>
+						<label style={marginRight15Style} class="control-label">{Strings.tablePhone}</label>
+				  </div>
+				</form>
+				<h2>{Strings.finish}</h2>
+				<form class="form-horizontal">
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	style={btnStyle} class="btn btn-primary"
@@ -337,7 +389,8 @@ export default class NewProcessPage extends React.Component{
 									this.state.due_date,
 									this.state.p_type,
 									this.state.car,
-									this.state.addAccounts)}>
+									this.state.addAccounts,
+									this.state.tablePhone)}>
 									<span class="glyphicon glyphicon-plus pull-left"></span>
 									{Strings.processList.createNewProcess}
 							</a>

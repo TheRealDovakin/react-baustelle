@@ -19,7 +19,7 @@ class Header extends React.Component{
 				<nav class="navbar navbar-default navbar-fixed-top">
 				    <div>
 				      <ul class="nav navbar-nav">
-				      	<a style={margin} class="navbar-brand" href="#">Kieback & Peter</a>
+				      	<a style={margin} class="navbar-brand" href="/">Kieback & Peter</a>
 				      </ul>
 				    </div>
 				</nav>
