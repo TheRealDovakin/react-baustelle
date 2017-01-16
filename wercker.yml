@@ -1,8 +1,0 @@
-box: wercker/default
-build:
-  steps:
-    build:
-      script:
-        name: output
-        code: |-
-          echo "hallo kasper"
