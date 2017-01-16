@@ -228,7 +228,7 @@ export default class Item extends React.Component{
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
 						<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
-						<li class={"list-group-item"+responsablePerson}><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+						<li class={"list-group-item"+responsablePerson}><a  target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
 						<li class={"list-group-item"+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
 						<a class="btn btn-success" style={btnStyle} onClick={
 							() => this.changeItemStatus(this, _id, 2)}>
@@ -272,8 +272,8 @@ export default class Item extends React.Component{
 						</div>
 						<ul class="list-group">
 							<li class="list-group-item"><span>{Strings.status}: erledigt</span></li>
-							<li class="list-group-item"><a href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-							<li class="list-group-item"><a href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
+							<li class="list-group-item"><a target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+							<li class="list-group-item"><a target="_blank_" href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
 							<a class="btn btn-default" style={btnStyle} onClick={
 								() => this.changeItemStatus(this, _id, 3)
 							}>{Strings.item.setToNotDone}</a>

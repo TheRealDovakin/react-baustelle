@@ -6,7 +6,6 @@ var express = require('express'),
     gmailLogin = require('../js/values/gmailLogin'),
     methodOverride = require('method-override'),
     morgan = require('morgan'),
-    nodemailer = require('nodemailer'),
     restful = require('node-restful');
 
 var mongoose = restful.mongoose;
