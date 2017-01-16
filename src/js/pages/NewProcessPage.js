@@ -285,45 +285,53 @@ export default class NewProcessPage extends React.Component{
 		const paddingLeft50Style = { paddingLeft: '17%' }
 		return(
 			<div class="col-md-12">
+
 				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
 				<h2>{Strings.basicInfo}</h2>
 				<form class="form-horizontal">
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.name}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.name} value={this.state.name} onChange={this.handleNameChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.personNr}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" type="number" placeholder={Strings.personNr} value={this.state.person_nr} onChange={this.handlePersonNrChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.short}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.short} value={this.state.short} onChange={this.handleShortChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.job}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.job} value={this.state.job} onChange={this.handleJobChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.place}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.place} value={this.state.place} onChange={this.handlePlaceChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.department}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.department} value={this.state.department} onChange={this.handleDepartmentChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.dueDate}*</label>
 				    <div class="col-sm-10">
@@ -335,6 +343,7 @@ export default class NewProcessPage extends React.Component{
 				    	</div>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.type}*</label>
 				    <div class="col-sm-10">
@@ -346,9 +355,12 @@ export default class NewProcessPage extends React.Component{
 						</select>
 				    </div>
 				  </div>
+
 				</form>
+
 				<h2>{Strings.equipment}</h2>
 				<form style={paddingLeft50Style} class="form-inline">
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
@@ -357,6 +369,7 @@ export default class NewProcessPage extends React.Component{
 			      </div>
 						<label style={marginRight15Style} class="control-label">{Strings.additionalAccounts}</label>
 				  </div>
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
@@ -365,6 +378,7 @@ export default class NewProcessPage extends React.Component{
 			    	</div>
 						<label style={marginRight15Style} class="control-label">{Strings.companyCar}</label>
 				  </div>
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
@@ -373,9 +387,12 @@ export default class NewProcessPage extends React.Component{
 			      </div>
 						<label style={marginRight15Style} class="control-label">{Strings.tablePhone}</label>
 				  </div>
+
 				</form>
+
 				<h2>{Strings.finish}</h2>
 				<form class="form-horizontal">
+
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	style={btnStyle} class="btn btn-primary"
@@ -396,6 +413,7 @@ export default class NewProcessPage extends React.Component{
 							</a>
 				    </div>
 				  </div>
+
 				</form>
 			</div>
 		);
