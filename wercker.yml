@@ -7,7 +7,6 @@
     # A custom script step, name value is used in the UI
     # and the code value contains the command that get executed
     - script:
-        name: echo nodejs information
+        name: echo Hallo
         code: |
-          npm install;
-          webpack;
+          echo "Hallo"
