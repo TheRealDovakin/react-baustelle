@@ -4,7 +4,6 @@ import React from "react";
 //own files
 import Header from "./Header";
 import Footer from "./Footer";
-import PhaseList from "./PhaseList";
 
 /**
  * @author Kasper Nadrajkowski

@@ -3,13 +3,13 @@ import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import ES6Promise from 'es6-promise';
 import flatpickr from "flatpickr";
-import flatpickr_de from '../../node_modules/flatpickr/src/l10n/de';
+import flatpickr_de from '../../../node_modules/flatpickr/src/l10n/de';
 import React from "react";
 import _ from 'underscore';
 import "whatwg-fetch";
 
 //css
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 //own files
 import dispatcher from "../dispatcher";
@@ -216,7 +216,7 @@ export default class NewProcessPage extends React.Component{
 						const json_data = JSON.stringify({
 							adress: mail,
 							subject: "Eintrittsprocess: "+p_name,
-							body: "Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: http://172.22.23.6:25555/#/processView/"+p_id
+							body: "Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: http://172.22.23.6:25555/#/processPage/"+p_id
 						});
 						var myHeaders = new Headers();
 						myHeaders.append("Content-Type", "application/json");
@@ -285,45 +285,53 @@ export default class NewProcessPage extends React.Component{
 		const paddingLeft50Style = { paddingLeft: '17%' }
 		return(
 			<div class="col-md-12">
+
 				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
 				<h2>{Strings.basicInfo}</h2>
 				<form class="form-horizontal">
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.name}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.name} value={this.state.name} onChange={this.handleNameChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.personNr}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" type="number" placeholder={Strings.personNr} value={this.state.person_nr} onChange={this.handlePersonNrChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.short}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.short} value={this.state.short} onChange={this.handleShortChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.job}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.job} value={this.state.job} onChange={this.handleJobChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.place}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.place} value={this.state.place} onChange={this.handlePlaceChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.department}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.department} value={this.state.department} onChange={this.handleDepartmentChange}></input>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.dueDate}*</label>
 				    <div class="col-sm-10">
@@ -335,6 +343,7 @@ export default class NewProcessPage extends React.Component{
 				    	</div>
 				    </div>
 				  </div>
+
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.type}*</label>
 				    <div class="col-sm-10">
@@ -346,9 +355,12 @@ export default class NewProcessPage extends React.Component{
 						</select>
 				    </div>
 				  </div>
+
 				</form>
+
 				<h2>{Strings.equipment}</h2>
 				<form style={paddingLeft50Style} class="form-inline">
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
@@ -357,6 +369,7 @@ export default class NewProcessPage extends React.Component{
 			      </div>
 						<label style={marginRight15Style} class="control-label">{Strings.additionalAccounts}</label>
 				  </div>
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
@@ -365,6 +378,7 @@ export default class NewProcessPage extends React.Component{
 			    	</div>
 						<label style={marginRight15Style} class="control-label">{Strings.companyCar}</label>
 				  </div>
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
@@ -373,9 +387,12 @@ export default class NewProcessPage extends React.Component{
 			      </div>
 						<label style={marginRight15Style} class="control-label">{Strings.tablePhone}</label>
 				  </div>
+
 				</form>
+
 				<h2>{Strings.finish}</h2>
 				<form class="form-horizontal">
+
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	style={btnStyle} class="btn btn-primary"
@@ -396,6 +413,7 @@ export default class NewProcessPage extends React.Component{
 							</a>
 				    </div>
 				  </div>
+
 				</form>
 			</div>
 		);

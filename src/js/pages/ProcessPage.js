@@ -13,7 +13,7 @@ import CommentStore from '../stores/CommentStore';
 import DateUtils from '../utils/DateUtils';
 import dispatcher from "../dispatcher";
 import ItemsStore from "../stores/ItemsStore"
-import Phase from "./Phase";
+import Phase from "../components/Phase";
 import PhaseStore from "../stores/PhaseStore"
 import Strings from '../values/strings_de';
 
@@ -22,7 +22,7 @@ import Strings from '../values/strings_de';
  * @author Kasper Nadrajkowski
  * this class represents a list of Phases for a Process
  */
- export default class PhaseList extends React.Component{
+ export default class ProcessPage extends React.Component{
 	constructor(){
     //IE promise-support
     ES6Promise.polyfill();
@@ -261,24 +261,6 @@ import Strings from '../values/strings_de';
 	 * updates the status of the current Process to done
 	 */
 	finishProcess(){
-    /* //port 465 not open
-    const json_data = JSON.stringify({
-      adress: "nadrajkowski@live.de",
-      subject: "K&P",
-      body: "hallo"
-    });
-    var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
-		fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
-			if(res.ok){
-        console.log('ok');
-			}else{
-				console.log(res);
-				console.log(Strings.error.restApi);
-			}
-		});
-    */
 		if(this.processCanBeFinished()){
 			this.setProcessStatus(2);
 		}else{
