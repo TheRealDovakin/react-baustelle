@@ -1,4 +1,7 @@
-box: wercker/nodejs
+box: wercker/default
 build:
   steps:
-    - npm-install
+    script:
+      name: output
+      code: |-
+        echo "hallo kasper"
