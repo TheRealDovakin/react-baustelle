@@ -1,20 +1,31 @@
+//js
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory} from "react-router";
 
-import Items from "./pages/Items";
+//own files
+import InfoPage from "./pages/InfoPage";
 import Layout from "./components/Layout";
-import Places from "./pages/Places";
+import NewProcessPage from "./pages/NewProcessPage";
+import PhaseList from "./components/PhaseList";
+import ProcessListPage from "./pages/ProcessListPage";
+import ProcessView from "./pages/ProcessView";
 
+/**
+ * @author Kasper Nadrajkowski
+ * react router
+ */
 
 const app = document.getElementById('app');
 
 ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout}>
-			<IndexRoute path="/" component={Items}></IndexRoute>
-			<Route path="places" component={Places}></Route>
-			<Route path="items" component={Items}></Route>
+			<IndexRoute component={ProcessListPage}></IndexRoute>
+			<Route path="/" component={ProcessListPage}></Route>
+			<Route path="processView/:id" component={PhaseList}></Route>
+			<Route path="newProcess" component={NewProcessPage}></Route>
+			<Route path="info" component={InfoPage}></Route>
 		</Route>
-	</Router>, 
-	app);
+	</Router>,
+app);

@@ -1,16 +1,10 @@
+//own files
 import dispatcher from "../dispatcher";
 
-export function createItem(phase_id, status, name, person, person_spare, spare){
-	dispatcher.dispatch({
-		type: "CREATE_ITEM",
-		phase_id,
-		status,
-		name,
-		person,
-		person_spare,
-		spare
-	});
-}
+/**
+ * @author Kasper Nadrajkowski
+ * collection action for Items
+ */
 
 export function deleteItem(id){
 	dispatcher.dispatch({
@@ -19,10 +13,8 @@ export function deleteItem(id){
 	});
 }
 
-export function changeItemStatus(id, status){
+export function changeItemStatus(){
 	dispatcher.dispatch({
-		type: "CHANGE_ITEM_STATUS",
-		id,
-		status,
+		type: "ITEM_STATUS_CHANGED",
 	});
 }

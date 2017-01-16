@@ -1,12 +1,18 @@
+//js
 import React from "react";
 
-import Content from "./Content";
+//own files
 import Header from "./Header";
 import Footer from "./Footer";
+import PhaseList from "./PhaseList";
 
+/**
+ * @author Kasper Nadrajkowski
+ * this class represents the overall layout of the application
+ */
 export default class Layout extends React.Component{
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 		this.state = {
 			title: "Welcome"
 		}
@@ -17,15 +23,11 @@ export default class Layout extends React.Component{
 	}
 
 	render(){
-		const title = "Welcome Kasper"
 		return(
 			<div>
 				<Header></Header>
 				{this.props.children}
-				<Content
-					changeTitle={this.changeTitle.bind(this)}
-				 	title={this.state.title}/>
-				<Footer />			
+				<Footer />
 			</div>
 		);
 	}

@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --content-base src"
+    "dev": "webpack-dev-server --content-base src --host 0.0.0.0 --port 25555"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.15.3",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
     "babel-plugin-add-module-exports": "^0.2.1",
