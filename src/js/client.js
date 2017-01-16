@@ -7,9 +7,8 @@ import { Router, Route, IndexRoute, hashHistory} from "react-router";
 import InfoPage from "./pages/InfoPage";
 import Layout from "./components/Layout";
 import NewProcessPage from "./pages/NewProcessPage";
-import PhaseList from "./components/PhaseList";
+import ProcessPage from "./pages/ProcessPage";
 import ProcessListPage from "./pages/ProcessListPage";
-import ProcessView from "./pages/ProcessView";
 
 /**
  * @author Kasper Nadrajkowski
@@ -23,7 +22,7 @@ ReactDOM.render(
 		<Route path="/" component={Layout}>
 			<IndexRoute component={ProcessListPage}></IndexRoute>
 			<Route path="/" component={ProcessListPage}></Route>
-			<Route path="processView/:id" component={PhaseList}></Route>
+			<Route path="processPage/:id" component={ProcessPage}></Route>
 			<Route path="newProcess" component={NewProcessPage}></Route>
 			<Route path="info" component={InfoPage}></Route>
 		</Route>

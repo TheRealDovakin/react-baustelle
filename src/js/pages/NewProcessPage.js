@@ -3,13 +3,13 @@ import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import ES6Promise from 'es6-promise';
 import flatpickr from "flatpickr";
-import flatpickr_de from '../../node_modules/flatpickr/src/l10n/de';
+import flatpickr_de from '../../../node_modules/flatpickr/src/l10n/de';
 import React from "react";
 import _ from 'underscore';
 import "whatwg-fetch";
 
 //css
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 //own files
 import dispatcher from "../dispatcher";
@@ -216,7 +216,7 @@ export default class NewProcessPage extends React.Component{
 						const json_data = JSON.stringify({
 							adress: mail,
 							subject: "Eintrittsprocess: "+p_name,
-							body: "Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: http://172.22.23.6:25555/#/processView/"+p_id
+							body: "Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: http://172.22.23.6:25555/#/processPage/"+p_id
 						});
 						var myHeaders = new Headers();
 						myHeaders.append("Content-Type", "application/json");

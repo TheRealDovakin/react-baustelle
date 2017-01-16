@@ -19,7 +19,7 @@ export default class Process extends React.Component{
 	 * @param {string} id			process id
 	 */
 	goToProcess(id){
-		document.location.href = "#/processView/"+id;
+		document.location.href = "#/processPage/"+id;
  }
 
 	render(){

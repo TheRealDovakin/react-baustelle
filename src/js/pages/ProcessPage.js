@@ -13,7 +13,7 @@ import CommentStore from '../stores/CommentStore';
 import DateUtils from '../utils/DateUtils';
 import dispatcher from "../dispatcher";
 import ItemsStore from "../stores/ItemsStore"
-import Phase from "./Phase";
+import Phase from "../components/Phase";
 import PhaseStore from "../stores/PhaseStore"
 import Strings from '../values/strings_de';
 
@@ -22,7 +22,7 @@ import Strings from '../values/strings_de';
  * @author Kasper Nadrajkowski
  * this class represents a list of Phases for a Process
  */
- export default class PhaseList extends React.Component{
+ export default class ProcessPage extends React.Component{
 	constructor(){
     //IE promise-support
     ES6Promise.polyfill();
