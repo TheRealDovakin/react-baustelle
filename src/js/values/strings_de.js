@@ -8,6 +8,7 @@ export default{
   //global strings
   additionalAccounts: 'Zusätzliche Konten',
   basicInfo: 'Grundinformationen',
+  baumanager: 'Baumanager',
   closed: 'geschlossen',
   companyCar: 'Firmenwagen',
   department: 'Abteilung/KST',

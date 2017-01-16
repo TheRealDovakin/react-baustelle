@@ -252,7 +252,10 @@ import Strings from '../values/strings_de';
 			}
 			else{
 				console.log(Strings.error.restApi);
-				console.log(res.json());
+        console.log(res);
+        if (res.status==404) {
+          document.location.href = '/#/processNotFound';
+        }
 			}
 		});
 	}

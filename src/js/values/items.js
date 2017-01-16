@@ -4,10 +4,16 @@
  */
 export default{
   //additional accounts phase
-  baumann: {
-    phase: "itk",
-    name: "Baumann",
+  baumanagerKonto: {
+    phase: "bm",
+    name: "Baumanager Konto",
     person: "Sascha Motschmann",
+    person_spare: "Peter Hans",
+  },
+  baumanagerDongle: {
+    phase: "bm",
+    name: "Baumanager Dongle",
+    person: "Ali Atef",
     person_spare: "Peter Hans",
   },
   adito: {

@@ -35,6 +35,7 @@ export default class NewProcessPage extends React.Component{
 		this.mailList = [[]];
 	  this.state = {
 		 	addAccounts: false,
+			baumanager: false,
 		 	car: false,
 			department: '',
 			due_date:'',
@@ -49,6 +50,7 @@ export default class NewProcessPage extends React.Component{
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
 	  this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
+	  this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
 	  this.handleCarChange = this.handleCarChange.bind(this);
 		this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
 		this.handleDueDateChange = this.handleDueDateChange.bind(this);
@@ -77,10 +79,11 @@ export default class NewProcessPage extends React.Component{
 	 * @param {String} due_date			date from datepicker
 	 * @param {String} p_type			process type from input
 	 */
-	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts, tablePhone){
+	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts, tablePhone, baumanager){
 
 		var json_data = JSON.stringify({
 			addAccounts: addAccounts,
+			baumanager: baumanager,
 			car: car,
 			department: department,
 			due_date: due_date,
@@ -101,6 +104,12 @@ export default class NewProcessPage extends React.Component{
 	* eventhandler for car-input, toggles true and false
 	* @param  {event} event 		input value
 	*/
+	 handleBaumanagerChange() {
+		 var baumanager;
+		 if(this.state.baumanager==false) baumanager = true;
+		 else baumanager = false;
+		 this.setState({ baumanager: baumanager });
+	 }
 	 handleAddAccountsChange() {
 		 var addAccounts;
 		 if(this.state.addAccounts==false) addAccounts = true;
@@ -154,11 +163,13 @@ export default class NewProcessPage extends React.Component{
 				if (options.addAccounts==true) self.postPhase(res, PhaseValues.itKonten);
 				if (options.car==true) self.postPhase(res, PhaseValues.auto);
 				if (options.tablePhone==true) self.postPhase(res, PhaseValues.tablePhone);
+				if (options.baumanager==true) self.postPhase(res, PhaseValues.baumanager);
 				// HACK:
 				self.postPhase(res, PhaseValues.basic, true);
 				alertify.success(Strings.newProcess.success);
 				self.setState({
 					addAccounts: false,
+					baumanager: false,
 					car: false,
 					department:'',
 	 	    	due_date:'',
@@ -388,6 +399,15 @@ export default class NewProcessPage extends React.Component{
 						<label style={marginRight15Style} class="control-label">{Strings.tablePhone}</label>
 				  </div>
 
+					<div class="form-group">
+						<div class="checkbox">
+			        <label style={marginRight5Style}>
+		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.baumanager} onChange={this.handleBaumanagerChange}></input>
+			        </label>
+			      </div>
+						<label style={marginRight15Style} class="control-label">{Strings.baumanager}</label>
+				  </div>
+
 				</form>
 
 				<h2>{Strings.finish}</h2>
@@ -407,7 +427,8 @@ export default class NewProcessPage extends React.Component{
 									this.state.p_type,
 									this.state.car,
 									this.state.addAccounts,
-									this.state.tablePhone)}>
+									this.state.tablePhone,
+									this.state.baumanager)}>
 									<span class="glyphicon glyphicon-plus pull-left"></span>
 									{Strings.processList.createNewProcess}
 							</a>

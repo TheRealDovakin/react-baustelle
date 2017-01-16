@@ -43,5 +43,11 @@ export default{
     name: "Tischtelefon",
     status: 1,
     r_nr: 1,
+  },
+  baumanager: {
+    short: "bm",
+    name: "Baumanager",
+    status: 1,
+    r_nr: 1,
   }
 }
