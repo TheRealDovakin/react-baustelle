@@ -27,6 +27,13 @@ mongoose.connect("mongodb://localhost/kup");
 
 var Schema = mongoose.Schema;
 
+
+
+//authentication
+app.use('/', function(req, res, next){
+  
+});
+
 var ItemModel = require('./models/Item.js');
 ItemModel.methods(['get', 'post', 'put', 'delete']),
 ItemModel.register(app, '/items');
@@ -52,6 +59,8 @@ function sendMail(adress, subject, body){
 function getSendMailCommand(adress, subject, body){
   return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
 }
+
+
 
 app.post('/sendMail', function(_req, res){
   var req = _req.body;
