@@ -61,6 +61,8 @@ export default class ProcessListPage extends React.Component{
 	componentDidMount(){
 		this.fetchProcesses();
 		this.fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
+		console.log(window.sessionStorage.accessToken);
+		console.log(window.sessionStorage.bla);
 	}
 
 	/**
@@ -68,7 +70,11 @@ export default class ProcessListPage extends React.Component{
 	 * its store
 	 */
 	fetchProcesses(){
-		fetch(Constants.restApiPath+'processes').then(function(res){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders }
+		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -80,6 +86,9 @@ export default class ProcessListPage extends React.Component{
 			else{
 				console.log(res);
 				console.log(Strings.error.restApi);
+				if(res.status==401){
+					document.location.href = '/#/login?callbackPath=';
+				}
 			}
 		});
 	}

@@ -182,6 +182,7 @@ import Strings from '../values/strings_de';
 	}
 
   fetchComments(){
+    const processId = this.props.location.pathname.split("/")[2];
 		fetch(Constants.restApiPath+'comments').then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
@@ -194,6 +195,9 @@ import Strings from '../values/strings_de';
 			else{
 				console.log(res);
 				console.log(Strings.error.restApi);
+        if(res.status==401){
+					document.location.href = '/#/login?callbackPath=processPage/'+processId;
+				}
 			}
 		});
 	}
