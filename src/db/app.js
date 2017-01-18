@@ -87,7 +87,7 @@ ItemModel.register(app, '/api/items');
 
 var PhaseModel = require('./models/Phase.js');
 PhaseModel.methods(['get', 'post', 'put', 'delete']),
-PhaseModel.register(app, '//apiapi/phases');
+PhaseModel.register(app, '/api/phases');
 
 var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),

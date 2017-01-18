@@ -106,7 +106,10 @@ import Strings from '../values/strings_de';
 		_.each(self.state.comments, function(comment){
 			if(comment.item_id==item_id){
         console.log(comment.commentor);
-				var myInit = { method: 'DELETE' }
+        var myHeaders = new Headers();
+    		myHeaders.append("Content-Type", "application/json");
+    		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+				var myInit = { headers: myHeaders, method: 'DELETE' }
 				fetch(Constants.restApiPath+'comments/'+comment._id, myInit).then(function(res){
 					if(res.ok) {}
 					else{
@@ -125,7 +128,10 @@ import Strings from '../values/strings_de';
 		const self = this;
 		_.each(self.state.items, function(item){
 			if(item.phase_id==phase_id){
-				var myInit = { method: 'DELETE' }
+        var myHeaders = new Headers();
+    		myHeaders.append("Content-Type", "application/json");
+    		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+				var myInit = { headers: myHeaders, method: 'DELETE' }
 				fetch(Constants.restApiPath+'items/'+item._id, myInit).then(function(res){
 					if(res.ok) { self.deleteComments(item._id); }
 					else{
@@ -145,7 +151,10 @@ import Strings from '../values/strings_de';
 		_.each(self.state.phases, function(phase){
 			if(phase.process_id==self.state.process._id){
 				self.deleteItems(phase._id);
-				var myInit = { method: 'DELETE' }
+        var myHeaders = new Headers();
+    		myHeaders.append("Content-Type", "application/json");
+    		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+				var myInit = { headers: myHeaders, method: 'DELETE' }
 				fetch(Constants.restApiPath+'phases/'+phase._id, myInit).then(function(res){
 					if(res.ok){
 
@@ -169,7 +178,10 @@ import Strings from '../values/strings_de';
 			 ev.preventDefault();
 				const processId = self.props.location.pathname.split("/")[2];
 				self.deletePhases();
-				var myInit = { method: 'DELETE' }
+        var myHeaders = new Headers();
+    		myHeaders.append("Content-Type", "application/json");
+    		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+				var myInit = { headers: myHeaders, method: 'DELETE' }
 				fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
 					if(res.ok){
 						document.location.href = '/';
@@ -183,7 +195,11 @@ import Strings from '../values/strings_de';
 
   fetchComments(){
     const processId = this.props.location.pathname.split("/")[2];
-		fetch(Constants.restApiPath+'comments').then(function(res){
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+    var myInit = { headers: myHeaders };
+		fetch(Constants.restApiPath+'comments', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -195,6 +211,7 @@ import Strings from '../values/strings_de';
 			else{
 				console.log(res);
 				console.log(Strings.error.restApi);
+        console.log('comments');
         if(res.status==401){
 					document.location.href = '/#/login?callbackPath=processPage/'+processId;
 				}
@@ -206,7 +223,11 @@ import Strings from '../values/strings_de';
 	 * fetches Items from DB and dispatches an action that updates the store
 	 */
 	fetchItems(){
-		fetch(Constants.restApiPath+'items').then(function(res){
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+    var myInit = { headers: myHeaders };
+		fetch(Constants.restApiPath+'items', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -216,6 +237,7 @@ import Strings from '../values/strings_de';
 				})
 			}
 			else{
+        console.log('items');
 				console.log(Strings.error.restApi);
 				console.log(res.json());
 			}
@@ -226,7 +248,11 @@ import Strings from '../values/strings_de';
 	 * fetches Phases from DB and dispatches an action that updates the store
 	 */
 	fetchPhases(){
-		fetch(Constants.restApiPath+'phases').then(function(res){
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+    var myInit = { headers: myHeaders };
+		fetch(Constants.restApiPath+'phases', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -236,6 +262,7 @@ import Strings from '../values/strings_de';
 				})
 			}
 			else{
+        console.log('phases');
 				console.log(Strings.error.restApi);
 				console.log(res.json());
 			}
@@ -248,13 +275,18 @@ import Strings from '../values/strings_de';
 	fetchProcess(){
 		const processId = this.props.location.pathname.split("/")[2];
 		var self = this;
-		fetch(Constants.restApiPath+'processes/'+processId).then(function(res){
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+    var myInit = { headers: myHeaders };
+		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					self.setProcess(res);
 				})
 			}
 			else{
+        console.log('process');
 				console.log(Strings.error.restApi);
         console.log(res);
         if (res.status==404) {
@@ -346,6 +378,7 @@ import Strings from '../values/strings_de';
 			status: status
 		});
 		var myHeaders = new Headers();
+    myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
 		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){

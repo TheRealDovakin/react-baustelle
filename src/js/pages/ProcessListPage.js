@@ -71,7 +71,7 @@ export default class ProcessListPage extends React.Component{
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-		var myInit = { headers: myHeaders }
+		var myInit = { headers: myHeaders };
 		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){

@@ -63,7 +63,11 @@ export default class Item extends React.Component{
 	 * its store
 	 */
 	fetchComments(){
-		fetch(Constants.restApiPath+'comments').then(function(res){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders }
+		fetch(Constants.restApiPath+'comments', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -112,6 +116,7 @@ export default class Item extends React.Component{
 		});
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
 		var self = this;
 		fetch(Constants.restApiPath+'items/'+_id, myInit).then(function(res){
@@ -134,7 +139,11 @@ export default class Item extends React.Component{
 	 */
 
 	fetchItems(){
-		fetch(Constants.restApiPath+'items').then(function(res){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders }
+		fetch(Constants.restApiPath+'items', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -177,6 +186,7 @@ export default class Item extends React.Component{
 		});
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
 		fetch(Constants.restApiPath+'comments/', myInit).then(function(res){

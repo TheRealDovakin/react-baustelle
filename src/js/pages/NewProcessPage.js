@@ -148,6 +148,7 @@ export default class NewProcessPage extends React.Component{
 	postProcess(json_data){
 		var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 	var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 	const self = this;
 	fetch(Constants.restApiPath+'processes/', myInit).then(function(res){
@@ -207,6 +208,7 @@ export default class NewProcessPage extends React.Component{
 		})
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
 		var p_id = res._id;
@@ -231,6 +233,7 @@ export default class NewProcessPage extends React.Component{
 						});
 						var myHeaders = new Headers();
 						myHeaders.append("Content-Type", "application/json");
+						myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
 						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
 							if(res.ok){
@@ -267,6 +270,7 @@ export default class NewProcessPage extends React.Component{
 		});
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
 		fetch(Constants.restApiPath+'items/', myInit).then(function(res){
