@@ -7,7 +7,8 @@ var express = require('express'),
     jwt = require('jsonwebtoken'),
     methodOverride = require('method-override'),
     morgan = require('morgan'),
-    restful = require('node-restful');
+    restful = require('node-restful'),
+    Strings = require('../js/values/strings_de');
 
 var mongoose = restful.mongoose;
 
@@ -49,7 +50,6 @@ function requestHasToken(req){
 app.use('/api', function(req, res, next){
   requestHasToken(req)
   .then(decoded => {
-    console.log(decoded.access);
     if (decoded.access==true) {
       next();
     }else{

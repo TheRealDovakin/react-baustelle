@@ -228,8 +228,8 @@ export default class NewProcessPage extends React.Component{
 					_.each(_.uniq(self.mailList[0]), function(mail){
 						const json_data = JSON.stringify({
 							adress: mail,
-							subject: "Eintrittsprocess: "+p_name,
-							body: "Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: http://172.22.23.6:25555/#/processPage/"+p_id
+							subject: Strings.entryProcess+": "+p_name,
+							body: Strings.mailBody+Constants.appPath+"/#/processPage/"+p_id
 						});
 						var myHeaders = new Headers();
 						myHeaders.append("Content-Type", "application/json");
