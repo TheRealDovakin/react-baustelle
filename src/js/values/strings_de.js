@@ -4,7 +4,7 @@
  * language string-collection: german
  */
 
-export default{
+module.exports = {
   //global strings
   additionalAccounts: 'Zusätzliche Konten',
   basicInfo: 'Grundinformationen',
