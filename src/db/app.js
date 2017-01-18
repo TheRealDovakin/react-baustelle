@@ -27,6 +27,7 @@ app.use(cors({origin:Constants.appPath}));
 mongoose.connect("mongodb://localhost/kup");
 
 var Schema = mongoose.Schema;
+var x = {};
 
 function getSendMailCommand(adress, subject, body){
   return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
@@ -35,21 +36,29 @@ function getSendMailCommand(adress, subject, body){
 function requestHasToken(req){
   var token = req.headers.authorization.split(' ')[1];
   var secret = new Buffer('decodeString', 'base64');
-  var x;
-  jwt.verify(token, secret, function(err, decoded){
-    if (decoded.access == 'true') {
-      x =  true;
-    }else x = false;
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, function(err, decoded){
+      if(err){
+        return reject(err);
+      }
+      return resolve(decoded);
+    });
   });
-  return true;
 }
 //authentication
 app.use('/api', function(req, res, next){
-  if (requestHasToken(req)) {
-    next();
-  }else{
+  requestHasToken(req)
+  .then(decoded => {
+    console.log(decoded.access);
+    if (decoded.access==true) {
+      next();
+    }else{
+      res.status(401).send('unauthorized');
+    }
+  })
+  .catch(err =>{
     res.status(401).send('unauthorized');
-  }
+  });
 });
 
 app.post('/authenticate', function(req, res){

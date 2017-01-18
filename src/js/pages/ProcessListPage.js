@@ -61,8 +61,6 @@ export default class ProcessListPage extends React.Component{
 	componentDidMount(){
 		this.fetchProcesses();
 		this.fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
-		console.log(window.sessionStorage.accessToken);
-		console.log(window.sessionStorage.bla);
 	}
 
 	/**
