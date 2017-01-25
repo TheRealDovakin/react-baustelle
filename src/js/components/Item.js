@@ -178,7 +178,7 @@ export default class Item extends React.Component{
 
 	postComment(_id, body){
 		//TODO: commentor will be replaced as soon as app gets auth
-		const commentor = 'Kasper Nadrajkowski';
+		const commentor = window.sessionStorage.displayName;
 		const json_data = JSON.stringify({
 			item_id: _id,
 			commentor: commentor,
@@ -192,9 +192,7 @@ export default class Item extends React.Component{
 		fetch(Constants.restApiPath+'comments/', myInit).then(function(res){
 			if(res.ok){
 				self.fetchComments();
-				self.setState({
-					comment: '',
-				})
+				self.setState({ comment: '' });
 				dispatcher.dispatch({type: "COMMENT_CREATED"});
 			}else{
 				alertify.logPosition("top right");

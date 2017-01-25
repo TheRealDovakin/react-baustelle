@@ -50,11 +50,13 @@ function requestHasToken(req){
 app.use('/api', function(req, res, next){
   requestHasToken(req)
   .then(decoded => {
-    if (decoded.access==true) {
-      next();
-    }else{
-      res.status(401).send('unauthorized');
+    if(req.method == 'DELETE'){
+      if(decoded.admin==true) next();
+      else res.status(401).send('unauthorized');
+      return;
     }
+    if (decoded.access==true) next();
+    else res.status(401).send('unauthorized');
   })
   .catch(err =>{
     res.status(401).send('unauthorized');
@@ -62,24 +64,29 @@ app.use('/api', function(req, res, next){
 });
 
 app.post('/authenticate', function(req, res){
-  if(req.body.name=='it'&&req.body.password=='kup'){
-    auth = true;
-    var tInfo = {
-      name: 'it',
-      access: true,
+  UserModel.findOne({email: req.body.name}, function(err, user){
+    if(err){
+      res.status(401).send('unauthorized');
+      return;
+    }else{
+      if(user.password==req.body.password){
+        var tInfo = {
+          name: user.name,
+          access: true,
+          admin: user.admin,
+        };
+        var secret = new Buffer('decodeString', 'base64');
+        var token = jwt.sign(tInfo, secret);
+        res.status(200);
+        res.json({
+          success: true,
+          displayName: user.name,
+          message: 'hier dein token',
+          token: token,
+        });
+      }
     }
-    var secret = new Buffer('decodeString', 'base64');
-    var token = jwt.sign(tInfo, secret);
-    res.status(200);
-    res.json({
-      success: true,
-      displayName: 'it',
-      message: 'hier dein token',
-      token: token,
-    });
-  }else{
-    res.status(401).send('unauthorized');
-  }
+  });
 });
 
 var ItemModel = require('./models/Item.js');
@@ -97,6 +104,8 @@ ProcessModel.register(app, '/api/processes');
 var CommentModel = require('./models/Comment.js');
 CommentModel.methods(['get', 'post', 'delete']),
 CommentModel.register(app, '/api/comments');
+
+var UserModel = require('./models/User.js');
 
 function sendMail(adress, subject, body){
   const command = getSendMailCommand(adress, subject, body);

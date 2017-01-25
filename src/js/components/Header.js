@@ -17,11 +17,15 @@ class Header extends React.Component{
 		this.logout = this.logout.bind(this);
 	}
 
+	/**
+		* handler for logout button
+		*/
 	logout(){
 		window.sessionStorage.accessToken = undefined;
 		window.sessionStorage.displayName = '';
 		document.location.href = '/';
 	}
+
 	render(){
 		const margin={marginRight: 10}
 		var loginString = 'nicht angemeldet';

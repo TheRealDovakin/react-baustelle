@@ -173,7 +173,7 @@ import Strings from '../values/strings_de';
 	 */
 	deleteProcess(){
 		const self = this;
-		alertify.error(Strings.process.confirmDelete,
+		alertify.log(Strings.process.confirmDelete,
 		 function(ev){
 			 ev.preventDefault();
 				const processId = self.props.location.pathname.split("/")[2];
@@ -188,6 +188,9 @@ import Strings from '../values/strings_de';
 					}else{
 						console.log(Strings.error.restApi);
 						console.log(res.json());
+            if(res.status==401){
+    					alertify.log(Strings.noAccessRights);
+    				}
 					}
 				});
 			});
@@ -211,7 +214,6 @@ import Strings from '../values/strings_de';
 			else{
 				console.log(res);
 				console.log(Strings.error.restApi);
-        console.log('comments');
         if(res.status==401){
 					document.location.href = '/#/login?callbackPath=processPage/'+processId;
 				}
