@@ -7,6 +7,7 @@
 module.exports = {
   //global strings
   additionalAccounts: 'Zusätzliche Konten',
+  adito: 'Adito',
   basicInfo: 'Grundinformationen',
   baumanager: 'Baumanager',
   closed: 'geschlossen',
@@ -14,6 +15,7 @@ module.exports = {
   department: 'Abteilung/KST',
   dueDate: 'Deadline',
   done: 'beendet',
+  emailBody: 'Es gibt einen neuen Eintrittsprozess an dem auch Sie beteiligt sind und der folgende Link führt Sie zur Bearbeitungsseite dieses Prozesses.\n Die Applikation ist noch in der Testphase und ist nur Auf die IT-Abteilung beschränkt.\n\n Zum einloggen beutzen Sie bitte vorerst folgende Daten: \n\n Name: it\n Passwort: kup \n\nLink zum Prozess: ',
   entryProcess: 'Eintrittsprocess',
   equipment: 'Ausstattung',
   finish: 'Abschließen',

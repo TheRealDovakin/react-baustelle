@@ -38,6 +38,7 @@ export default class LoginPage extends React.Component{
         res.json().then(function(res){
           window.sessionStorage.accessToken = res.token;
           document.location.href='#/'+self.callbackPath;
+          window.sessionStorage.displayName = res.displayName;
         });
       }
 			else{

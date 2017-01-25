@@ -71,7 +71,9 @@ export default class NewProcessPage extends React.Component{
 	 * wil be called after the component mounted
 	 */
 	componentDidMount(){
+		// BUG: closes tab in IE when datepicker is closed, but will not be needed in final version anyway
 		this.setDatepicker();
+		console.log(Strings.emailBody);
 	}
 	/**
 	 * wrapes parameters to a JSON and call post-function with it
@@ -229,7 +231,7 @@ export default class NewProcessPage extends React.Component{
 						const json_data = JSON.stringify({
 							adress: mail,
 							subject: Strings.entryProcess+": "+p_name,
-							body: Strings.mailBody+Constants.appPath+"/#/processPage/"+p_id
+							body: Strings.emailBody+"http://172.22.23.6/#/processPage/"+p_id
 						});
 						var myHeaders = new Headers();
 						myHeaders.append("Content-Type", "application/json");
@@ -382,7 +384,7 @@ export default class NewProcessPage extends React.Component{
 		            <input id="carCheckbox" type='checkbox' value={this.state.addAccounts} onChange={this.handleAddAccountsChange}></input>
 			        </label>
 			      </div>
-						<label style={marginRight15Style} class="control-label">{Strings.additionalAccounts}</label>
+						<label style={marginRight15Style} class="control-label">{Strings.adito}</label>
 				  </div>
 
 					<div class="form-group">

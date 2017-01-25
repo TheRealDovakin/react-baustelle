@@ -37,7 +37,7 @@ export default class Footer extends React.Component{
 					<a style={linkStyle} target="_blank" href={Constants.githubPath}>{'\u00A9'} 2017 Kasper Nadrajkowski</a>
 				</div>
 				<div class="pull-right">
-					<a style={aStyle} href='/' >
+					<a style={aStyle} href='#' >
 					<span class="glyphicon glyphicon-home"></span>
 					_{Strings.footer.home}</a>
 					<a style={aStyle} href="#/info">

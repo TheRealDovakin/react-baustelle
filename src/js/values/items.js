@@ -9,6 +9,8 @@ export default{
     name: "Baumanager Konto",
     person: "Sascha Motschmann",
     person_spare: "Keine Angabe",
+    mail: "motschmann@kieback-peter.de",
+
   },
   baumanagerDongle: {
     phase: "bmd",
@@ -21,6 +23,7 @@ export default{
     name: "Adito",
     person: "Norman Krämer",
     person_spare: "Rene Fürtenau",
+    mail: "kraemer@kieback-peter.de",
   },
   pps: {
     phase: "pps",
@@ -34,10 +37,10 @@ export default{
     name: "AD-Account",
     person: "Ali Atef",
     person_spare: "Ulf Röckert",
-    mail: "nadrajkowski@kieback-peter.de",
+    mail: "atef@kieback-peter.de",
   },
   mobile: {
-    phase: "-b",
+    phase: "-b",//not included for test in IT
     name: "Mobiltelefon",
     person: "Ines Zimmermann",
     person_spare: "Keine Angabe",
@@ -48,36 +51,42 @@ export default{
     name: "Werstattauftrag",
     person: "Marek Dorn",
     person_spare: "Ulf Röckert",
+    mail: "dorn@kieback-peter.de",
   },
   laptopZentraleAuftrag: {
     phase: "c",
     name: "Werstattauftrag",
     person: "Marek Dorn",
     person_spare: "Ulf Röckert",
+    mail: "dorn@kieback-peter.de",
   },
   laptopTechnikerAuftrag: {
     phase: "t",
     name: "Werstattauftrag",
     person: "Marek Dorn",
     person_spare: "Ulf Röckert",
+    mail: "dorn@kieback-peter.de",
   },
   laptopVertrieb: {
     phase: "v",
     name: "Laptop-Vertrieb",
     person: "Christopher Kuhn",
     person_spare: "Dominik Hohmann",
+    mail: "kuhn@kieback-peter.de",
   },
   laptopZentrale: {
     phase: "c",
     name: "Laptop-Zentrale",
     person: "Christopher Kuhn",
     person_spare: "Dominik Hohmann",
+    mail: "kuhn@kieback-peter.de",
   },
   laptopTechniker: {
     phase: "t",
     name: "Laptop-Techniker",
     person: "Christopher Kuhn",
     person_spare: "Dominik Hohmann",
+    mail: "kuhn@kieback-peter.de",
   },
   //car phase
   auto: {
@@ -98,5 +107,6 @@ export default{
     name: "Tischtelefon",
     person: "Dominic Hohmann",
     person_spare: "Peter Pan",
+    mail: "hohmann@kieback-peter.de",
   }
 }

@@ -62,10 +62,10 @@ app.use('/api', function(req, res, next){
 });
 
 app.post('/authenticate', function(req, res){
-  if(req.body.name=='Kasper'&&req.body.password=='pw'){
+  if(req.body.name=='it'&&req.body.password=='kup'){
     auth = true;
     var tInfo = {
-      name: 'Kasper',
+      name: 'it',
       access: true,
     }
     var secret = new Buffer('decodeString', 'base64');
@@ -73,6 +73,7 @@ app.post('/authenticate', function(req, res){
     res.status(200);
     res.json({
       success: true,
+      displayName: 'it',
       message: 'hier dein token',
       token: token,
     });
@@ -100,7 +101,7 @@ CommentModel.register(app, '/api/comments');
 function sendMail(adress, subject, body){
   const command = getSendMailCommand(adress, subject, body);
   console.log("execute: "+command);
-  childProcess.exec(command);
+  //childProcess.exec(command);
 }
 
 app.post('/api/sendMail', function(_req, res){
