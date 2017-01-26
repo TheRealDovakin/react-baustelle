@@ -14,6 +14,7 @@ import DateUtils from '../utils/DateUtils';
 import dispatcher from "../dispatcher";
 import ItemsStore from "../stores/ItemsStore"
 import Phase from "../components/Phase";
+import PhaseSmall from "../components/PhaseSmall";
 import PhaseStore from "../stores/PhaseStore"
 import Strings from '../values/strings_de';
 
@@ -439,14 +440,20 @@ import Strings from '../values/strings_de';
 				if(item.process_id==processId){
 					return <Phase key={item._id} {...item}/>;
 				}
+			});
 
+      const ItemComponentsSmall = phases.map((item) => {
+				if(item.process_id==processId){
+					return <PhaseSmall key={item._id} {...item}/>;
+				}
 			});
 
 			var formatted_date = DateUtils.getDateAsString(process.due_date);
 			// inline styling
 			const btnStyle = { margin: '0%', width: '100%', };
       const headlineStyle = { marginTop: 70 };
-      const leftNavStyle = { top: '120px', left: '0px', position: 'fixed' }
+      const leftNavStyle = { top: 's0px', left: '0px'}
+      const scrollStyle = { overflowY:'auto', height:'900px'}
 			//dynamic styles
 			var disableBtnFinish = 'disabled';
 			var disableBtnReDo = '';
@@ -499,10 +506,12 @@ import Strings from '../values/strings_de';
 							</ul>
 						</div>
 					</div>
-					<div class="col-md-9 col-xs-9 pull-right">
-					{ItemComponents}
+					<div style={scrollStyle} class="col-md-7 col-xs-7">
+					     {ItemComponents}
 					</div>
-
+          <div class="col-md-2 col-xs-2">
+               {ItemComponentsSmall}
+          </div>
 				</div>
 			);
 		}else{ // loading spinner

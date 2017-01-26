@@ -34,7 +34,7 @@ export default class Footer extends React.Component{
 		return(
 			<footer style={footerStyle}>
 				<div class="pull-left">
-					<a style={linkStyle} target="_blank" href={Constants.githubPath}>{'\u00A9'} 2017 Kasper Nadrajkowski</a>
+					<a style={linkStyle} target="_blank" href={Constants.githubPath}>{'\u00A9'+Strings.yearAndAuthor}</a>
 				</div>
 				<div class="pull-right">
 					<a style={aStyle} href='#' >

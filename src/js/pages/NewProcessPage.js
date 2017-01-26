@@ -163,10 +163,10 @@ export default class NewProcessPage extends React.Component{
 					case Strings.processTypes.zentrale: {self.postPhase(res, PhaseValues.zentrale)}; break;
 					case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
 				}
-				if (options.addAccounts==true) self.postPhase(res, PhaseValues.itKonten);
-				if (options.car==true) self.postPhase(res, PhaseValues.auto);
-				if (options.tablePhone==true) self.postPhase(res, PhaseValues.tablePhone);
-				if (options.baumanager==true) self.postPhase(res, PhaseValues.baumanager);
+				if (options.addAccounts) self.postPhase(res, PhaseValues.itKonten);
+				if (options.car) self.postPhase(res, PhaseValues.auto);
+				if (options.tablePhone) self.postPhase(res, PhaseValues.tablePhone);
+				if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
 				// HACK:
 				self.postPhase(res, PhaseValues.basic, true);
 				alertify.success(Strings.newProcess.success);

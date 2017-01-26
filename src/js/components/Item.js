@@ -10,8 +10,9 @@ import CommentStore from '../stores/CommentStore';
 import Constants from '../values/constants';
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
-import PhaseStore from '../stores/PhaseStore';
+import ItemsStore from '../stores/ItemsStore';
 import Strings from '../values/strings_de';
+import _ from 'underscore';
 
 /**
  * @author Kasper Nadrajkowski
@@ -24,14 +25,18 @@ export default class Item extends React.Component{
 		this.changeCollapsed = this.changeCollapsed.bind(this);
 		this.fetchItems = this.fetchItems.bind(this);
 		this.fetchComments = this.fetchComments.bind(this);
+		this.fetchPhases = this.fetchPhases.bind(this);
+		this.finishPhase = this.finishPhase.bind(this);
 		this.getComments = this.getComments.bind(this);
 		this.handleCommentChange = this.handleCommentChange.bind(this);
 		this.handleEnter = this.handleEnter.bind(this);
+		this.phaseCanBeFinished = this.phaseCanBeFinished.bind(this);
 		//this.postComment = postComment.bind(this);
 		this.state = {
-			items: [],
+			comments: [],
 			comment: '',
 			collapsed: true,
+			phases: [],
 		}
 	}
 
@@ -88,7 +93,7 @@ export default class Item extends React.Component{
 	 */
 	getComments(){
 		this.setState({
-			items: CommentStore.getAll(),
+			comments: CommentStore.getAll(),
 		});
 	}
 
@@ -122,6 +127,9 @@ export default class Item extends React.Component{
 		fetch(Constants.restApiPath+'items/'+_id, myInit).then(function(res){
 			if(res.ok) res.json().then(function(res){
 				self.fetchItems();
+				if (status==2&&self.phaseCanBeFinished())	self.finishPhase(2);
+				else self.finishPhase(1);
+				self.fetchPhases();
 				dispatcher.dispatch({
 					type: 'ITEM_STATUS_CHANGED',
 					res,
@@ -160,6 +168,48 @@ export default class Item extends React.Component{
 	}
 
 	/**
+	 * fetches Phases from DB and dispatches an action that updates the store
+	 */
+	fetchPhases(){
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+    var myInit = { headers: myHeaders };
+		fetch(Constants.restApiPath+'phases', myInit).then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					dispatcher.dispatch({
+						type: 	"FETCH_PHASES_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+        console.log('phases');
+				console.log(Strings.error.restApi);
+				console.log(res.json());
+			}
+		});
+	}
+
+	finishPhase(status){
+		var json_data = JSON.stringify({ status: status });
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
+		var self = this;
+		fetch(Constants.restApiPath+'phases/'+self.props.phase_id, myInit).then(function(res){
+			if(res.ok) res.json().then(function(res){
+			});
+			else{
+				console.log(Strings.errors.restApi);
+				console.log(res);
+			}
+		});
+	}
+
+	/**
 	 * handles changeEvnet on comment-input
 	 * @param {event} envent
 	 */
@@ -176,8 +226,32 @@ export default class Item extends React.Component{
 		}
 	}
 
+	/**
+	* checks if all Items for the current Process are done and returns a boolean
+	 * @return {bolean}			true if all Items of Process are marked done
+	 */
+	phaseCanBeFinished(){
+		const items = ItemsStore.getAll();
+		const self = this;
+		var can = 0;
+		_.each(items, function(item){
+			if(item.phase_id==self.props.phase_id){
+				if(item.status==3)	can++;
+			}
+		});
+		console.log('can');
+
+		if(can==1){
+			console.log(true);
+			return true;
+		}
+		else{
+			console.log(false);
+			return false;
+		}
+	}
+
 	postComment(_id, body){
-		//TODO: commentor will be replaced as soon as app gets auth
 		const commentor = window.sessionStorage.displayName;
 		const json_data = JSON.stringify({
 			item_id: _id,
@@ -195,7 +269,7 @@ export default class Item extends React.Component{
 				self.setState({ comment: '' });
 				dispatcher.dispatch({type: "COMMENT_CREATED"});
 			}else{
-				alertify.logPosition("top right");
+				alertify.logPosition("bottom right");
 				alertify.error(Strings.comment.error);
 				alertify.reset();
 				console.log(Strings.error.restApi);
@@ -222,8 +296,8 @@ export default class Item extends React.Component{
 		}
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
-		const { items } = this.state;
-		const ItemComponents = items.map((item) => {
+		const { comments } = this.state;
+		const ItemComponents = comments.map((item) => {
 			var a = 0;
 			if(item.item_id==_id){
 				return <Comment key={item._id} {...item}/>;
@@ -235,7 +309,7 @@ export default class Item extends React.Component{
 				<div class="panel panel-default">
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
-						<li class="list-group-item"><span>{Strings.status}: laufend</span></li>
+						<li class="list-group-item"><span>{Strings.status}: {Strings.running}</span></li>
 						<li class={"list-group-item"+responsablePerson}><a  target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
 						<li class={"list-group-item"+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
 						<a class="btn btn-success" style={btnStyle} onClick={
@@ -243,7 +317,7 @@ export default class Item extends React.Component{
 						<span class="glyphicon glyphicon-ok pull-left"></span>
 						{Strings.item.setToDone}</a>
 						<li class="list-group-item">
-							<h4>Kommentare</h4>
+							<h4>{Strings.comments}</h4>
 							<div class="panel panel-default">
 								<ul class="list-group">
 									{ItemComponents}
@@ -251,7 +325,7 @@ export default class Item extends React.Component{
 										<div class="row">
 											<div class="col-xs-12">
 												<div class="input-group input-group-sm">
-													<input class="form-control" type="text" placeholder="Kommentar Text" value={this.state.comment} onChange={this.handleCommentChange}
+													<input class="form-control" type="text" placeholder={Strings.commentText} value={this.state.comment} onChange={this.handleCommentChange}
 												  onKeyPress={this.handleEnter}></input>
 													<div class="input-group-btn">
 														<span class="btn btn-default" style={btnSendStyle} onClick={() => this.postComment(_id, this.state.comment)}>

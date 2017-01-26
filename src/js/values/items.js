@@ -49,23 +49,23 @@ export default{
   laptopVertriebAuftrag: {
     phase: "v",
     name: "Werstattauftrag",
-    person: "Marek Dorn",
-    person_spare: "Ulf Röckert",
-    mail: "dorn@kieback-peter.de",
+    person: "Dominik Hohmann",
+    person_spare: "Christopher Kuhn",
+    mail: "hohmann@kieback-peter.de",
   },
   laptopZentraleAuftrag: {
     phase: "c",
     name: "Werstattauftrag",
-    person: "Marek Dorn",
-    person_spare: "Ulf Röckert",
-    mail: "dorn@kieback-peter.de",
+    person: "Dominik Hohmann",
+    person_spare: "Christopher Kuhn",
+    mail: "hohmann@kieback-peter.de",
   },
   laptopTechnikerAuftrag: {
     phase: "t",
     name: "Werstattauftrag",
-    person: "Marek Dorn",
-    person_spare: "Ulf Röckert",
-    mail: "dorn@kieback-peter.de",
+    person: "Dominik Hohmann",
+    person_spare: "Christopher Kuhn",
+    mail: "hohmann@kieback-peter.de",
   },
   laptopVertrieb: {
     phase: "v",
@@ -105,8 +105,8 @@ export default{
   tablePhone: {
     phase: "tp",
     name: "Tischtelefon",
-    person: "Dominic Hohmann",
-    person_spare: "Peter Pan",
-    mail: "hohmann@kieback-peter.de",
+    person: "Marek Dorn",
+    person_spare: "Ali Atef",
+    mail: "dorn@kieback-peter.de",
   }
 }

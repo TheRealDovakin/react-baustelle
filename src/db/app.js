@@ -51,11 +51,11 @@ app.use('/api', function(req, res, next){
   requestHasToken(req)
   .then(decoded => {
     if(req.method == 'DELETE'){
-      if(decoded.admin==true) next();
+      if(decoded.admin) next();
       else res.status(401).send('unauthorized');
       return;
     }
-    if (decoded.access==true) next();
+    if (decoded.access) next();
     else res.status(401).send('unauthorized');
   })
   .catch(err =>{
@@ -65,7 +65,7 @@ app.use('/api', function(req, res, next){
 
 app.post('/authenticate', function(req, res){
   UserModel.findOne({email: req.body.name}, function(err, user){
-    if(err){
+    if(!user){
       res.status(401).send('unauthorized');
       return;
     }else{

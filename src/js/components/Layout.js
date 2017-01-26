@@ -10,23 +10,12 @@ import Footer from "./Footer";
  * this class represents the overall layout of the application
  */
 export default class Layout extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {
-			title: "Welcome"
-		}
-	}
-
-	changeTitle(title){
-		this.setState({title});
-	}
-
 	render(){
 		return(
 			<div>
-				<Header></Header>
+				<Header/>
 				{this.props.children}
-				<Footer />
+				<Footer/>
 			</div>
 		);
 	}

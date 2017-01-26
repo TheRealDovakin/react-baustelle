@@ -5,6 +5,7 @@ import 'whatwg-fetch';
 import React from "react";
 //own files
 import Constants from '../values/constants';
+import Strings from '../values/strings_de';
 /**
  * @author Kasper Nadrajkowski
  * container for Info
@@ -26,7 +27,7 @@ export default class LoginPage extends React.Component{
   handlePassword(event){ this.setState({ password: event.target.value }); }
   authenticate(){
     const json_data = JSON.stringify({
-      name: this.state.name,
+      name: this.state.name+Strings.kupMail,
       password: this.state.password,
     });
     var myHeaders = new Headers();
@@ -52,19 +53,17 @@ export default class LoginPage extends React.Component{
     this.callbackPath = this.props.location.query.callbackPath;
     const style={marginTop: '60px'}
 		return(
-      <div style={style} class="jumbotron">
-        <div class="container">
-          <h1>Anmelden</h1>
-          <span>Name:</span>
+      <div style={style} class="jumbotron col-xs-4">
+        <form class="form-signin">
+          <h2 class="form-signin-heading">{Strings.login}</h2>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder={Strings.emailAdress} onChange={this.handleName} value={this.state.name}/>
+            <div class="input-group-addon">{Strings.kupMail}</div>
+          </div>
+          <input type="password" class="form-control" placeholder={Strings.password} onChange={this.handlePassword} value={this.state.password}/>
           <br/>
-          <input type='text' onChange={this.handleName} value={this.state.name}     ></input>
-          <br/>
-          <span>Passwort:</span>
-          <br/>
-          <input type='password' onChange={this.handlePassword} value={this.state.password}></input>
-          <br/>
-          <p><a class="btn btn-primary" onClick={this.authenticate} role="button">Anmelden</a></p>
-        </div>
+          <button class="btn btn-primary" onClick={this.authenticate}>{Strings.login}</button>
+        </form>
       </div>
 		);
 	}
