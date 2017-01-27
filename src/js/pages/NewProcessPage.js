@@ -32,7 +32,7 @@ export default class NewProcessPage extends React.Component{
 		//IE promise-support
 		ES6Promise.polyfill();
 	  super(props);
-		this.mailList = [[]];
+		this.mailList = [];
 	  this.state = {
 		 	addAccounts: false,
 			baumanager: false,
@@ -73,7 +73,6 @@ export default class NewProcessPage extends React.Component{
 	componentDidMount(){
 		// BUG: closes tab in IE when datepicker is closed, but will not be needed in final version anyway
 		this.setDatepicker();
-		console.log(Strings.emailBody);
 	}
 	/**
 	 * wrapes parameters to a JSON and call post-function with it
@@ -107,27 +106,19 @@ export default class NewProcessPage extends React.Component{
 	* @param  {event} event 		input value
 	*/
 	 handleBaumanagerChange() {
-		 var baumanager;
-		 if(this.state.baumanager==false) baumanager = true;
-		 else baumanager = false;
+		 var baumanager = (this.state.baumanager) ? false : true;
 		 this.setState({ baumanager: baumanager });
 	 }
 	 handleAddAccountsChange() {
-		 var addAccounts;
-		 if(this.state.addAccounts==false) addAccounts = true;
-		 else addAccounts = false;
+		 var addAccounts = (this.state.addAccounts) ? false : true;
 		 this.setState({ addAccounts: addAccounts });
 	 }
 	 handleCarChange() {
-		 var car;
-		 if(this.state.car==false) car = true;
-		 else car = false;
+		 var car = (this.state.car) ? false : true;
 		 this.setState({ car: car });
 	 }
 	 handleTablePhoneChange() {
-		 var tablePhone;
-		 if(this.state.tablePhone==false) tablePhone = true;
-		 else tablePhone = false;
+		 var tablePhone = (this.state.tablePhone) ? false : true;
 		 this.setState({ tablePhone: tablePhone });
 	 }
 	 /**
@@ -227,11 +218,11 @@ export default class NewProcessPage extends React.Component{
 				})
 				// HACK:
 				if (last) {
-					_.each(_.uniq(self.mailList[0]), function(mail){
+					_.each(_.uniq(self.mailList), function(mail){
 						const json_data = JSON.stringify({
 							adress: mail,
 							subject: Strings.entryProcess+": "+p_name,
-							body: Strings.emailBody+"http://172.22.23.6/#/processPage/"+p_id
+							body: Strings.emailBody+Strings.appPath+"/#/processPage/"+p_id
 						});
 						var myHeaders = new Headers();
 						myHeaders.append("Content-Type", "application/json");
@@ -239,7 +230,6 @@ export default class NewProcessPage extends React.Component{
 						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
 						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
 							if(res.ok){
-								console.log('ok');
 							}else{
 								console.log(res);
 								console.log(Strings.error.restApi);

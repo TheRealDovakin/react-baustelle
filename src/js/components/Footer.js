@@ -28,7 +28,6 @@ export default class Footer extends React.Component{
 			bottom: 0,
 			position: 'fixed',
 			backgroundColor: 'black',
-			opacity: '0.5',
 		}
 		// react default render function
 		return(

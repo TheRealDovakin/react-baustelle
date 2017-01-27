@@ -239,16 +239,7 @@ export default class Item extends React.Component{
 				if(item.status==3)	can++;
 			}
 		});
-		console.log('can');
-
-		if(can==1){
-			console.log(true);
-			return true;
-		}
-		else{
-			console.log(false);
-			return false;
-		}
+		return (can==1) ? true : false;
 	}
 
 	postComment(_id, body){
@@ -288,12 +279,8 @@ export default class Item extends React.Component{
 		const headlineStyle = { marginLeft: '10px'	};
 		const inputStyle = { width: '600px', height: '100%' }
 		//dynamic styling
-		var responsablePerson = ' disabled';
-		var sparePerson = '';
-		if(spare == false){
-			responsablePerson = '';
-			sparePerson = ' disabled';
-		}
+		var responsablePerson = (spare) ? 'disabled' : '';
+		var sparePerson = (!spare) ? 'disabled' : '';
 		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
 		const { comments } = this.state;
@@ -310,8 +297,8 @@ export default class Item extends React.Component{
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
 						<li class="list-group-item"><span>{Strings.status}: {Strings.running}</span></li>
-						<li class={"list-group-item"+responsablePerson}><a  target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-						<li class={"list-group-item"+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
+						<li class={"list-group-item "+responsablePerson}><a  target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
+						<li class={"list-group-item "+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
 						<a class="btn btn-success" style={btnStyle} onClick={
 							() => this.changeItemStatus(this, _id, 2)}>
 						<span class="glyphicon glyphicon-ok pull-left"></span>
@@ -344,7 +331,7 @@ export default class Item extends React.Component{
 				);
 			}
 			else if (status==2) {
-				if(this.state.collapsed==false){//erledigt
+				if(!this.state.collapsed){//erledigt
 					return(
 					<div class="panel panel-success">
 						<div class="panel-heading">

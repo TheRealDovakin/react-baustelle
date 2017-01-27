@@ -435,34 +435,32 @@ import Strings from '../values/strings_de';
 			});
 
 			const processId = this.props.location.pathname.split("/")[2];
-			// fills ItemComponents with Phases from this Process only
-			const ItemComponents = phases.map((item) => {
+			// fills PhaseComponents with Phases from this Process only
+			const PhaseComponents = phases.map((item) => {
 				if(item.process_id==processId){
 					return <Phase key={item._id} {...item}/>;
 				}
 			});
 
-      const ItemComponentsSmall = phases.map((item) => {
+      const PhaseNavComponents = phases.map((item) => {
 				if(item.process_id==processId){
 					return <PhaseSmall key={item._id} {...item}/>;
 				}
 			});
 
 			var formatted_date = DateUtils.getDateAsString(process.due_date);
+      var height = window.innerHeight
+      || document.documentElement.clientHeight
+      || document.body.clientHeight;
 			// inline styling
 			const btnStyle = { margin: '0%', width: '100%', };
       const headlineStyle = { marginTop: 70 };
       const leftNavStyle = { top: 's0px', left: '0px'}
-      const scrollStyle = { overflowY:'auto', height:'900px'}
+      const scrollStyle = { overflowY:'auto', height: ''+height-160}
 			//dynamic styles
-			var disableBtnFinish = 'disabled';
-			var disableBtnReDo = '';
-			var statusAsString = Strings.done;
-			if(process.status==1) {
-				disableBtnFinish = '';
-				disableBtnReDo = 'disabled';
-				statusAsString = Strings.running;
-			}
+			var disableBtnFinish = (process.status==1) ? '' : 'disabled';
+			var disableBtnReDo = (process.status==1) ? 'disabled' : '';
+			var statusAsString = (process.status==1) ? Strings.running : Strings.done;
 			return(
 				<div>
 				<h1 style={headlineStyle}>{process.person_name}</h1>
@@ -507,10 +505,18 @@ import Strings from '../values/strings_de';
 						</div>
 					</div>
 					<div style={scrollStyle} class="col-md-7 col-xs-7">
-					     {ItemComponents}
+					  {PhaseComponents}
 					</div>
           <div class="col-md-2 col-xs-2">
-               {ItemComponentsSmall}
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4>
+                  <span class="glyphicon glyphicon-list pull-right"></span>
+                  Übersicht
+                </h4>
+              </div>
+              {PhaseNavComponents}
+            </div>
           </div>
 				</div>
 			);

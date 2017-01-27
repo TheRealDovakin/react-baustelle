@@ -17,10 +17,9 @@ export default class PhaseSmall extends React.Component{
 	}
 	render(){
 
-		const btnStyle = { width: '100%', borderStyle: 'solid', borderWidth: '1px 1px 0px 1px', borderColor: '#ffffff' };
+		const btnStyle = { width: '100%', borderStyle: 'solid', borderWidth: '2px 0px 0px 0px', borderColor: '#cccccc' };
     const { _id, status, name, r_nr } = this.props;
-		var phaseStatus = 'btn-warning';
-		if (status==2) phaseStatus = 'btn-success';
+		var phaseStatus = (status==2) ? 'btn-success' : 'btn-warning';
     return(
 			<div>
 				<button style={btnStyle} class={"btn "+phaseStatus} onClick={() => this.scrollTo(_id)}>{name}</button>

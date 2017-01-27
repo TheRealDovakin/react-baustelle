@@ -53,7 +53,7 @@ export default class LoginPage extends React.Component{
     this.callbackPath = this.props.location.query.callbackPath;
     const style={marginTop: '60px'}
 		return(
-      <div style={style} class="jumbotron col-xs-4">
+      <div style={style} class="jumbotron col-xs-6">
         <form class="form-signin">
           <h2 class="form-signin-heading">{Strings.login}</h2>
           <div class="input-group">

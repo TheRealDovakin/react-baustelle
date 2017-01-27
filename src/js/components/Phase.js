@@ -111,8 +111,6 @@ export default class Phase extends React.Component{
 	render(){
 		const { _id, status, name, r_nr } = this.props;
 		const { items } = this.state;
-		var panelStyle = 'panel-warning';
-		if (status==2) panelStyle = 'panel-success';
 		// makes sure data from DB is loaded, else render loading spinner
 		if(items!=undefined){
 			var progress = this.getProgress();
@@ -129,6 +127,7 @@ export default class Phase extends React.Component{
 			var phaseColor = { backgroundColor: '#ddffdd', };
 			if(this.props.status==1) phaseColor ={ backgroundColor: '#eeeeee', };
 			if(this.props.status==2) phaseColor ={ backgroundColor: '#ddddff', };
+			var panelStyle = (status==2) ? 'panel-success' : 'panel-warning';
 			// react default render function
 			return(
 				<div id={this.props._id} class={"col-md-12 panel "+panelStyle} style={phaseColor}>
