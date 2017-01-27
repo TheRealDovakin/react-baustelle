@@ -3,6 +3,7 @@ var express = require('express'),
     childProcess = require('child_process'),
     Constants = require('../js/values/constants'),
     cors = require('cors'),
+    DateUtils = require('../js/utils/DateUtils'),
     gmailLogin = require('../js/values/gmailLogin'),
     jwt = require('jsonwebtoken'),
     methodOverride = require('method-override'),
@@ -34,6 +35,13 @@ function getSendMailCommand(adress, subject, body){
   return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
 }
 
+function addLineToLog(req, decoded){
+  const datetime = DateUtils.getExactDateAndTimeAsString(Date.now());
+  const s = '['+datetime+'] method: '+req.method+' path: '+req.path+' person: '+decoded.name;
+  const command = 'echo \''+s+'\' >> app.log';
+  childProcess.exec(command);
+}
+
 function requestHasToken(req){
   var token = req.headers.authorization.split(' ')[1];
   var secret = new Buffer('decodeString', 'base64');
@@ -50,6 +58,7 @@ function requestHasToken(req){
 app.use('/api', function(req, res, next){
   requestHasToken(req)
   .then(decoded => {
+    addLineToLog(req, decoded);
     if(req.method == 'DELETE'){
       if(decoded.admin) next();
       else res.status(401).send('unauthorized');
