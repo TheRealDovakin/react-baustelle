@@ -113,7 +113,7 @@ export default class ProcessListPage extends React.Component{
 	render(){
 		const panelElementStyle = { margin: '0%', width: '100%', };
 		const searchBarStyle = { width: '100%' };
-		const containerStyle = { overflow: 'auto' }
+		const containerStyle = { overflow: 'auto', marginBottom: '30px' }
 		const headlineStyle = { marginTop: 70 };
 		const { items } = this.state;
 		// makes sure data from DB is loaded, else render a loading spinner
@@ -147,10 +147,21 @@ export default class ProcessListPage extends React.Component{
 			    if(keyA > keyB) return 1;
 			    return 0;
 			});
-			// fills ItemComponents with Processes that match the search only
-			const ItemComponents = items.map((item) => {
-				var a = 0;
-				if(item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
+			// fills RunningProcessComponents with Processes that match the search only
+			const RunningProcessComponents = items.map((item) => {
+				if(item.status==3&&item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
+					return <Process key={item._id} {...item}/>;
+				}
+			});
+
+			const CreatedProcessComponents = items.map((item) => {
+				if(item.status==1&&item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
+					return <Process key={item._id} {...item}/>;
+				}
+			});
+
+			const FinishedProcessComponents = items.map((item) => {
+				if(item.status==2&&item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
 					return <Process key={item._id} {...item}/>;
 				}
 			});
@@ -214,6 +225,7 @@ export default class ProcessListPage extends React.Component{
 						</div>
 					</div>
 					<div class="col-xs-12 col-md-9" style={containerStyle}>
+						<h2>Angelegte Prozesse</h2>
 						<table class="table table-hover table-striped table-bordered">
 						<tbody>
 								<tr>
@@ -222,7 +234,35 @@ export default class ProcessListPage extends React.Component{
 									<th><h4>{Strings.dueDate}</h4></th>
 									<th><h4>{Strings.type}</h4></th>
 								</tr>
-							 	{ItemComponents}
+							 	{RunningProcessComponents}
+							</tbody>
+					 	</table>
+					</div>
+					<div class="col-xs-12 col-md-9" style={containerStyle}>
+						<h2>Laufende Prozesse</h2>
+						<table class="table table-hover table-striped table-bordered">
+						<tbody>
+								<tr>
+									<th><h4>{Strings.name}</h4></th>
+									<th><h4>{Strings.status}</h4></th>
+									<th><h4>{Strings.dueDate}</h4></th>
+									<th><h4>{Strings.type}</h4></th>
+								</tr>
+							 	{CreatedProcessComponents}
+							</tbody>
+					 	</table>
+					</div>
+					<div class="col-xs-12 col-md-9" style={containerStyle}>
+						<h2>Abgeschlossene Prozesse</h2>
+						<table class="table table-hover table-striped table-bordered">
+						<tbody>
+								<tr>
+									<th><h4>{Strings.name}</h4></th>
+									<th><h4>{Strings.status}</h4></th>
+									<th><h4>{Strings.dueDate}</h4></th>
+									<th><h4>{Strings.type}</h4></th>
+								</tr>
+							 	{FinishedProcessComponents}
 							</tbody>
 					 	</table>
 					</div>

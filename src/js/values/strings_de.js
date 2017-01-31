@@ -74,7 +74,7 @@ module.exports = {
   },
   process:{
     actions: 'Aktionen',
-    confirmDelete: 'Klicken Sie Hier wenn Sie den Prozess wirklich löschen wollen',
+    confirmDelete: 'Sie sind dabei diesen Prozess zu löschen. Wen Sie sicher sind, dass Sie ihn löschen wollen, dann klicken Sie auf OK',
     delete: 'Prozess löschen',
     error:{
       finishProcess: 'Prozess kann erst beendet werden wenn alle Aufgaben abgehackt sind',

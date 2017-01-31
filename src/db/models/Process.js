@@ -9,8 +9,8 @@ var mongoose = restful.mongoose;
 var ProcessSchema = new mongoose.Schema({
 	status: {type: Number, required: true},
 	person_name: {type: String, required: true},
-	person_nr: {type: String, required: true},
-	short: {type: String, required: true},
+	person_nr: {type: String, required: false},
+	short: {type: String, required: false},
 	job: {type: String, required: true},
 	place: {type: String, required: true},
 	department: {type: String, required: true},

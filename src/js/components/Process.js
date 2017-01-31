@@ -19,7 +19,8 @@ export default class Process extends React.Component{
 	 * @param {string} id			process id
 	 */
 	goToProcess(id){
-		document.location.href = "#/processPage/"+id;
+		if(this.props.status == 3) document.location.href = "#/createdProcess/"+id;
+		else document.location.href = "#/processPage/"+id;
  }
 
 	render(){

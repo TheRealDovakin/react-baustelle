@@ -42,6 +42,12 @@ function addLineToLog(req, decoded){
   childProcess.exec(command);
 }
 
+function sendMail(adress, subject, body){
+  const command = getSendMailCommand(adress, subject, body);
+  console.log('Mail to: '+adress);;
+  //childProcess.exec(command);
+}
+
 function requestHasToken(req){
   var token = req.headers.authorization.split(' ')[1];
   var secret = new Buffer('decodeString', 'base64');
@@ -115,12 +121,6 @@ CommentModel.methods(['get', 'post', 'delete']),
 CommentModel.register(app, '/api/comments');
 
 var UserModel = require('./models/User.js');
-
-function sendMail(adress, subject, body){
-  const command = getSendMailCommand(adress, subject, body);
-  console.log("execute: "+command);
-  //childProcess.exec(command);
-}
 
 app.post('/api/sendMail', function(_req, res){
   var req = _req.body;

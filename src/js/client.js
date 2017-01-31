@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory} from "react-router";
 
 //own files
+import CreatedProcessPage from "./pages/CreatedProcessPage";
 import InfoPage from "./pages/InfoPage";
 import Layout from "./components/Layout";
 import LoginPage from "./pages/LoginPage";
@@ -26,6 +27,7 @@ ReactDOM.render(
 			<Route path="/" component={ProcessListPage}></Route>
 			<Route path="processPage/:id" component={ProcessPage}></Route>
 			<Route path="newProcess" component={NewProcessPage}></Route>
+			<Route path="createdProcess/:id" component={CreatedProcessPage}></Route>
 			<Route path="info" component={InfoPage}></Route>
 			<Route path="processNotFound" component={ProcessNotFoundPage}></Route>
 			<Route path="login" component={LoginPage}></Route>

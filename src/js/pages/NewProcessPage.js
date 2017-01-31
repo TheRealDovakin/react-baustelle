@@ -34,9 +34,6 @@ export default class NewProcessPage extends React.Component{
 	  super(props);
 		this.mailList = [];
 	  this.state = {
-		 	addAccounts: false,
-			baumanager: false,
-		 	car: false,
 			department: '',
 			due_date:'',
 	  	name: '',
@@ -45,26 +42,17 @@ export default class NewProcessPage extends React.Component{
 			p_type: 'Vertrieb',
 			place: '',
 			short: '',
-			tablePhone: false,
 	  };
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
-	  this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
-	  this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
-	  this.handleCarChange = this.handleCarChange.bind(this);
 		this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
 		this.handleDueDateChange = this.handleDueDateChange.bind(this);
 	  this.handleJobChange = this.handleJobChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handlePersonNrChange = this.handlePersonNrChange.bind(this);
 		this.handlePlaceChange = this.handlePlaceChange.bind(this);
-		this.handleShortChange = this.handleShortChange.bind(this);
-	  this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
 	  this.handleTypeChange = this.handleTypeChange.bind(this);
 	  this.setDatepicker = this.setDatepicker.bind(this);
 	  this.postProcess = this.postProcess.bind(this);
-	  this.postPhase = this.postPhase.bind(this);
-	  this.postItem = this.postItem.bind(this);
 	}
 
 	/**
@@ -80,12 +68,9 @@ export default class NewProcessPage extends React.Component{
 	 * @param {String} due_date			date from datepicker
 	 * @param {String} p_type			process type from input
 	 */
-	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts, tablePhone, baumanager){
+	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type){
 
 		var json_data = JSON.stringify({
-			addAccounts: addAccounts,
-			baumanager: baumanager,
-			car: car,
 			department: department,
 			due_date: due_date,
 			job: job,
@@ -94,33 +79,11 @@ export default class NewProcessPage extends React.Component{
 			place: place,
 			p_type: p_type,
 			short: short,
-			status: 1,
-			tablePhone: tablePhone,
+			status: 3,
 		});
 		this.postProcess(json_data);
 	}
 
-
-	/**
-	* eventhandler for car-input, toggles true and false
-	* @param  {event} event 		input value
-	*/
-	 handleBaumanagerChange() {
-		 var baumanager = (this.state.baumanager) ? false : true;
-		 this.setState({ baumanager: baumanager });
-	 }
-	 handleAddAccountsChange() {
-		 var addAccounts = (this.state.addAccounts) ? false : true;
-		 this.setState({ addAccounts: addAccounts });
-	 }
-	 handleCarChange() {
-		 var car = (this.state.car) ? false : true;
-		 this.setState({ car: car });
-	 }
-	 handleTablePhoneChange() {
-		 var tablePhone = (this.state.tablePhone) ? false : true;
-		 this.setState({ tablePhone: tablePhone });
-	 }
 	 /**
 	 * eventhandlers for remaining inputs
 	 * @param  {event} event 		input value
@@ -129,9 +92,7 @@ export default class NewProcessPage extends React.Component{
 	handleDueDateChange(event) { this.setState({ due_date: event.target.value }); }
 	handleJobChange(event) { this.setState({ job: event.target.value	});	}
 	handleNameChange(event) {	this.setState({	name: event.target.value });}
-	handlePersonNrChange(event) {	this.setState({	person_nr: event.target.value	});	}
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
-	handleShortChange(event) { this.setState({ short: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
 
 	/**
@@ -148,18 +109,6 @@ export default class NewProcessPage extends React.Component{
 		if(res.ok){
 			dispatcher.dispatch({type: "PROCESS_CREATED"});
 			res.json().then(function(res){
-				const options = JSON.parse(json_data);
-				switch(options.p_type){
-					case Strings.processTypes.vertrieb: {self.postPhase(res, PhaseValues.vertrieb)}; break;
-					case Strings.processTypes.zentrale: {self.postPhase(res, PhaseValues.zentrale)}; break;
-					case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
-				}
-				if (options.addAccounts) self.postPhase(res, PhaseValues.itKonten);
-				if (options.car) self.postPhase(res, PhaseValues.auto);
-				if (options.tablePhone) self.postPhase(res, PhaseValues.tablePhone);
-				if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
-				// HACK:
-				self.postPhase(res, PhaseValues.basic, true);
 				alertify.success(Strings.newProcess.success);
 				self.setState({
 					addAccounts: false,
@@ -185,93 +134,6 @@ export default class NewProcessPage extends React.Component{
 			alertify.error(Strings.newProcess.error.wrongInput);
 		}
 	});
-	}
-
-	/**
-	 * creates a Phase in the DB and calls functions that create child-Items
-	 * @param  {object} res        parent Process
-	 * @param  {object} phaseValue predifined JSON for specific Phase
-	 */
-	postPhase(res, phaseValue, last){
-		const json_data = JSON.stringify({
-			name: phaseValue.name,
-			process_id: res._id,
-			status: phaseValue.status,
-			r_nr:phaseValue.r_nr,
-		})
-		var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
-		var self = this;
-		var p_id = res._id;
-		var p_name = res.person_name
-		fetch(Constants.restApiPath+'phases/', myInit).then(function(res){
-		if(res.ok){
-			dispatcher.dispatch({type: "PHASE_CREATED"});
-			res.json().then(function(res){
-				_.each(ItemValues, function(itemValue){
-				 if(itemValue.phase==phaseValue.short){
-					 self.mailList[0].push(itemValue.mail);
-					 self.postItem(res, itemValue);
-				 }
-				})
-				// HACK:
-				if (last) {
-					_.each(_.uniq(self.mailList), function(mail){
-						const json_data = JSON.stringify({
-							adress: mail,
-							subject: Strings.entryProcess+": "+p_name,
-							body: Strings.emailBody+Strings.appPath+"/#/processPage/"+p_id
-						});
-						var myHeaders = new Headers();
-						myHeaders.append("Content-Type", "application/json");
-						myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
-						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
-							if(res.ok){
-							}else{
-								console.log(res);
-								console.log(Strings.error.restApi);
-							}
-						});
-					})
-				}
-			})
-		}
-		else{
-			console.log(Strings.error.restApi);
-			console.log(res.json());
-		}
-	});
-	}
-
-	/**
-	 * creates an item in the DB
-	 * @param  {object} res       parent Phase
-	 * @param  {object} itemValue predifined JSON for specific Item
-	 */
-	postItem(res, itemValue){
-		const json_data = JSON.stringify({
-			phase_id: res._id,
-			status: 3,
-			name: itemValue.name,
-			person: itemValue.person,
-			person_spare: itemValue.person_spare,
-			spare: false
-		});
-		var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
-		var self = this;
-		fetch(Constants.restApiPath+'items/', myInit).then(function(res){
-			if(res.ok){dispatcher.dispatch({type: "ITEM_CREATED"});}
-			else{
-				console.log(Strings.error.restApi);
-				console.log(res.json());
-			}
-		});
 	}
 
 	/**
@@ -301,20 +163,6 @@ export default class NewProcessPage extends React.Component{
 				    <label class="col-sm-2 control-label">{Strings.name}*</label>
 				    <div class="col-sm-10">
 				      <input class="form-control" placeholder={Strings.name} value={this.state.name} onChange={this.handleNameChange}></input>
-				    </div>
-				  </div>
-
-				  <div class="form-group">
-				    <label class="col-sm-2 control-label">{Strings.personNr}*</label>
-				    <div class="col-sm-10">
-				      <input class="form-control" type="number" placeholder={Strings.personNr} value={this.state.person_nr} onChange={this.handlePersonNrChange}></input>
-				    </div>
-				  </div>
-
-				  <div class="form-group">
-				    <label class="col-sm-2 control-label">{Strings.short}*</label>
-				    <div class="col-sm-10">
-				      <input class="form-control" placeholder={Strings.short} value={this.state.short} onChange={this.handleShortChange}></input>
 				    </div>
 				  </div>
 
@@ -365,47 +213,6 @@ export default class NewProcessPage extends React.Component{
 
 				</form>
 
-				<h2>{Strings.equipment}</h2>
-				<form style={paddingLeft50Style} class="form-inline">
-
-					<div class="form-group">
-						<div class="checkbox">
-			        <label style={marginRight5Style}>
-		            <input id="carCheckbox" type='checkbox' value={this.state.addAccounts} onChange={this.handleAddAccountsChange}></input>
-			        </label>
-			      </div>
-						<label style={marginRight15Style} class="control-label">{Strings.adito}</label>
-				  </div>
-
-					<div class="form-group">
-						<div class="checkbox">
-			        <label style={marginRight5Style}>
-		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.car} onChange={this.handleCarChange}></input>
-			        </label>
-			    	</div>
-						<label style={marginRight15Style} class="control-label">{Strings.companyCar}</label>
-				  </div>
-
-					<div class="form-group">
-						<div class="checkbox">
-			        <label style={marginRight5Style}>
-		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.tablePhone} onChange={this.handleTablePhoneChange}></input>
-			        </label>
-			      </div>
-						<label style={marginRight15Style} class="control-label">{Strings.tablePhone}</label>
-				  </div>
-
-					<div class="form-group">
-						<div class="checkbox">
-			        <label style={marginRight5Style}>
-		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.baumanager} onChange={this.handleBaumanagerChange}></input>
-			        </label>
-			      </div>
-						<label style={marginRight15Style} class="control-label">{Strings.baumanager}</label>
-				  </div>
-
-				</form>
-
 				<h2>{Strings.finish}</h2>
 				<form class="form-horizontal">
 
@@ -420,11 +227,7 @@ export default class NewProcessPage extends React.Component{
 									this.state.place,
 									this.state.department,
 									this.state.due_date,
-									this.state.p_type,
-									this.state.car,
-									this.state.addAccounts,
-									this.state.tablePhone,
-									this.state.baumanager)}>
+									this.state.p_type,)}>
 									<span class="glyphicon glyphicon-plus pull-left"></span>
 									{Strings.processList.createNewProcess}
 							</a>

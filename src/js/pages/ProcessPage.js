@@ -174,7 +174,7 @@ import Strings from '../values/strings_de';
 	 */
 	deleteProcess(){
 		const self = this;
-		alertify.log(Strings.process.confirmDelete,
+		alertify.confirm(Strings.process.confirmDelete,
 		 function(ev){
 			 ev.preventDefault();
 				const processId = self.props.location.pathname.split("/")[2];
