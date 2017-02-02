@@ -2,14 +2,14 @@
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import ES6Promise from 'es6-promise';
-import flatpickr from "flatpickr";
-import flatpickr_de from '../../../node_modules/flatpickr/src/l10n/de';
+import Pikaday from 'pikaday-react';
+import moment from 'moment';
 import React from "react";
 import _ from 'underscore';
 import "whatwg-fetch";
 
 //css
-import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
+import '!!style-loader!css-loader!pikaday/css/pikaday.css';
 
 //own files
 import dispatcher from "../dispatcher";
@@ -38,10 +38,8 @@ export default class NewProcessPage extends React.Component{
 			due_date:'',
 	  	name: '',
 			job: '',
-			person_nr: '',
 			p_type: 'Vertrieb',
 			place: '',
-			short: '',
 	  };
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
@@ -51,34 +49,26 @@ export default class NewProcessPage extends React.Component{
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handlePlaceChange = this.handlePlaceChange.bind(this);
 	  this.handleTypeChange = this.handleTypeChange.bind(this);
-	  this.setDatepicker = this.setDatepicker.bind(this);
 	  this.postProcess = this.postProcess.bind(this);
 	}
 
-	/**
-	 * wil be called after the component mounted
-	 */
-	componentDidMount(){
-		// BUG: closes tab in IE when datepicker is closed, but will not be needed in final version anyway
-		this.setDatepicker();
-	}
 	/**
 	 * wrapes parameters to a JSON and call post-function with it
 	 * @param {String} person_name			name from input
 	 * @param {String} due_date			date from datepicker
 	 * @param {String} p_type			process type from input
 	 */
-	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type){
+	createProcess(person_name, job, place, department, due_date, p_type){
 
 		var json_data = JSON.stringify({
 			department: department,
 			due_date: due_date,
 			job: job,
 			person_name: person_name,
-			person_nr: person_nr,
+			person_nr: '',
 			place: place,
 			p_type: p_type,
-			short: short,
+			short: '',
 			status: 3,
 		});
 		this.postProcess(json_data);
@@ -119,9 +109,7 @@ export default class NewProcessPage extends React.Component{
 					name: '',
 					job: '',
 	 	    	p_type: Strings.processTypes.vertrieb,
-					person_nr: '',
 					place: '',
-					short: '',
 					tablePhone: false,
 				});
 				document.getElementById('carCheckbox').checked = false;
@@ -136,19 +124,10 @@ export default class NewProcessPage extends React.Component{
 	});
 	}
 
-	/**
-	 * sets the datepicker for date-input
-	 */
-	setDatepicker(){
-		flatpickr.localize(flatpickr_de.de);
-		var picker = document.getElementById('datepicker');
-		flatpickr(picker, {	locale: flatpickr_de.de	});
-	}
 
 	render(){
 		const headlineStyle = { marginTop: 70 };
 		const btnStyle = { width: '30%', marginBottom: "50px" };
-		const dueDateStyle = { backgroundColor: '#ffffff' };
 		const marginRight5Style = { marginRight: '5px', paddingBottom: '30px' }
 		const marginRight15Style = { marginRight: '50px', paddingBottom: '30px' }
 		const paddingLeft50Style = { paddingLeft: '17%' }
@@ -191,10 +170,7 @@ export default class NewProcessPage extends React.Component{
 				    <label class="col-sm-2 control-label">{Strings.dueDate}*</label>
 				    <div class="col-sm-10">
 				    	<div class="input-group">
-				    		<span class="input-group-addon" style={dueDateStyle}>
-				    			<span class="glyphicon glyphicon-calendar"></span>
-				    		</span>
-			      		<input style={dueDateStyle} id="datepicker" aria-describedby="sizing-addon1" class="form-control" placeholder={Strings.dueDate} value={this.state.due_date} onChange={this.handleDueDateChange}></input>
+								<Pikaday class="form-control" placeholder={Strings.dueDate} date={this.state.due_date} onDateChange ={this.handleDueDateChange}/>
 				    	</div>
 				    </div>
 				  </div>
@@ -221,8 +197,6 @@ export default class NewProcessPage extends React.Component{
 				      <a 	style={btnStyle} class="btn btn-primary"
 								onClick={() => this.createProcess(
 									this.state.name,
-									this.state.person_nr,
-									this.state.short,
 									this.state.job,
 									this.state.place,
 									this.state.department,

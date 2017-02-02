@@ -224,7 +224,7 @@ export default class ProcessListPage extends React.Component{
 							</ul>
 						</div>
 					</div>
-					<div class="col-xs-12 col-md-9" style={containerStyle}>
+					<div class="col-xs-12 col-md-9 pull-right" style={containerStyle}>
 						<h2>Angelegte Prozesse</h2>
 						<table class="table table-hover table-striped table-bordered">
 						<tbody>
@@ -238,7 +238,7 @@ export default class ProcessListPage extends React.Component{
 							</tbody>
 					 	</table>
 					</div>
-					<div class="col-xs-12 col-md-9" style={containerStyle}>
+					<div class="col-xs-12 col-md-9 pull-right" style={containerStyle}>
 						<h2>Laufende Prozesse</h2>
 						<table class="table table-hover table-striped table-bordered">
 						<tbody>
@@ -252,7 +252,7 @@ export default class ProcessListPage extends React.Component{
 							</tbody>
 					 	</table>
 					</div>
-					<div class="col-xs-12 col-md-9" style={containerStyle}>
+					<div class="col-xs-12 col-md-9 pull-right" style={containerStyle}>
 						<h2>Abgeschlossene Prozesse</h2>
 						<table class="table table-hover table-striped table-bordered">
 						<tbody>

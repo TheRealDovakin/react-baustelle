@@ -28,7 +28,7 @@ class ProcessStore extends EventEmitter {
 	 * @param  {array} data upadated Processes
 	 */
 	updateProcesses(data){
-		this.state.items = data; //this should be replaced with setState({items: data}) but it doesn't work somehow
+		this.state.items = data;
 		this.emit('change');
 	}
 

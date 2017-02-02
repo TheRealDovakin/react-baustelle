@@ -44,7 +44,7 @@ function addLineToLog(req, decoded){
 
 function sendMail(adress, subject, body){
   const command = getSendMailCommand(adress, subject, body);
-  console.log('Mail to: '+adress);;
+  console.log('Mail to: '+adress);
   //childProcess.exec(command);
 }
 

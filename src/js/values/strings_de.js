@@ -15,6 +15,8 @@ module.exports = {
   commentText: 'Kommentar Text',
   companyCar: 'Firmenwagen',
   companyName: 'Kieback & Peter',
+  completeProcess: 'Prozess vervollständigen',
+  createdProcess: 'Angelegter Process',
   department: 'Abteilung/KST',
   dueDate: 'Deadline',
   done: 'beendet',

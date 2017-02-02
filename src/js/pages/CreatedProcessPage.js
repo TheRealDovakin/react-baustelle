@@ -2,14 +2,13 @@
 import alertify from 'alertify.js';
 import Constants from '../values/constants';
 import ES6Promise from 'es6-promise';
-import flatpickr from "flatpickr";
-import flatpickr_de from '../../../node_modules/flatpickr/src/l10n/de';
+import Pikaday from 'pikaday-react';
 import React from "react";
 import _ from 'underscore';
 import "whatwg-fetch";
 
 //css
-import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
+import '!!style-loader!css-loader!pikaday/css/pikaday.css';
 
 //own files
 import dispatcher from "../dispatcher";
@@ -62,7 +61,6 @@ export default class NewProcessPage extends React.Component{
 		this.handleShortChange = this.handleShortChange.bind(this);
 	  this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
 	  this.handleTypeChange = this.handleTypeChange.bind(this);
-		this.setDatepicker = this.setDatepicker.bind(this);
 	  this.setProcess = this.setProcess.bind(this);
 	  this.postProcess = this.postProcess.bind(this);
 	  this.postPhase = this.postPhase.bind(this);
@@ -75,7 +73,6 @@ export default class NewProcessPage extends React.Component{
 	componentDidMount(){
 		// BUG: closes tab in IE when datepicker is closed, but will not be needed in final version anyway
 		this.fetchProcess();
-		this.setDatepicker();
 	}
 	/**
 	 * wrapes parameters to a JSON and call post-function with it
@@ -143,7 +140,6 @@ export default class NewProcessPage extends React.Component{
 	  });
 	}
 
-
 	/**
 	* eventhandler for car-input, toggles true and false
 	* @param  {event} event 		input value
@@ -193,6 +189,7 @@ export default class NewProcessPage extends React.Component{
 			dispatcher.dispatch({type: "PROCESS_CREATED"});
 			res.json().then(function(res){
 				const options = JSON.parse(json_data);
+				//checks for all options that can be selected and creates the chosen phases
 				switch(options.p_type){
 					case Strings.processTypes.vertrieb: {self.postPhase(res, PhaseValues.vertrieb)}; break;
 					case Strings.processTypes.zentrale: {self.postPhase(res, PhaseValues.zentrale)}; break;
@@ -203,10 +200,10 @@ export default class NewProcessPage extends React.Component{
 				if (options.tablePhone) self.postPhase(res, PhaseValues.tablePhone);
 				if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
 				// HACK:
-				self.postPhase(res, PhaseValues.basic, true);
+				self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
 				alertify.success(Strings.newProcess.success);
-				document.location.href = '#';
-			})
+				document.location.href = '#'; //return to Home page
+			});
 		}
 		else{
 			console.log(Strings.error.restApi);
@@ -220,6 +217,7 @@ export default class NewProcessPage extends React.Component{
 	 * creates a Phase in the DB and calls functions that create child-Items
 	 * @param  {object} res        parent Process
 	 * @param  {object} phaseValue predifined JSON for specific Phase
+	 * @param  {boolean} last 		 if true, POST to /api/sendMail for all adresses in maillist
 	 */
 	postPhase(res, phaseValue, last){
 		const json_data = JSON.stringify({
@@ -245,7 +243,6 @@ export default class NewProcessPage extends React.Component{
 					 self.postItem(res, itemValue);
 				 }
 				})
-				// HACK:
 				if (last) {
 					_.each(_.uniq(self.mailList), function(mail){
 						const json_data = JSON.stringify({
@@ -260,8 +257,8 @@ export default class NewProcessPage extends React.Component{
 						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
 							if(res.ok){
 							}else{
-								console.log(res);
 								console.log(Strings.error.restApi);
+								console.log(res);
 							}
 						});
 					})
@@ -303,17 +300,6 @@ export default class NewProcessPage extends React.Component{
 		});
 	}
 
-	/**
-	 * sets the datepicker for date-input
-	 */
-	setDatepicker(){
-		flatpickr.localize(flatpickr_de.de);
-		var picker = document.getElementById('datepicker_created');
-		flatpickr(picker, {	locale: flatpickr_de.de	});
-	}
-
-
-
 	render(){
 		const headlineStyle = { marginTop: 70 };
 		const btnStyle = { width: '30%', marginBottom: "50px" };
@@ -324,7 +310,7 @@ export default class NewProcessPage extends React.Component{
 		return(
 			<div class="col-md-12">
 
-				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
+				<h1 style={headlineStyle}>{Strings.createdProcess}</h1>
 				<h2>{Strings.basicInfo}</h2>
 				<form class="form-horizontal">
 
@@ -374,10 +360,7 @@ export default class NewProcessPage extends React.Component{
 				    <label class="col-sm-2 control-label">{Strings.dueDate}*</label>
 				    <div class="col-sm-10">
 				    	<div class="input-group">
-				    		<span class="input-group-addon" style={dueDateStyle}>
-				    			<span class="glyphicon glyphicon-calendar"></span>
-				    		</span>
-			      		<input style={dueDateStyle} id="datepicker_created" aria-describedby="sizing-addon1" class="form-control" placeholder={Strings.dueDate} value={this.state.due_date} onChange={this.handleDueDateChange}></input>
+			      		<Pikaday class="form-control" placeholder={Strings.dueDate} date={this.state.due_date} onDateChange ={this.handleDueDateChange}/>
 				    	</div>
 				    </div>
 				  </div>
@@ -457,7 +440,7 @@ export default class NewProcessPage extends React.Component{
 									this.state.tablePhone,
 									this.state.baumanager)}>
 									<span class="glyphicon glyphicon-plus pull-left"></span>
-									{Strings.processList.createNewProcess}
+									{Strings.completeProcess}
 							</a>
 				    </div>
 				  </div>

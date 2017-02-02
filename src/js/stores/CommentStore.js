@@ -28,7 +28,6 @@ class CommentStore extends EventEmitter {
 	 * @param  {array} data upadated Comments
 	 */
 	updateComments(data){
-		//TODO: this should be replaced with setState({items: data}) but it doesn't work somehow
 		this.state.items = data;
 		this.emit('change');
 	}
