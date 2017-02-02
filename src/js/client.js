@@ -26,7 +26,7 @@ ReactDOM.render(
 			<IndexRoute component={ProcessListPage}></IndexRoute>
 			<Route path="/" component={ProcessListPage}></Route>
 			<Route path="processPage/:id" component={ProcessPage}></Route>
-			<Route path="newProcess" component={NewProcessPage}></Route>
+			<Route path="newProcess" component={CreatedProcessPage}></Route>
 			<Route path="createdProcess/:id" component={CreatedProcessPage}></Route>
 			<Route path="info" component={InfoPage}></Route>
 			<Route path="processNotFound" component={ProcessNotFoundPage}></Route>

@@ -25,6 +25,7 @@ class Header extends React.Component{
 	logout(){
 		window.sessionStorage.accessToken = undefined;
 		window.sessionStorage.displayName = '';
+		localStorage.accessToken = undefined;
 		document.location.href = '/';
 	}
 

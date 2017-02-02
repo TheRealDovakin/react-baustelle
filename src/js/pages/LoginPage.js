@@ -40,13 +40,13 @@ export default class LoginPage extends React.Component{
           //BUG: token isn't stored in IE
           sessionStorage.setItem('accessToken', res.token);
           sessionStorage.setItem('displayName', res.displayName);
+          console.log(sessionStorage.accessToken);
           document.location.href='#/'+self.callbackPath;
         });
       }
 			else{
 				console.log(res.json());
         alertify.error('Name und/ oder Password ist falsch');
-
 			}
 		});
   }

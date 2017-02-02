@@ -18,6 +18,7 @@ import * as PhaseActions from "../actions/PhaseActions";
 import PhaseStore from '../stores/PhaseStore';
 import PhaseValues from '../values/phases';
 import * as ProcessActions from "../actions/ProcessActions";
+import ProcessInDropdown from '../components/ProcessInDropdown';
 import ProcessStore from '../stores/ProcessStore';
 import ProcessValues from '../values/processes';
 import Strings from '../values/strings_de';
@@ -26,7 +27,7 @@ import Strings from '../values/strings_de';
  * @author Kasper Nadrajkowski
  * this class represents a view for a form to create a new Process
  */
-export default class NewProcessPage extends React.Component{
+export default class CreatedProcessPage extends React.Component{
 	constructor(props) {
 		//IE promise-support
 		ES6Promise.polyfill();
@@ -40,15 +41,19 @@ export default class NewProcessPage extends React.Component{
 			due_date:'',
 	  	name: '',
 			job: '',
-			person_nr: '',
 			p_type: 'Vertrieb',
+			person_nr: '',
+			person_nrToFill: '',
 			place: '',
+			processes: [],
 			short: '',
 			tablePhone: false,
 	  };
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
-		this.fetchProcess = this.fetchProcess.bind(this);
+		this.fetchProcesses = this.fetchProcesses.bind(this);
+		this.fillInputs = this.fillInputs.bind(this);
+		this.getProcesses = this.getProcesses.bind(this);
 	  this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
 	  this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
 	  this.handleCarChange = this.handleCarChange.bind(this);
@@ -57,6 +62,7 @@ export default class NewProcessPage extends React.Component{
 	  this.handleJobChange = this.handleJobChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handlePersonNrChange = this.handlePersonNrChange.bind(this);
+		this.handlePersonNrToFillChange = this.handlePersonNrToFillChange.bind(this);
 		this.handlePlaceChange = this.handlePlaceChange.bind(this);
 		this.handleShortChange = this.handleShortChange.bind(this);
 	  this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
@@ -68,11 +74,26 @@ export default class NewProcessPage extends React.Component{
 	}
 
 	/**
+	 * will be called before the component mounted,
+	 * adds changelisteners for stores
+	 */
+	componentWillMount(){
+		ProcessStore.on("change", this.getProcesses);
+	}
+
+	/**
+	 * will be called before the component will unmount,
+	 * removes changelisteners for stores
+	 */
+	componentWillUnmount(){
+		ProcessStore.removeListener("change", this.getProcesses);
+	}
+
+	/**
 	 * wil be called after the component mounted
 	 */
 	componentDidMount(){
-		// BUG: closes tab in IE when datepicker is closed, but will not be needed in final version anyway
-		this.fetchProcess();
+		this.fetchProcesses();
 	}
 	/**
 	 * wrapes parameters to a JSON and call post-function with it
@@ -104,29 +125,59 @@ export default class NewProcessPage extends React.Component{
 		this.postProcess(json_data);
 	}
 
-	fetchProcess(){
-		console.log('hallo');
-		const processId = this.props.location.pathname.split("/")[2];
-		console.log(processId);
-		var self = this;
-    var myHeaders = new Headers();
+
+	/**
+	 * fetches all Processes from the DB and dispatches an action that updates
+	 * its store
+	 */
+	fetchProcesses(){
+		var token = sessionStorage.accessToken || localStorage.accessToken;
+		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-    var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
+		myHeaders.append("Authorization", 'Bearer '+token);
+		var myInit = { headers: myHeaders };
+		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
-					self.setProcess(res);
+					dispatcher.dispatch({
+						type: 	"FETCH_PROCESSES_FROM_API",
+						res,
+					});
 				})
 			}
 			else{
-        console.log('process');
+				console.log(res);
 				console.log(Strings.error.restApi);
-        console.log(res);
-        if (res.status==404) {
-          document.location.href = '/#/processNotFound';
-        }
+				if(res.status==401){
+					document.location.href = '/#/login?callbackPath=';
+				}
 			}
+		});
+	}
+
+	fillInputs(){
+		var self = this;
+		var rightProcess = _.find(self.state.processes, function(process){
+			return process.person_nr == self.state.person_nrToFill;
+		});
+		self.setState({
+			department: rightProcess.department,
+			due_date: rightProcess.due_date,
+	  	name: rightProcess.person_name,
+			job: rightProcess.job,
+			place: rightProcess.place,
+			person_nr: rightProcess.person_nr,
+			short: rightProcess.short,
+			p_type: rightProcess.p_type
+		});
+	}
+
+	/**
+	 * updates the state with Processes from its Store
+	 */
+	getProcesses(){
+		this.setState({
+			processes: ProcessStore.getAll(),
 		});
 	}
 
@@ -169,6 +220,7 @@ export default class NewProcessPage extends React.Component{
 	handleJobChange(event) { this.setState({ job: event.target.value	});	}
 	handleNameChange(event) {	this.setState({	name: event.target.value });}
 	handlePersonNrChange(event) {	this.setState({	person_nr: event.target.value	});	}
+	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value	});	}
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
 	handleShortChange(event) { this.setState({ short: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
@@ -180,37 +232,36 @@ export default class NewProcessPage extends React.Component{
 	postProcess(json_data){
 		var myHeaders = new Headers();
 		const processId = this.props.location.pathname.split("/")[2];
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-	var myInit = { method: 'PUT', mode: 'cors', body: json_data, headers: myHeaders }
-	const self = this;
-	fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
-		if(res.ok){
-			dispatcher.dispatch({type: "PROCESS_CREATED"});
-			res.json().then(function(res){
-				const options = JSON.parse(json_data);
-				//checks for all options that can be selected and creates the chosen phases
-				switch(options.p_type){
-					case Strings.processTypes.vertrieb: {self.postPhase(res, PhaseValues.vertrieb)}; break;
-					case Strings.processTypes.zentrale: {self.postPhase(res, PhaseValues.zentrale)}; break;
-					case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
-				}
-				if (options.addAccounts) self.postPhase(res, PhaseValues.itKonten);
-				if (options.car) self.postPhase(res, PhaseValues.auto);
-				if (options.tablePhone) self.postPhase(res, PhaseValues.tablePhone);
-				if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
-				// HACK:
-				self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
-				alertify.success(Strings.newProcess.success);
-				document.location.href = '#'; //return to Home page
-			});
-		}
-		else{
-			console.log(Strings.error.restApi);
-			console.log(res.json());
-			alertify.error(Strings.newProcess.error.wrongInput);
-		}
-	});
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
+		const self = this;
+		fetch(Constants.restApiPath+'processes/', myInit).then(function(res){
+			if(res.ok){
+				dispatcher.dispatch({type: "PROCESS_CREATED"});
+				res.json().then(function(res){
+					const options = JSON.parse(json_data);
+					//checks for all options that can be selected and creates the chosen phases
+					switch(options.p_type){
+						case Strings.processTypes.vertrieb: {self.postPhase(res, PhaseValues.vertrieb)}; break;
+						case Strings.processTypes.zentrale: {self.postPhase(res, PhaseValues.zentrale)}; break;
+						case Strings.processTypes.techniker: {self.postPhase(res, PhaseValues.techniker)}; break;
+					}
+					if (options.addAccounts) self.postPhase(res, PhaseValues.itKonten);
+					if (options.car) self.postPhase(res, PhaseValues.auto);
+					if (options.tablePhone) self.postPhase(res, PhaseValues.tablePhone);
+					if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
+					// HACK:
+					self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
+					alertify.success(Strings.newProcess.success);
+				});
+			}
+			else{
+				console.log(Strings.error.restApi);
+				console.log(res.json());
+				alertify.error(Strings.newProcess.error.wrongInput);
+			}
+		});
 	}
 
 	/**
@@ -307,10 +358,36 @@ export default class NewProcessPage extends React.Component{
 		const marginRight5Style = { marginRight: '5px', paddingBottom: '30px' }
 		const marginRight15Style = { marginRight: '50px', paddingBottom: '30px' }
 		const paddingLeft50Style = { paddingLeft: '17%' }
+
+		const { processes } = this.state;
+
+		const ProcessesInDropdown = processes.map((item) => {
+			if(true){
+				return <ProcessInDropdown key={item._id} {...item}/>;
+			}
+		});
 		return(
 			<div class="col-md-12">
 
-				<h1 style={headlineStyle}>{Strings.createdProcess}</h1>
+				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
+
+				<h2>{Strings.processList.search}</h2>
+				<form class="form-horizontal">
+				  <div class="form-group">
+						<label class="col-sm-2 control-label">{Strings.personNr}</label>
+						<div class="col-sm-4">
+							<select class="form-control" value={this.state.person_nrToFill} onChange={this.handlePersonNrToFillChange}>
+							{ProcessesInDropdown}
+							</select>
+						</div>
+
+						<div class="col-sm-2">
+							<button class="btn btn-default form-control" onClick={this.fillInputs}>Füllen</button>
+						</div>
+					</div>
+
+				</form>
+
 				<h2>{Strings.basicInfo}</h2>
 				<form class="form-horizontal">
 

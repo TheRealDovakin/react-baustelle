@@ -68,9 +68,10 @@ export default class ProcessListPage extends React.Component{
 	 * its store
 	 */
 	fetchProcesses(){
+		var token = sessionStorage.accessToken || localStorage.accessToken;
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		myHeaders.append("Authorization", 'Bearer '+token);
 		var myInit = { headers: myHeaders };
 		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
 			if(res.ok){
@@ -149,12 +150,6 @@ export default class ProcessListPage extends React.Component{
 			});
 			// fills RunningProcessComponents with Processes that match the search only
 			const RunningProcessComponents = items.map((item) => {
-				if(item.status==3&&item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
-					return <Process key={item._id} {...item}/>;
-				}
-			});
-
-			const CreatedProcessComponents = items.map((item) => {
 				if(item.status==1&&item.person_name.toUpperCase().indexOf(this.state.search_filter.toUpperCase())!==-1){
 					return <Process key={item._id} {...item}/>;
 				}
@@ -174,6 +169,7 @@ export default class ProcessListPage extends React.Component{
 								<span class="glyphicon glyphicon-info-sign pull-right"></span>
 								{Strings.info}
 							</h4></div>
+
 							<ul class="list-group">
 								<li class="list-group-item"><span>
 									{Strings.newProcess.running}:
@@ -188,20 +184,24 @@ export default class ProcessListPage extends React.Component{
 									<span class="label label-danger pull-right">{processCountDue}</span>
 								</span></li>
 							</ul>
+
 							<div class="panel-heading"><h4>
 								<span class="glyphicon glyphicon-flash pull-right"></span>
 								{Strings.process.actions}
 							</h4></div>
+
 							<ul class="list-group">
 								<li><a class="btn btn-primary" style={panelElementStyle} href="#/newProcess">
 								<span class="glyphicon glyphicon-plus pull-left"></span>
 								{Strings.processList.createNewProcess}
 								</a></li>
 							</ul>
+
 							<div class="panel-heading"><h4>
 								<span class="glyphicon glyphicon-filter pull-right"></span>
 								{Strings.processList.filter}
 							</h4></div>
+
 							<ul class="list-group">
 								<li>
 									<form>
@@ -222,10 +222,12 @@ export default class ProcessListPage extends React.Component{
 									</div>
 								</li>
 							</ul>
+
 						</div>
 					</div>
+
 					<div class="col-xs-12 col-md-9 pull-right" style={containerStyle}>
-						<h2>Angelegte Prozesse</h2>
+						<h2>Laufende Prozesse</h2>
 						<table class="table table-hover table-striped table-bordered">
 						<tbody>
 								<tr>
@@ -238,20 +240,7 @@ export default class ProcessListPage extends React.Component{
 							</tbody>
 					 	</table>
 					</div>
-					<div class="col-xs-12 col-md-9 pull-right" style={containerStyle}>
-						<h2>Laufende Prozesse</h2>
-						<table class="table table-hover table-striped table-bordered">
-						<tbody>
-								<tr>
-									<th><h4>{Strings.name}</h4></th>
-									<th><h4>{Strings.status}</h4></th>
-									<th><h4>{Strings.dueDate}</h4></th>
-									<th><h4>{Strings.type}</h4></th>
-								</tr>
-							 	{CreatedProcessComponents}
-							</tbody>
-					 	</table>
-					</div>
+
 					<div class="col-xs-12 col-md-9 pull-right" style={containerStyle}>
 						<h2>Abgeschlossene Prozesse</h2>
 						<table class="table table-hover table-striped table-bordered">
@@ -266,6 +255,7 @@ export default class ProcessListPage extends React.Component{
 							</tbody>
 					 	</table>
 					</div>
+
 				</div>
 			);
 		}else{// spinner
