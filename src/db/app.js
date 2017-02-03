@@ -4,42 +4,87 @@ var express = require('express'),
     Constants = require('../js/values/constants'),
     cors = require('cors'),
     DateUtils = require('../js/utils/DateUtils'),
+    execPhp = require('exec-php'),
     gmailLogin = require('../js/values/gmailLogin'),
     jwt = require('jsonwebtoken'),
     methodOverride = require('method-override'),
     morgan = require('morgan'),
     restful = require('node-restful'),
-    Strings = require('../js/values/strings_de');
+    Strings = require('../js/values/strings_de'),
+    _ = require('underscore'),
+    mongoose = restful.mongoose;
 
-var mongoose = restful.mongoose;
-
-/**
- * express rest-api with node-restful
- * @type {express}
- */
+//////////////////////////////////////////////////////
+///////////////////////DB-CONFIG//////////////////////
+//////////////////////////////////////////////////////
 var app = express();
-
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
 app.use(cors({origin:Constants.appPath}));
-
 mongoose.connect("mongodb://localhost/kup");
-
 var Schema = mongoose.Schema;
-var x = {};
+this.ret = [];
 
-function getSendMailCommand(adress, subject, body){
-  return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
-}
 
+//////////////////////////////////////////////////////
+///////////////////////FUNCTIONS//////////////////////
+//////////////////////////////////////////////////////
 function addLineToLog(req, decoded){
   const datetime = DateUtils.getExactDateAndTimeAsString(Date.now());
   const s = '['+datetime+'] method: '+req.method+' path: '+req.path+' person: '+decoded.name;
   const command = 'echo \''+s+'\' >> app.log';
   childProcess.exec(command);
+}
+
+function getDataFromLoga(){
+  var self = this;
+  var oracledb = require('oracledb');
+  var config = require('../../dbconfig.js');
+  var ret;
+  oracledb.getConnection({
+      user          : config.name,
+      password      : config.pw,
+      connectString : config.qstring,
+    },
+    function(err, connection)  {
+      if (err) {
+        console.error(err.message);
+        return;
+      }
+      connection.execute(
+        "select * from kp_einstellung_workflow",
+        function(err, result)  {
+          if (err) {
+            console.error(err.message);
+            doRelease(connection);
+            return;
+          }
+          console.log(result.metaData);
+          console.log('result.rows');
+          self.ret = result.rows;
+          doRelease(connection);
+        }
+      );
+    }
+  );
+}
+
+function doRelease(connection){
+  connection.close(
+    function(err) {
+      if (err) {
+        console.error(err.message);
+      }
+    }
+  );
+}
+
+
+function getSendMailCommand(adress, subject, body){
+  return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
 }
 
 function sendMail(adress, subject, body){
@@ -60,6 +105,10 @@ function requestHasToken(req){
     });
   });
 }
+
+//////////////////////////////////////////////////////
+///////////////////////ROUTES/////////////////////////
+//////////////////////////////////////////////////////
 //authentication
 app.use('/api', function(req, res, next){
   requestHasToken(req)
@@ -104,6 +153,35 @@ app.post('/authenticate', function(req, res){
   });
 });
 
+app.post('/api/sendMail', function(_req, res){
+  var req = _req.body;
+  sendMail(req.adress, req.subject, req.body);
+  res.send('hallo');
+});
+
+app.get('/loga', function(req, res){
+  getDataFromLoga();
+  var array = [];
+  var i = 0;
+for(var i = 0; i<this.ret.length; i++){
+    var x = this.ret[i];
+    var y = {
+      status: 1,
+      person_name:x[2]+' '+x[1],
+      person_nr: x[0],
+      short: x[3],
+      job: x[4],
+      place: x[5],
+      department: x[6],
+      due_date: x[10],
+      p_type: x[11],
+    }
+    array.push(y);
+    i++;
+  }
+  res.json(array);
+});
+
 var ItemModel = require('./models/Item.js');
 ItemModel.methods(['get', 'post', 'put', 'delete']),
 ItemModel.register(app, '/api/items');
@@ -118,15 +196,10 @@ ProcessModel.register(app, '/api/processes');
 
 var CommentModel = require('./models/Comment.js');
 CommentModel.methods(['get', 'post', 'delete']),
-CommentModel.register(app, '/api/comments');
+CommentModel.register(app, '/comments');
 
 var UserModel = require('./models/User.js');
 
-app.post('/api/sendMail', function(_req, res){
-  var req = _req.body;
-  sendMail(req.adress, req.subject, req.body);
-  res.send('hallo');
-});
 
 console.log('app listens at localhost:3000');
 app.listen(3000);

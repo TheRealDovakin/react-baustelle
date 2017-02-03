@@ -76,6 +76,7 @@ export default class ProcessListPage extends React.Component{
 		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
+					console.log(res);
 					dispatcher.dispatch({
 						type: 	"FETCH_PROCESSES_FROM_API",
 						res,

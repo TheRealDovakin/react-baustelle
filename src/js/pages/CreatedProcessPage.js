@@ -131,26 +131,19 @@ export default class CreatedProcessPage extends React.Component{
 	 * its store
 	 */
 	fetchProcesses(){
-		var token = sessionStorage.accessToken || localStorage.accessToken;
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+token);
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
+		var self = this;
+		fetch('http://172.22.23.6:3000/loga', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
-					dispatcher.dispatch({
-						type: 	"FETCH_PROCESSES_FROM_API",
-						res,
-					});
-				})
+					console.log(res);
+					self.state.processes = res;
+				});
 			}
 			else{
-				console.log(res);
-				console.log(Strings.error.restApi);
-				if(res.status==401){
-					document.location.href = '/#/login?callbackPath=';
-				}
 			}
 		});
 	}
@@ -363,7 +356,7 @@ export default class CreatedProcessPage extends React.Component{
 
 		const ProcessesInDropdown = processes.map((item) => {
 			if(true){
-				return <ProcessInDropdown key={item._id} {...item}/>;
+				return <ProcessInDropdown key={item.person_nr} {...item}/>;
 			}
 		});
 		return(
