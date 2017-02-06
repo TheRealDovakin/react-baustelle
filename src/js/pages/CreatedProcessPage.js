@@ -402,26 +402,25 @@ export default class CreatedProcessPage extends React.Component{
 		const paddingLeft50Style = { paddingLeft: '17%' }
 
 		const { loga, processes } = this.state;
+		//removes all LOGA elements from list for wich a process is already existing
 		var logaFiltered = _.filter(loga, function(logaElement){
-			var x = true;
-			_.each(processes, function(process){
-				if (logaElement.person_nr == process.person_nr) {
-					x = false;
-				}
+			return _.every(processes, function(process){
+				return logaElement.person_nr!=process.person_nr;
 			});
-			return x;
 		});
+
 		const ProcessesInDropdown = logaFiltered.map((item) => {
 			if(true){
 				return <ProcessInDropdown key={item.person_nr} {...item}/>;
 			}
 		});
+		
 		return(
 			<div class="col-md-12">
 
 				<h1 style={headlineStyle}>{Strings.newProcess.headline}</h1>
 
-				<h2>{Strings.processList.search}</h2>
+				<h2>{Strings.pickPerson}</h2>
 				<form class="form-horizontal">
 				  <div class="form-group">
 						<label class="col-sm-2 control-label">{Strings.personNr}</label>
@@ -432,7 +431,7 @@ export default class CreatedProcessPage extends React.Component{
 						</div>
 
 						<div class="col-sm-2">
-							<button class="btn btn-default form-control" onClick={this.fillInputs}>Füllen</button>
+							<button class="btn btn-default form-control" onClick={this.fillInputs}>{Strings.fillInputs}</button>
 						</div>
 					</div>
 
