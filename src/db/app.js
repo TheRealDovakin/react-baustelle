@@ -14,6 +14,8 @@ var express = require('express'),
     _ = require('underscore'),
     mongoose = restful.mongoose;
 
+mongoose.Promise = global.Promise;
+
 //////////////////////////////////////////////////////
 ///////////////////////DB-CONFIG//////////////////////
 //////////////////////////////////////////////////////
@@ -44,32 +46,33 @@ function getDataFromLoga(){
   var oracledb = require('oracledb');
   var config = require('../../dbconfig.js');
   var ret;
-  oracledb.getConnection({
-      user          : config.name,
-      password      : config.pw,
-      connectString : config.qstring,
-    },
-    function(err, connection)  {
-      if (err) {
-        console.error(err.message);
-        return;
-      }
-      connection.execute(
-        "select * from kp_einstellung_workflow",
-        function(err, result)  {
-          if (err) {
-            console.error(err.message);
-            doRelease(connection);
-            return;
-          }
-          console.log(result.metaData);
-          console.log('result.rows');
-          self.ret = result.rows;
-          doRelease(connection);
+  return new Promise((resolve, reject) => {
+    oracledb.getConnection(
+      {
+        user          : config.name,
+        password      : config.pw,
+        connectString : config.qstring,
+      },
+      function(err, connection)  {
+        if (err) {
+          console.error(err.message);
+          return reject(err);
         }
-      );
-    }
-  );
+        connection.execute(
+          "select * from kp_einstellung_workflow",
+          function(err, result)  {
+            if (err) {
+              console.error(err.message);
+              doRelease(connection);
+              return reject(err);
+            }
+            doRelease(connection);
+            return resolve(result.rows);
+          }
+        );
+      }
+    );
+  });
 }
 
 function doRelease(connection){
@@ -159,27 +162,28 @@ app.post('/api/sendMail', function(_req, res){
   res.send('hallo');
 });
 
-app.get('/loga', function(req, res){
-  getDataFromLoga();
-  var array = [];
-  var i = 0;
-for(var i = 0; i<this.ret.length; i++){
-    var x = this.ret[i];
-    var y = {
-      status: 1,
-      person_name:x[2]+' '+x[1],
-      person_nr: x[0],
-      short: x[3],
-      job: x[4],
-      place: x[5],
-      department: x[6],
-      due_date: x[10],
-      p_type: x[11],
+app.get('/api/loga', function(req, res){
+  getDataFromLoga().then(rows => {
+    var array = [];
+    var i = 0;
+    for(var i = 0; i<rows.length; i++){
+      var x = rows[i];
+      var y = {
+        status: 1,
+        person_name:x[2]+' '+x[1],
+        person_nr: x[0],
+        short: x[3],
+        job: x[4],
+        place: x[5],
+        department: x[6],
+        due_date: x[10],
+        p_type: x[11],
+      }
+      array.push(y);
+      i++;
     }
-    array.push(y);
-    i++;
-  }
-  res.json(array);
+    res.json(array);
+  });
 });
 
 var ItemModel = require('./models/Item.js');
@@ -196,7 +200,7 @@ ProcessModel.register(app, '/api/processes');
 
 var CommentModel = require('./models/Comment.js');
 CommentModel.methods(['get', 'post', 'delete']),
-CommentModel.register(app, '/comments');
+CommentModel.register(app, '/api/comments');
 
 var UserModel = require('./models/User.js');
 

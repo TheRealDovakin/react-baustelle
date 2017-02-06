@@ -14,6 +14,7 @@ import '!!style-loader!css-loader!pikaday/css/pikaday.css';
 import dispatcher from "../dispatcher";
 import * as ItemsActions from "../actions/ItemsActions";
 import ItemValues from '../values/items.js'
+import LogaStore from '../stores/LogaStore';
 import * as PhaseActions from "../actions/PhaseActions";
 import PhaseStore from '../stores/PhaseStore';
 import PhaseValues from '../values/phases';
@@ -39,6 +40,7 @@ export default class CreatedProcessPage extends React.Component{
 		 	car: false,
 			department: '',
 			due_date:'',
+			loga: [],
 	  	name: '',
 			job: '',
 			p_type: 'Vertrieb',
@@ -51,8 +53,10 @@ export default class CreatedProcessPage extends React.Component{
 	  };
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
+		this.fetchLoga = this.fetchLoga.bind(this);
 		this.fetchProcesses = this.fetchProcesses.bind(this);
 		this.fillInputs = this.fillInputs.bind(this);
+		this.getLoga = this.getLoga.bind(this);
 		this.getProcesses = this.getProcesses.bind(this);
 	  this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
 	  this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
@@ -78,6 +82,7 @@ export default class CreatedProcessPage extends React.Component{
 	 * adds changelisteners for stores
 	 */
 	componentWillMount(){
+		LogaStore.on("change", this.getLoga);
 		ProcessStore.on("change", this.getProcesses);
 	}
 
@@ -86,6 +91,7 @@ export default class CreatedProcessPage extends React.Component{
 	 * removes changelisteners for stores
 	 */
 	componentWillUnmount(){
+		LogaStore.removeListener("change", this.getLoga);
 		ProcessStore.removeListener("change", this.getProcesses);
 	}
 
@@ -93,6 +99,7 @@ export default class CreatedProcessPage extends React.Component{
 	 * wil be called after the component mounted
 	 */
 	componentDidMount(){
+		this.fetchLoga();
 		this.fetchProcesses();
 	}
 	/**
@@ -130,17 +137,42 @@ export default class CreatedProcessPage extends React.Component{
 	 * fetches all Processes from the DB and dispatches an action that updates
 	 * its store
 	 */
+	fetchLoga(){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders };
+		var self = this;
+		fetch(Constants.restApiPath+'loga', myInit).then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					dispatcher.dispatch({
+						type: 	"FETCH_LOGA_FROM_API",
+						res,
+					});
+				});
+			}
+			else{
+			}
+		});
+	}
+	/**
+	 * fetches all Processes from the DB and dispatches an action that updates
+	 * its store
+	 */
 	fetchProcesses(){
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { headers: myHeaders };
 		var self = this;
-		fetch('http://172.22.23.6:3000/loga', myInit).then(function(res){
+		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
-					console.log(res);
-					self.state.processes = res;
+					dispatcher.dispatch({
+						type: 	"FETCH_PROCESSES_FROM_API",
+						res,
+					});
 				});
 			}
 			else{
@@ -149,8 +181,9 @@ export default class CreatedProcessPage extends React.Component{
 	}
 
 	fillInputs(){
+		//BUG: refreshes the site on first use
 		var self = this;
-		var rightProcess = _.find(self.state.processes, function(process){
+		var rightProcess = _.find(self.state.loga, function(process){
 			return process.person_nr == self.state.person_nrToFill;
 		});
 		self.setState({
@@ -162,6 +195,15 @@ export default class CreatedProcessPage extends React.Component{
 			person_nr: rightProcess.person_nr,
 			short: rightProcess.short,
 			p_type: rightProcess.p_type
+		});
+	}
+
+	/**
+	 * updates the state with Processes from its Store
+	 */
+	getLoga(){
+		this.setState({
+			loga: LogaStore.getAll(),
 		});
 	}
 
@@ -352,9 +394,9 @@ export default class CreatedProcessPage extends React.Component{
 		const marginRight15Style = { marginRight: '50px', paddingBottom: '30px' }
 		const paddingLeft50Style = { paddingLeft: '17%' }
 
-		const { processes } = this.state;
+		const { loga } = this.state;
 
-		const ProcessesInDropdown = processes.map((item) => {
+		const ProcessesInDropdown = loga.map((item) => {
 			if(true){
 				return <ProcessInDropdown key={item.person_nr} {...item}/>;
 			}

@@ -57,6 +57,7 @@ export default class LoginPage extends React.Component{
       <div style={style} class="jumbotron col-xs-6">
         <form class="form-signin">
           <h2 class="form-signin-heading">{Strings.login}</h2>
+          <h2 class="form-signin-heading">{Strings.loginError}</h2>
           <div class="input-group">
             <input type="text" class="form-control" placeholder={Strings.emailAdress} onChange={this.handleName} value={this.state.name}/>
             <div class="input-group-addon">{Strings.kupMail}</div>
