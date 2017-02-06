@@ -401,9 +401,17 @@ export default class CreatedProcessPage extends React.Component{
 		const marginRight15Style = { marginRight: '50px', paddingBottom: '30px' }
 		const paddingLeft50Style = { paddingLeft: '17%' }
 
-		const { loga } = this.state;
-
-		const ProcessesInDropdown = loga.map((item) => {
+		const { loga, processes } = this.state;
+		var logaFiltered = _.filter(loga, function(logaElement){
+			var x = true;
+			_.each(processes, function(process){
+				if (logaElement.person_nr == process.person_nr) {
+					x = false;
+				}
+			});
+			return x;
+		});
+		const ProcessesInDropdown = logaFiltered.map((item) => {
 			if(true){
 				return <ProcessInDropdown key={item.person_nr} {...item}/>;
 			}
