@@ -109,9 +109,16 @@ export default class CreatedProcessPage extends React.Component{
 	 * @param {String} p_type			process type from input
 	 */
 	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts, tablePhone, baumanager){
-
-		if(short==''||person_nr==''){
-			alertify.error('Biite geben Sie eine Personla Nr. und ein Kürzel an');
+		var self = this;
+		if(short==''||person_nr==''||person_name==''||place==''||short==''||job==''||due_date==''||department==''){
+			alertify.error('Bitte füllen Sie alle mit einem * markierte Felder aus');
+			return;
+		}
+		var existingProcess = _.find(self.state.processes, function(process){
+			return process.person_nr == person_nr;
+		});
+		if (person_nr == existingProcess.person_nr) {
+			alertify.error('Es besteht bereits ein Process für die Personal Nr.');
 			return;
 		}
 		var json_data = JSON.stringify({
@@ -288,7 +295,7 @@ export default class CreatedProcessPage extends React.Component{
 					if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
 					// HACK:
 					self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
-					alertify.success(Strings.newProcess.success);
+					document.location.href = '/';
 				});
 			}
 			else{
