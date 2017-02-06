@@ -117,7 +117,7 @@ export default class CreatedProcessPage extends React.Component{
 		var existingProcess = _.find(self.state.processes, function(process){
 			return process.person_nr == person_nr;
 		});
-		if (person_nr == existingProcess.person_nr) {
+		if (existingProcess && person_nr == existingProcess.person_nr) {
 			alertify.error('Es besteht bereits ein Process für die Personal Nr.');
 			return;
 		}
