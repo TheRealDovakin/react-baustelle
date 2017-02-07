@@ -34,16 +34,16 @@ export default class CreatedProcessPage extends React.Component{
 	constructor(props) {
 		//IE promise-support
 		ES6Promise.polyfill();
-	  super(props);
+		super(props);
 		this.mailList = [];
-	  this.state = {
+		this.state = {
 		 	addAccounts: false,
 			baumanager: false,
 		 	car: false,
 			department: '',
 			due_date:'',
 			loga: [],
-	  	name: '',
+	  		name: '',
 			job: '',
 			p_type: 'Vertrieb',
 			person_nr: '',
@@ -52,7 +52,7 @@ export default class CreatedProcessPage extends React.Component{
 			processes: [],
 			short: '',
 			tablePhone: false,
-	  };
+		};
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
 		this.fetchLoga = this.fetchLoga.bind(this);
@@ -60,23 +60,23 @@ export default class CreatedProcessPage extends React.Component{
 		this.fillInputs = this.fillInputs.bind(this);
 		this.getLoga = this.getLoga.bind(this);
 		this.getProcesses = this.getProcesses.bind(this);
-	  this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
-	  this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
-	  this.handleCarChange = this.handleCarChange.bind(this);
+		this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
+		this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
+		this.handleCarChange = this.handleCarChange.bind(this);
 		this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
 		this.handleDueDateChange = this.handleDueDateChange.bind(this);
-	  this.handleJobChange = this.handleJobChange.bind(this);
+		this.handleJobChange = this.handleJobChange.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handlePersonNrChange = this.handlePersonNrChange.bind(this);
 		this.handlePersonNrToFillChange = this.handlePersonNrToFillChange.bind(this);
 		this.handlePlaceChange = this.handlePlaceChange.bind(this);
 		this.handleShortChange = this.handleShortChange.bind(this);
-	  this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
-	  this.handleTypeChange = this.handleTypeChange.bind(this);
-	  this.setProcess = this.setProcess.bind(this);
-	  this.postProcess = this.postProcess.bind(this);
-	  this.postPhase = this.postPhase.bind(this);
-	  this.postItem = this.postItem.bind(this);
+		this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
+		this.handleTypeChange = this.handleTypeChange.bind(this);
+		this.setProcess = this.setProcess.bind(this);
+		this.postProcess = this.postProcess.bind(this);
+		this.postPhase = this.postPhase.bind(this);
+		this.postItem = this.postItem.bind(this);
 	}
 
 	/**
@@ -190,7 +190,7 @@ export default class CreatedProcessPage extends React.Component{
 	}
 
 	fillInputs(){
-		//BUG: refreshes the site on first use
+		//BUG: #001 refreshes the site on first use, fixed with #002
 		var self = this;
 		var rightProcess = _.find(self.state.loga, function(process){
 			return process.person_nr == self.state.person_nrToFill;
@@ -198,7 +198,7 @@ export default class CreatedProcessPage extends React.Component{
 		self.setState({
 			department: rightProcess.department,
 			due_date: rightProcess.due_date,
-	  	name: rightProcess.person_name,
+	  		name: rightProcess.person_name,
 			job: rightProcess.job,
 			place: rightProcess.place,
 			person_nr: rightProcess.person_nr,
