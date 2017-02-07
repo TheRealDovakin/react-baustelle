@@ -86,7 +86,8 @@ export default class ProcessListPage extends React.Component{
 				console.log(res);
 				console.log(Strings.error.restApi);
 				if(res.status==401){
-					document.location.href = '/#/login?callbackPath=';
+					//HACK: #004 fixes #003
+					document.location.href = '/?#/login?callbackPath=';
 				}
 			}
 		});

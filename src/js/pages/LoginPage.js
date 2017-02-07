@@ -37,10 +37,11 @@ export default class LoginPage extends React.Component{
     fetch('http://172.22.23.6:3000/authenticate/', myInit).then(function(res){
 			if(res.ok){
         res.json().then(function(res){
-          //BUG: token isn't stored in IE
+          //BUG: #003 sometimes have to login twice, fixed in #004
+          //BUG: #005 token isn't stored in IE
           sessionStorage.setItem('accessToken', res.token);
           sessionStorage.setItem('displayName', res.displayName);
-          console.log(sessionStorage.accessToken);
+          console.log(sessionStorage.accessToken1);
           document.location.href='#/'+self.callbackPath;
         });
       }

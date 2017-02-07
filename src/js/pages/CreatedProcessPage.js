@@ -162,6 +162,12 @@ export default class CreatedProcessPage extends React.Component{
 				});
 			}
 			else{
+				console.log(res);
+				console.log(Strings.error.restApi);
+				if(res.status==401){
+					//HACK: #004 fixes #003
+					document.location.href = '/?#/login?callbackPath=newProcess';
+				}
 			}
 		});
 	}

@@ -216,7 +216,8 @@ import Strings from '../values/strings_de';
 				console.log(res);
 				console.log(Strings.error.restApi);
         if(res.status==401){
-					document.location.href = '/#/login?callbackPath=processPage/'+processId;
+        			//HACK: #004 fixes #003
+					document.location.href = '/?#/login?callbackPath=processPage/'+processId;
 				}
 			}
 		});
