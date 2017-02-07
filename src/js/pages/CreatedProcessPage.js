@@ -9,9 +9,11 @@ import "whatwg-fetch";
 
 //css
 import '!!style-loader!css-loader!pikaday/css/pikaday.css';
+import '../../css/spinner_rectangle.css';
 
 //own files
 import dispatcher from "../dispatcher";
+import HtmlTemplates from '../values/htmlTemplates';
 import * as ItemsActions from "../actions/ItemsActions";
 import ItemValues from '../values/items.js'
 import LogaStore from '../stores/LogaStore';
@@ -295,7 +297,15 @@ export default class CreatedProcessPage extends React.Component{
 					if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
 					// HACK:
 					self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
-					document.location.href = '/';
+					var msgSpinner = HtmlTemplates.creatingProzessSpinner;
+					var msgSuccess = HtmlTemplates.processCreatedLog;
+					alertify.delay(2000).alert(msgSpinner);
+					setTimeout(function(){
+						alertify.delay(2000).success(msgSuccess);
+					},2000);
+					setTimeout(function(){
+						document.location.href = '#';
+					}, 4000);
 				});
 			}
 			else{
