@@ -297,11 +297,9 @@ export default class CreatedProcessPage extends React.Component{
 					if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
 					// HACK:
 					self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
-					var msgSpinner = HtmlTemplates.creatingProzessSpinner;
-					var msgSuccess = HtmlTemplates.processCreatedLog;
-					alertify.delay(2000).alert(msgSpinner);
+					alertify.delay(2000).log(HtmlTemplates.creatingProzessSpinner);
 					setTimeout(function(){
-						alertify.delay(2000).success(msgSuccess);
+						alertify.delay(2000).success(HtmlTemplates.processCreatedLog);
 					},2000);
 					setTimeout(function(){
 						document.location.href = '#';
