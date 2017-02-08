@@ -179,26 +179,37 @@ app.get('/api/ldap/:nr', function(req, res){
 
   client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
     if(err) console.log(err);
+    function lul(){
+      return new Promise((reject, resolve) => {
+        res.on('searchEntry', function(entry) {
+          console.log('entry: ' + JSON.stringify(entry.object));
+          x.json(entry.object);
+          return resolve('');
+        });
+        res.on('searchReference', function(referral) {
+          console.log('referral: ' + referral.uris.join());
+          return resolve('');
+        });
+        res.on('error', function(err) {
+          x.status(400);
+          x.json(err.message);
+          console.error('error: ' + err.message);
+          return resolve('');
+        });
+        res.on('end', function(result) {
+          console.log('status: ' + result.status);
+        });
+      });
+    }
 
-    res.on('searchEntry', function(entry) {
-      console.log('entry: ' + JSON.stringify(entry.object));
-      x.json(entry.object);
-    });
-    res.on('searchReference', function(referral) {
-      console.log('referral: ' + referral.uris.join());
-    });
-    res.on('error', function(err) {
-      x.status(400);
-      x.json(err.message);
-      console.error('error: ' + err.message);
-    });
-    res.on('end', function(result) {
-      console.log('status: ' + result.status);
+    lul().then(y => {
+      client.unbind(function(err) {
+        if(err) console.log(err);
+      });
+      client.destroy();
     });
   });
-  client.unbind(function(err) {
-    if(err) console.log(err);
-  });
+
 });
 
 app.post('/api/sendMail', function(_req, res){

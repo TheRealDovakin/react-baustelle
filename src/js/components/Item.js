@@ -25,6 +25,7 @@ export default class Item extends React.Component{
 		this.changeCollapsed = this.changeCollapsed.bind(this);
 		this.fetchItems = this.fetchItems.bind(this);
 		this.fetchComments = this.fetchComments.bind(this);
+		this.fetchUserFromAd = this.fetchUserFromAd.bind(this);
 		this.fetchPhases = this.fetchPhases.bind(this);
 		this.finishPhase = this.finishPhase.bind(this);
 		this.getComments = this.getComments.bind(this);
@@ -61,6 +62,7 @@ export default class Item extends React.Component{
 	 */
 	componentDidMount(){
 		this.getComments();
+		this.fetchUserFromAd();
 	}
 
 	/**
@@ -82,7 +84,24 @@ export default class Item extends React.Component{
 				})
 			}
 			else{
-				console.log(res);
+				console.log(Strings.error.restApi);
+			}
+		});
+	}
+
+	fetchUserFromAd(){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders }
+		fetch(Constants.restApiPath+'ldap/10921', myInit).then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					console.log(res.name);
+					console.log(res.employeeNumber);
+				})
+			}
+			else{
 				console.log(Strings.error.restApi);
 			}
 		});
