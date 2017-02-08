@@ -192,7 +192,7 @@ export default class ProcessListPage extends React.Component{
 							</h4></div>
 
 							<ul class="list-group">
-								{/* HACK: #002 fixes bug nr. #001 */}
+								{/* HACK: #002 fixes #001 */}
 								<li><a class="btn btn-primary" style={panelElementStyle} href="?#/newProcess">
 								<span class="glyphicon glyphicon-plus pull-left"></span>
 								{Strings.processList.createNewProcess}

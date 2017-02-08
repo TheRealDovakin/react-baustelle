@@ -14,6 +14,9 @@ var express = require('express'),
     _ = require('underscore'),
     mongoose = restful.mongoose;
 
+var ldap = require('ldapjs');
+var ldapConf = require('../../ldapconfig');
+
 mongoose.Promise = global.Promise;
 
 //////////////////////////////////////////////////////
@@ -154,6 +157,50 @@ app.post('/authenticate', function(req, res){
       }
     }
   });
+});
+
+app.get('/ldap', function(req, res){
+  var x = res;
+  var client = ldap.createClient({
+    url: ldapConf.url,
+  });
+
+  client.bind(ldapConf.dn, ldapConf.pw, function(err) {
+    if(err) console.log(err);
+  });
+
+  var opts = {
+    filter: '(employeeNumber=10921)',
+    scope: 'sub',
+    attributes: ['name', 'employeeNumber'],
+  };
+
+  client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
+    if(err) console.log(err);
+
+    res.on('searchEntry', function(entry) {
+      console.log('entry: ' + JSON.stringify(entry.object));
+      x.json(entry.object);
+    });
+    res.on('searchReference', function(referral) {
+      console.log('referral: ' + referral.uris.join());
+    });
+    res.on('error', function(err) {
+      x.status(400);
+      x.json(err.message);
+      console.error('error: ' + err.message);
+    });
+    res.on('end', function(result) {
+      console.log('status: ' + result.status);
+    });
+  });
+  client.unbind(function(err) {
+    if(err) console.log(err);
+  });
+});
+
+app.post('/ldap', function(req, res){
+  res.json({name: 'Kasper'});
 });
 
 app.post('/api/sendMail', function(_req, res){
