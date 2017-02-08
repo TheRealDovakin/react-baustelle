@@ -36,6 +36,9 @@ export default class Item extends React.Component{
 		this.state = {
 			comments: [],
 			comment: '',
+			mail: '',
+			person_name: '',
+			person_name_spare: '',
 			collapsed: true,
 			phases: [],
 		}
@@ -94,11 +97,16 @@ export default class Item extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { headers: myHeaders }
-		fetch(Constants.restApiPath+'ldap/10921', myInit).then(function(res){
+		var self = this;
+		fetch(Constants.restApiPath+'ldap/'+self.props.person, myInit).then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
-					console.log(res.name);
-					console.log(res.employeeNumber);
+					console.log(res);
+					self.setState({
+						person_name: res.name,
+						person_name_spare: res.name,
+						mail: res.mail,
+					});
 				})
 			}
 			else{
@@ -300,9 +308,8 @@ export default class Item extends React.Component{
 		//dynamic styling
 		var responsablePerson = (spare) ? 'disabled' : '';
 		var sparePerson = (!spare) ? 'disabled' : '';
-		const phoneBookLink = "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25";
 		// TODO: replace multiple views with dynamic styles
-		const { comments } = this.state;
+		const { comments, person_name, person_name_spare, mail } = this.state;
 		const ItemComponents = comments.map((item) => {
 			var a = 0;
 			if(item.item_id==_id){
@@ -316,8 +323,8 @@ export default class Item extends React.Component{
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
 						<li class="list-group-item"><span>{Strings.status}: {Strings.running}</span></li>
-						<li class={"list-group-item "+responsablePerson}><a  target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-						<li class={"list-group-item "+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_spare}</span></li>
+						<li class={"list-group-item "+responsablePerson}><span>{Strings.item.responsablePerson}: {person_name}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>
+						<li class={"list-group-item "+sparePerson}><span>{Strings.item.responsablePersonSpare}: {person_name_spare}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>
 						<a class="btn btn-success" style={btnStyle} onClick={
 							() => this.changeItemStatus(this, _id, 2)}>
 						<span class="glyphicon glyphicon-ok pull-left"></span>
@@ -360,8 +367,8 @@ export default class Item extends React.Component{
 						</div>
 						<ul class="list-group">
 							<li class="list-group-item"><span>{Strings.status}: erledigt</span></li>
-							<li class="list-group-item"><a target="_blank_" href={phoneBookLink+person.split(" ")[1]+"%25&res_vorname=%25"+person.split(" ")[0]+"%25"}>{Strings.item.responsablePerson}: {person}</a></li>
-							<li class="list-group-item"><a target="_blank_" href={phoneBookLink+person_spare.split(" ")[1]+"%25&res_vorname=%25"+person_spare.split(" ")[0]+"%25"}>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
+							<li class="list-group-item"><span>{Strings.item.responsablePerson}: {person_name}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>
+							<li class="list-group-item"><span>{Strings.item.responsablePersonSpare}: {person_name_spare}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>
 							<a class="btn btn-default" style={btnStyle} onClick={
 								() => this.changeItemStatus(this, _id, 3)
 							}>{Strings.item.setToNotDone}</a>
@@ -385,8 +392,8 @@ export default class Item extends React.Component{
 					<div class="panel-heading"><h4>{name}</h4></div>
 					<ul class="list-group">
 						<li class="list-group-item disabled"><span>{Strings.status}: in Warteschlage</span></li>
-						<li class="list-group-item disabled"><a>{Strings.item.responsablePerson}: {person}</a></li>
-						<li class="list-group-item disabled"><a>{Strings.item.responsablePersonSpare}: {person_spare}</a></li>
+						<li class="list-group-item disabled"><span>{Strings.item.responsablePerson}: {person_name}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>
+						<li class="list-group-item disabled"><span>{Strings.item.responsablePersonSpare}: {person_name_spare}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>
 						<li class="list-group-item disabled"><a class="btn btn-success disabled">{Strings.item.setToDone}</a></li>
 					</ul>
 				</div>

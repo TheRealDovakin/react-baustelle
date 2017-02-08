@@ -165,43 +165,37 @@ app.get('/api/ldap/:nr', function(req, res){
   var x = res;
   var client = ldap.createClient({
     url: ldapConf.url,
+    reconnect: true,
   });
-
   client.bind(ldapConf.dn, ldapConf.pw, function(err) {
     if(err) console.log(err);
   });
-
   var opts = {
     filter: '(employeeNumber='+req.params.nr+')',
     scope: 'sub',
-    attributes: ['name', 'employeeNumber'],
+    attributes: ['name', 'mail', 'title', 'employeeNumber', 'department', 'l'],
   };
-
+  client.on('error', function(err) {
+    console.warn('LDAP connection failed, but fear not, it will reconnect OK', err);
+  });
   client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
     if(err) console.log(err);
     function lul(){
       return new Promise((reject, resolve) => {
         res.on('searchEntry', function(entry) {
-          console.log('entry: ' + JSON.stringify(entry.object));
           x.json(entry.object);
           return resolve('');
-        });
+        })
         res.on('searchReference', function(referral) {
-          console.log('referral: ' + referral.uris.join());
           return resolve('');
-        });
+        })
         res.on('error', function(err) {
           x.status(400);
           x.json(err.message);
-          console.error('error: ' + err.message);
           return resolve('');
-        });
-        res.on('end', function(result) {
-          console.log('status: ' + result.status);
         });
       });
     }
-
     lul().then(y => {
       client.unbind(function(err) {
         if(err) console.log(err);
@@ -209,7 +203,6 @@ app.get('/api/ldap/:nr', function(req, res){
       client.destroy();
     });
   });
-
 });
 
 app.post('/api/sendMail', function(_req, res){

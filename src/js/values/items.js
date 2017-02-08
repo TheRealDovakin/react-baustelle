@@ -7,7 +7,7 @@ export default{
   baumanagerKonto: {
     phase: "bm",
     name: "Baumanager Konto",
-    person: "Sascha Motschmann",
+    person: "00480",
     person_spare: "Keine Angabe",
     mail: "motschmann@kieback-peter.de",
 
@@ -21,7 +21,7 @@ export default{
   adito: {
     phase: "itk",
     name: "Adito",
-    person: "Norman Krämer",
+    person: "01202",
     person_spare: "Rene Fürtenau",
     mail: "kraemer@kieback-peter.de",
   },
@@ -35,7 +35,7 @@ export default{
   adAccount: {
     phase: "b",
     name: "AD-Account",
-    person: "Ali Atef",
+    person: "01809",
     person_spare: "Ulf Röckert",
     mail: "atef@kieback-peter.de",
   },
@@ -49,42 +49,42 @@ export default{
   laptopVertriebAuftrag: {
     phase: "v",
     name: "Werstattauftrag",
-    person: "Dominik Hohmann",
+    person: "10782",
     person_spare: "Christopher Kuhn",
     mail: "hohmann@kieback-peter.de",
   },
   laptopZentraleAuftrag: {
     phase: "c",
     name: "Werstattauftrag",
-    person: "Dominik Hohmann",
+    person: "10782",
     person_spare: "Christopher Kuhn",
     mail: "hohmann@kieback-peter.de",
   },
   laptopTechnikerAuftrag: {
     phase: "t",
     name: "Werstattauftrag",
-    person: "Dominik Hohmann",
+    person: "10782",
     person_spare: "Christopher Kuhn",
     mail: "hohmann@kieback-peter.de",
   },
   laptopVertrieb: {
     phase: "v",
     name: "Laptop-Vertrieb",
-    person: "Christopher Kuhn",
+    person: "10263",
     person_spare: "Dominik Hohmann",
     mail: "kuhn@kieback-peter.de",
   },
   laptopZentrale: {
     phase: "c",
     name: "Laptop-Zentrale",
-    person: "Christopher Kuhn",
+    person: "10263",
     person_spare: "Dominik Hohmann",
     mail: "kuhn@kieback-peter.de",
   },
   laptopTechniker: {
     phase: "t",
     name: "Laptop-Techniker",
-    person: "Christopher Kuhn",
+    person: "10263",
     person_spare: "Dominik Hohmann",
     mail: "kuhn@kieback-peter.de",
   },
@@ -92,20 +92,20 @@ export default{
   auto: {
     phase: "car",
     name: "Firmenwagen",
-    person: "Ringo Möwe",
+    person: "10083",
     person_spare: "Keine Angabe",
   },
   tempAuto: {
     phase: "car",
     name: "Temporärer Firmenwagen",
-    person: "Ringo Möwe",
+    person: "10083",
     person_spare: "Keine Angabe",
   },
   //table phone phase
   tablePhone: {
     phase: "tp",
     name: "Tischtelefon",
-    person: "Marek Dorn",
+    person: "02236",
     person_spare: "Ali Atef",
     mail: "dorn@kieback-peter.de",
   }
