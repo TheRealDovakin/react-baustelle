@@ -100,8 +100,10 @@ function sendMail(adress, subject, body){
 }
 
 function requestHasToken(req){
-  var token = req.headers.authorization.split(' ')[1];
-  var secret = new Buffer('decodeString', 'base64');
+  if(req.headers.authorization){
+    var token = req.headers.authorization.split(' ')[1];
+    var secret = new Buffer('decodeString', 'base64');
+  }
   return new Promise((resolve, reject) => {
     jwt.verify(token, secret, function(err, decoded){
       if(err){
@@ -159,7 +161,7 @@ app.post('/authenticate', function(req, res){
   });
 });
 
-app.get('/ldap', function(req, res){
+app.get('/api/ldap/:nr', function(req, res){
   var x = res;
   var client = ldap.createClient({
     url: ldapConf.url,
@@ -170,7 +172,7 @@ app.get('/ldap', function(req, res){
   });
 
   var opts = {
-    filter: '(employeeNumber=10921)',
+    filter: '(employeeNumber='+req.params.nr+')',
     scope: 'sub',
     attributes: ['name', 'employeeNumber'],
   };
@@ -197,10 +199,6 @@ app.get('/ldap', function(req, res){
   client.unbind(function(err) {
     if(err) console.log(err);
   });
-});
-
-app.post('/ldap', function(req, res){
-  res.json({name: 'Kasper'});
 });
 
 app.post('/api/sendMail', function(_req, res){
