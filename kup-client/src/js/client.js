@@ -9,9 +9,10 @@ import InfoPage from "./pages/InfoPage";
 import Layout from "./components/Layout";
 import LoginPage from "./pages/LoginPage";
 import NewProcessPage from "./pages/NewProcessPage";
-import ProcessNotFoundPage from "./pages/processNotFoundPage";
+import ProcessNotFoundPage from "./pages/ProcessNotFoundPage";
 import ProcessListPage from "./pages/ProcessListPage";
 import ProcessPage from "./pages/ProcessPage";
+import ServerUnreachablePage from "./pages/ServerUnreachablePage";
 
 /**
  * @author Kasper Nadrajkowski
@@ -30,6 +31,7 @@ ReactDOM.render(
 			<Route path="createdProcess/:id" component={CreatedProcessPage}></Route>
 			<Route path="info" component={InfoPage}></Route>
 			<Route path="processNotFound" component={ProcessNotFoundPage}></Route>
+			<Route path="serverUnreachable" component={ServerUnreachablePage}></Route>
 			<Route path="login" component={LoginPage}></Route>
 		</Route>
 	</Router>,

@@ -34,7 +34,8 @@ export default class LoginPage extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
     const self = this;
-    fetch('http://172.22.23.6:3000/authenticate/', myInit).then(function(res){
+    fetch('http://172.22.23.6:3000/authenticate/', myInit)
+    .then(function(res){
 			if(res.ok){
         res.json().then(function(res){
           //BUG: #003 sometimes have to login twice, fixed in #004

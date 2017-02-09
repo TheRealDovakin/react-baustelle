@@ -203,7 +203,8 @@ import Strings from '../values/strings_de';
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
     var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'comments', myInit).then(function(res){
+		fetch(Constants.restApiPath+'comments', myInit)
+    .then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -220,6 +221,9 @@ import Strings from '../values/strings_de';
 					document.location.href = '/?#/login?callbackPath=processPage/'+processId;
 				}
 			}
+		})
+		.catch(function(error){
+			document.location.href = '/#/serverUnreachable';
 		});
 	}
 
@@ -231,7 +235,8 @@ import Strings from '../values/strings_de';
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
     var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'items', myInit).then(function(res){
+		fetch(Constants.restApiPath+'items', myInit)
+    .then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -256,7 +261,8 @@ import Strings from '../values/strings_de';
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
     var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'phases', myInit).then(function(res){
+		fetch(Constants.restApiPath+'phases', myInit)
+    .then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -283,7 +289,8 @@ import Strings from '../values/strings_de';
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
     var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
+		fetch(Constants.restApiPath+'processes/'+processId, myInit)
+    .then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					self.setProcess(res);
@@ -385,7 +392,8 @@ import Strings from '../values/strings_de';
     myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
-		fetch(Constants.restApiPath+'processes/'+processId, myInit).then(function(res){
+		fetch(Constants.restApiPath+'processes/'+processId, myInit)
+    .then(function(res){
 			if(res.ok){
 				if(status==2){
 					document.location.href = '/';

@@ -44,6 +44,8 @@ module.exports = {
   processNotFoundLong: 'Der gesuchte Prozess wurde gelöscht oder war nie vorhanden',
   processStatus: 'Porozess-Status',
   running: 'laufend',
+  serverUnreachable: '503 - Server nicht erreichbar',
+  serverUnreachableLong: 'Der Server ist zurzeit nicht erreichbar. Bitte versuchen Sie es an einem späteren Zeitpunkt nochmal oder wenden Sie sich an den Support',
   status: 'Status',
   type: 'Typ',
   toHome: 'zur Startseite',

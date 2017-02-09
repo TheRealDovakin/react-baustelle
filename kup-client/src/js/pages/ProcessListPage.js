@@ -73,7 +73,8 @@ export default class ProcessListPage extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+token);
 		var myInit = { headers: myHeaders };
-		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
+		fetch(Constants.restApiPath+'processes', myInit)
+		.then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -90,6 +91,9 @@ export default class ProcessListPage extends React.Component{
 					document.location.href = '/?#/login?callbackPath=';
 				}
 			}
+		})
+		.catch(function(error){
+			document.location.href = '/#/serverUnreachable';
 		});
 	}
 

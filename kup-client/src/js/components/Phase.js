@@ -58,7 +58,8 @@ export default class Phase extends React.Component{
 	 * fetches Items from the DB an dispatches an action that updates the ItemsStore
 	 */
 	fetchItems(){
-		fetch(Constants.restApiPath+'items').then(function(res){
+		fetch(Constants.restApiPath+'items')
+		.then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({

@@ -134,7 +134,12 @@ app.use('/api', function(req, res, next){
     res.status(401).send('unauthorized');
   });
 });
-
+app.get('/', function(req, res){
+  res.send(
+    '<h1> it works!</h1>'+
+    '<h3>K&P REST-API</h3>'
+  );
+});
 app.post('/authenticate', function(req, res){
   UserModel.findOne({email: req.body.name}, function(err, user){
     if(!user){

@@ -152,7 +152,8 @@ export default class CreatedProcessPage extends React.Component{
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { headers: myHeaders };
 		var self = this;
-		fetch(Constants.restApiPath+'loga', myInit).then(function(res){
+		fetch(Constants.restApiPath+'loga', myInit)
+		.then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -169,6 +170,9 @@ export default class CreatedProcessPage extends React.Component{
 					document.location.href = '/?#/login?callbackPath=newProcess';
 				}
 			}
+		})
+		.catch(function(error){
+			document.location.href = '/#/serverUnreachable';
 		});
 	}
 	/**
@@ -181,7 +185,8 @@ export default class CreatedProcessPage extends React.Component{
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { headers: myHeaders };
 		var self = this;
-		fetch(Constants.restApiPath+'processes', myInit).then(function(res){
+		fetch(Constants.restApiPath+'processes', myInit)
+		.then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
 					dispatcher.dispatch({
@@ -286,7 +291,8 @@ export default class CreatedProcessPage extends React.Component{
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		const self = this;
-		fetch(Constants.restApiPath+'processes/', myInit).then(function(res){
+		fetch(Constants.restApiPath+'processes/', myInit)
+		.then(function(res){
 			if(res.ok){
 				dispatcher.dispatch({type: "PROCESS_CREATED"});
 				res.json().then(function(res){
@@ -340,7 +346,8 @@ export default class CreatedProcessPage extends React.Component{
 		var self = this;
 		var p_id = res._id;
 		var p_name = res.person_name
-		fetch(Constants.restApiPath+'phases/', myInit).then(function(res){
+		fetch(Constants.restApiPath+'phases/', myInit)
+		.then(function(res){
 		if(res.ok){
 			dispatcher.dispatch({type: "PHASE_CREATED"});
 			res.json().then(function(res){
@@ -398,7 +405,8 @@ export default class CreatedProcessPage extends React.Component{
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var self = this;
-		fetch(Constants.restApiPath+'items/', myInit).then(function(res){
+		fetch(Constants.restApiPath+'items/', myInit)
+		.then(function(res){
 			if(res.ok){dispatcher.dispatch({type: "ITEM_CREATED"});}
 			else{
 				console.log(Strings.error.restApi);
