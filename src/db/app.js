@@ -219,7 +219,7 @@ app.get('/api/loga', function(req, res){
       var x = rows[i];
       var y = {
         status: 1,
-        person_name:x[2]+' '+x[1],
+        person_name:x[1]+', '+x[2],
         person_nr: x[0],
         short: x[3],
         job: x[4],

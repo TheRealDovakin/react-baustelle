@@ -4,13 +4,19 @@
  */
 export default{
   //additional accounts phase
-  baumanagerKonto: {
+  baumanagerKonto1: {
     phase: "bm",
-    name: "Baumanager Konto",
+    name: "AD-Konto ist vorhanden",
     person: "00480",
     person_spare: "Keine Angabe",
     mail: "motschmann@kieback-peter.de",
-
+  },
+  baumanagerKonto2: {
+    phase: "bm",
+    name: "Baumanager-Konto erstellen",
+    person: "00480",
+    person_spare: "Keine Angabe",
+    mail: "motschmann@kieback-peter.de",
   },
   baumanagerDongle: {
     phase: "bmd",
@@ -18,9 +24,16 @@ export default{
     person: "Detlef Elert",
     person_spare: "Gerd Dreyer",
   },
-  adito: {
+  adito1: {
     phase: "itk",
-    name: "Adito",
+    name: "AD-Konto ist vorhanden",
+    person: "01202",
+    person_spare: "Rene Fürtenau",
+    mail: "kraemer@kieback-peter.de",
+  },
+  adito2: {
+    phase: "itk",
+    name: "Adito-Konto erstellen",
     person: "01202",
     person_spare: "Rene Fürtenau",
     mail: "kraemer@kieback-peter.de",
@@ -34,7 +47,7 @@ export default{
   //basic phase
   adAccount: {
     phase: "b",
-    name: "AD-Account",
+    name: "AD-Konto erstellen",
     person: "01809",
     person_spare: "Ulf Röckert",
     mail: "atef@kieback-peter.de",
@@ -48,42 +61,42 @@ export default{
   //laptop phases
   laptopVertriebAuftrag: {
     phase: "v",
-    name: "Werstattauftrag",
+    name: "Werstattauftrag drucken",
     person: "10782",
     person_spare: "Christopher Kuhn",
     mail: "hohmann@kieback-peter.de",
   },
   laptopZentraleAuftrag: {
     phase: "c",
-    name: "Werstattauftrag",
+    name: "Werstattauftrag drucken",
     person: "10782",
     person_spare: "Christopher Kuhn",
     mail: "hohmann@kieback-peter.de",
   },
   laptopTechnikerAuftrag: {
     phase: "t",
-    name: "Werstattauftrag",
+    name: "Werstattauftrag drucken",
     person: "10782",
     person_spare: "Christopher Kuhn",
     mail: "hohmann@kieback-peter.de",
   },
   laptopVertrieb: {
     phase: "v",
-    name: "Laptop-Vertrieb",
+    name: "Laptop (Vertrieb) vorbereiten und versenden",
     person: "10263",
     person_spare: "Dominik Hohmann",
     mail: "kuhn@kieback-peter.de",
   },
   laptopZentrale: {
     phase: "c",
-    name: "Laptop-Zentrale",
+    name: "Laptop (Zentrale) vorbereiten und versenden",
     person: "10263",
     person_spare: "Dominik Hohmann",
     mail: "kuhn@kieback-peter.de",
   },
   laptopTechniker: {
     phase: "t",
-    name: "Laptop-Techniker",
+    name: "Laptop (Techniker) vorbereiten und versenden",
     person: "10263",
     person_spare: "Dominik Hohmann",
     mail: "kuhn@kieback-peter.de",
@@ -91,20 +104,20 @@ export default{
   //car phase
   auto: {
     phase: "car",
-    name: "Firmenwagen",
+    name: "dauerhaften Firmenwagen bereitstellen",
     person: "10083",
     person_spare: "Keine Angabe",
   },
   tempAuto: {
     phase: "car",
-    name: "Temporärer Firmenwagen",
+    name: "temporären Firmenwagen bereitstellen",
     person: "10083",
     person_spare: "Keine Angabe",
   },
   //table phone phase
   tablePhone: {
     phase: "tp",
-    name: "Tischtelefon",
+    name: "Tischtelefon vorbereiten und versenden",
     person: "02236",
     person_spare: "Ali Atef",
     mail: "dorn@kieback-peter.de",

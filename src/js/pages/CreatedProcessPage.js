@@ -204,7 +204,7 @@ export default class CreatedProcessPage extends React.Component{
 		self.setState({
 			department: rightProcess.department,
 			due_date: rightProcess.due_date,
-	  		name: rightProcess.person_name,
+	  	name: rightProcess.person_name,
 			job: rightProcess.job,
 			place: rightProcess.place,
 			person_nr: rightProcess.person_nr,
@@ -428,7 +428,7 @@ export default class CreatedProcessPage extends React.Component{
 				return <ProcessInDropdown key={item.person_nr} {...item}/>;
 			}
 		});
-		
+
 		return(
 			<div class="col-md-12">
 

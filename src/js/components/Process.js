@@ -24,7 +24,7 @@ export default class Process extends React.Component{
  }
 
 	render(){
-		const { _id, status, person_name, due_date, p_type } = this.props;
+		const { _id, status, person_name, due_date, p_type, department, place } = this.props;
 		var formatted_date = DateUtils.getDateAsString(due_date);
 		// dynamic styling
 		var rowStyle = 'default';
@@ -43,7 +43,8 @@ export default class Process extends React.Component{
 				<td>{person_name}</td>
 				<td>{statusAsString}</td>
 				<td>{formatted_date}</td>
-				<td>{p_type}</td>
+				<td>{department}</td>
+				<td>{place}</td>
 			</tr>
 		);
 	}

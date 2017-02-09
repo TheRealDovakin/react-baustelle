@@ -236,7 +236,8 @@ export default class ProcessListPage extends React.Component{
 									<th><h4>{Strings.name}</h4></th>
 									<th><h4>{Strings.status}</h4></th>
 									<th><h4>{Strings.dueDate}</h4></th>
-									<th><h4>{Strings.type}</h4></th>
+									<th><h4>{Strings.department}</h4></th>
+									<th><h4>{Strings.place}</h4></th>
 								</tr>
 							 	{RunningProcessComponents}
 							</tbody>
@@ -251,7 +252,8 @@ export default class ProcessListPage extends React.Component{
 									<th><h4>{Strings.name}</h4></th>
 									<th><h4>{Strings.status}</h4></th>
 									<th><h4>{Strings.dueDate}</h4></th>
-									<th><h4>{Strings.type}</h4></th>
+									<th><h4>{Strings.department}</h4></th>
+									<th><h4>{Strings.place}</h4></th>
 								</tr>
 							 	{FinishedProcessComponents}
 							</tbody>

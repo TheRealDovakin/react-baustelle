@@ -10,19 +10,19 @@ export default{
   },
   techniker: {
     short: "t",
-    name: "Technikerphase",
+    name: "Techniker-PC",
     status: 1,
     r_nr: 1,
   },
   zentrale: {
     short: "c",
-    name: "Zentralephase",
+    name: "Zentrale-PC",
     status: 1,
     r_nr: 1,
   },
   vertrieb: {
     short: "v",
-    name: "Vertriebphase",
+    name: "Vertrieb-PC",
     status: 1,
     r_nr: 1,
   },
@@ -34,7 +34,7 @@ export default{
   },
   itKonten: {
     short: "itk",
-    name: "Zusätzliche Konten",
+    name: "Adito",
     status: 1,
     r_nr: 1,
   },

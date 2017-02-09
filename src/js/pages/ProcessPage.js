@@ -453,6 +453,8 @@ import Strings from '../values/strings_de';
       var height = window.innerHeight
       || document.documentElement.clientHeight
       || document.body.clientHeight;
+      //fomating date
+      var due_dateFormated = DateUtils.getDateAsString(process.due_date);
 			// inline styling
 			const btnStyle = { margin: '0%', width: '100%', };
       const headlineStyle = { marginTop: 70 };
@@ -474,14 +476,14 @@ import Strings from '../values/strings_de';
                 </h4>
 							</div>
 							<ul class="list-group">
-                <li class="list-group-item"><span>{Strings.status}:	{statusAsString}</span></li>
+                <li class="list-group-item"><span>{Strings.processStatus}:	{statusAsString}</span></li>
 								<li class="list-group-item"><span>{Strings.name}:	{process.person_name}</span></li>
                 <li class="list-group-item"><span>{Strings.personNr}: {process.person_nr}</span></li>
                 <li class="list-group-item"><span>{Strings.short}: {process.short}</span></li>
                 <li class="list-group-item"><span>{Strings.place}: {process.place}</span></li>
                 <li class="list-group-item"><span>{Strings.department}: {process.department}</span></li>
-                <li class="list-group-item"><span>{Strings.type}: {process.p_type}</span></li>
                 <li class="list-group-item"><span>{Strings.job}: {process.job}</span></li>
+                <li class="list-group-item"><span>{Strings.dueDate}: {due_dateFormated}</span></li>
 							</ul>
 							<div class="panel-heading">
 								<h4>
