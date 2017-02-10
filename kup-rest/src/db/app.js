@@ -104,7 +104,7 @@ function sendMail(adress, subject, body){
 function requestHasToken(req){
   if(req.headers.authorization){
     var token = req.headers.authorization.split(' ')[1];
-    var secret = new Buffer('decodeString', 'base64');
+    var secret = new Buffer(jwtConf.encodeString, 'base64');
   }
   return new Promise((resolve, reject) => {
     jwt.verify(token, secret, function(err, decoded){
@@ -168,7 +168,7 @@ app.post('/authenticate', function(req, res){
       admin: isAdmin,
     };
     var secret = new Buffer(jwtConf.encodeString, 'base64');
-    var token = jwt.sign(tInfo, secret);
+    var token = jwt.sign(tInfo, secret, { expiresIn: jwtConf.expire });
     res.status(200);
     res.json({
       success: true,
@@ -178,7 +178,7 @@ app.post('/authenticate', function(req, res){
     });
   });
   auth.close(function(err) {
-    console.log('ldapAuth on close error: '+err);
+    console.log('ldapAuth on close error'+err);
   });
 });
 

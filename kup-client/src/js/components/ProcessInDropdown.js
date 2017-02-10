@@ -11,9 +11,9 @@ export default class ProcessInDropown extends React.Component{
 	}
 
 	render(){
-		const { person_nr } = this.props;
+		const { person_nr, person_name } = this.props;
 		return(
-			<option>{person_nr}</option>
+			<option>{person_nr+' - '+person_name}</option>
 		);
 	}
 }
