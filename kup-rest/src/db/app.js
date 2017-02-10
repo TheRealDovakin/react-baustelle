@@ -7,6 +7,7 @@ var express = require('express'),
     DateUtils = require('../js/utils/DateUtils'),
     jwt = require('jsonwebtoken'),
     ldap = require('ldapjs');
+    LdapAuth = require('ldapauth-fork'),
     methodOverride = require('method-override'),
     morgan = require('morgan'),
     oracledb = require('oracledb'),
@@ -15,6 +16,7 @@ var express = require('express'),
 
 //own files
 var ldapConf = require('../../../ldapconfig'),
+    jwtConf = require('../../../jwtconfig'),
     oracleDbConfig = require('../../../dbconfig.js'),
     Strings = require('../js/values/strings_de');
 
@@ -141,28 +143,42 @@ app.get('/', function(req, res){
   );
 });
 app.post('/authenticate', function(req, res){
-  UserModel.findOne({email: req.body.name}, function(err, user){
-    if(!user){
-      res.status(401).send('unauthorized');
+  var options = {
+    url: ldapConf.url,
+    bindDn: ldapConf.dn,
+    bindCredentials: ldapConf.pw,
+    searchBase: 'ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup',
+    searchFilter: '(mail='+req.body.name+')',
+    reconnect: true,
+  };
+  var auth = new LdapAuth(options);
+  auth.on('error', function (err) {
+    console.error('LdapAuth: ', err);
+  });
+  auth.authenticate(req.body.name, req.body.password, function(err, user) {
+    if(err){
+      console.log(err);
+      res.status(401).send('unautherized: ' + err);
       return;
-    }else{
-      if(user.password==req.body.password){
-        var tInfo = {
-          name: user.name,
-          access: true,
-          admin: user.admin,
-        };
-        var secret = new Buffer('decodeString', 'base64');
-        var token = jwt.sign(tInfo, secret);
-        res.status(200);
-        res.json({
-          success: true,
-          displayName: user.name,
-          message: 'hier dein token',
-          token: token,
-        });
-      }
     }
+    var isAdmin = user.employeeNumber==10921;
+    var tInfo = {
+      name: user.name,
+      access: true,
+      admin: isAdmin,
+    };
+    var secret = new Buffer(jwtConf.encodeString, 'base64');
+    var token = jwt.sign(tInfo, secret);
+    res.status(200);
+    res.json({
+      success: true,
+      displayName: user.name,
+      message: 'hier dein token',
+      token: token,
+    });
+  });
+  auth.close(function(err) {
+    console.log('ldapAuth on close error: '+err);
   });
 });
 

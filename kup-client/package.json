@@ -25,6 +25,7 @@
     "es6-promise": "^4.0.5",
     "flux": "^3.1.0",
     "history": "^1.17.0",
+    "ldapauth-fork": "^3.0.0",
     "pikaday": "^1.5.1",
     "pikaday-react": "0.0.0-alpha.1",
     "react": "^15.4.1",
