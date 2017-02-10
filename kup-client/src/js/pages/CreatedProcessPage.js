@@ -206,6 +206,7 @@ export default class CreatedProcessPage extends React.Component{
 		var rightProcess = _.find(self.state.loga, function(process){
 			return process.person_nr == self.state.person_nrToFill;
 		});
+		console.log(rightProcess);
 		self.setState({
 			department: rightProcess.department,
 			due_date: rightProcess.due_date,
@@ -263,8 +264,7 @@ export default class CreatedProcessPage extends React.Component{
 		 this.setState({ car: car });
 	 }
 	 handleTablePhoneChange() {
-		 var tablePhone = (this.state.tablePhone) ? false : true;
-		 this.setState({ tablePhone: tablePhone });
+		 this.setState({ tablePhone: !this.state.tablePhone });
 	 }
 	 /**
 	 * eventhandlers for remaining inputs
@@ -275,7 +275,7 @@ export default class CreatedProcessPage extends React.Component{
 	handleJobChange(event) { this.setState({ job: event.target.value	});	}
 	handleNameChange(event) {	this.setState({	name: event.target.value });}
 	handlePersonNrChange(event) {	this.setState({	person_nr: event.target.value	});	}
-	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value	});	}
+	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value.split(' ')[0]	});	}
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
 	handleShortChange(event) { this.setState({ short: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
