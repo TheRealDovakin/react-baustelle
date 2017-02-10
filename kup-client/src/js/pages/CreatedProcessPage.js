@@ -204,7 +204,7 @@ export default class CreatedProcessPage extends React.Component{
 		//BUG: #001 refreshes the site on first use, fixed with #002
 		var self = this;
 		var rightProcess = _.find(self.state.loga, function(process){
-			return process.person_nr == self.state.person_nrToFill;
+			return process.person_nr == self.state.person_nrToFill.split(' ')[0];
 		});
 		console.log(rightProcess);
 		self.setState({
@@ -275,7 +275,7 @@ export default class CreatedProcessPage extends React.Component{
 	handleJobChange(event) { this.setState({ job: event.target.value	});	}
 	handleNameChange(event) {	this.setState({	name: event.target.value });}
 	handlePersonNrChange(event) {	this.setState({	person_nr: event.target.value	});	}
-	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value.split(' ')[0]	});	}
+	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value	});	}
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
 	handleShortChange(event) { this.setState({ short: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
