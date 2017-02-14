@@ -6,7 +6,7 @@ module.exports = {
   devtool: debug ? "inline-sourcemap" : null,
   entry: [
     "./js/client.js",
-    "webpack-dev-server/client?http://0.0.0.0:80",
+    "webpack-dev-server/client?http://0.0.0.0:5555",
     "babel-polyfill"
   ],
   module: {
@@ -26,13 +26,14 @@ module.exports = {
       }
     ]
   },
-  output: {
+  output: debug ? {
     path: __dirname,
     filename: "client.min.js"
+  } : {
+    path: 'public',
+    filename: "client.production.min.js"
   },
   plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
   ],
 };

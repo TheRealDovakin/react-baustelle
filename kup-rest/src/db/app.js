@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
-app.use(cors({origin:Constants.appPath}));
+app.use(cors({origin: [Constants.appPath+':8080', Constants.appPath] }));
 mongoose.connect("mongodb://localhost/kup");
 var Schema = mongoose.Schema;
 

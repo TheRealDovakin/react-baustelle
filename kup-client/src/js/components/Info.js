@@ -9,7 +9,7 @@ export default class Info extends React.Component{
 		return(
       <div>
         <h1>.</h1>
-        <h1>Info</h1>
+        <h1>Info s</h1>
       </div>
     );
   }
