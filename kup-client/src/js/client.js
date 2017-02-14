@@ -8,7 +8,6 @@ import CreatedProcessPage from "./pages/CreatedProcessPage";
 import InfoPage from "./pages/InfoPage";
 import Layout from "./components/Layout";
 import LoginPage from "./pages/LoginPage";
-import NewProcessPage from "./pages/NewProcessPage";
 import ProcessNotFoundPage from "./pages/ProcessNotFoundPage";
 import ProcessListPage from "./pages/ProcessListPage";
 import ProcessPage from "./pages/ProcessPage";

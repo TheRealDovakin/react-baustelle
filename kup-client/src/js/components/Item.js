@@ -311,14 +311,12 @@ export default class Item extends React.Component{
 		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const btnSendStyle = { margin: '0%', minWidth: '60px', maxWidth: '8%' }
 		const headlineStyle = { marginLeft: '10px'	};
-		const inputStyle = { width: '600px', height: '100%' }
 		//dynamic styling
 		var responsablePerson = (spare) ? 'disabled' : '';
 		var sparePerson = (!spare) ? 'disabled' : '';
 		// TODO: replace multiple views with dynamic styles
 		const { comments, person_name, person_name_spare, mail } = this.state;
 		const ItemComponents = comments.map((item) => {
-			var a = 0;
 			if(item.item_id==_id){
 				return <Comment key={item._id} {...item}/>;
 			}

@@ -1,13 +1,14 @@
 //js
-var express = require('express'),
+const express = require('express'),
     bodyParser = require('body-parser'),
     childProcess = require('child_process'),
     Constants = require('../js/values/constants'),
     cors = require('cors'),
-    DateUtils = require('../js/utils/DateUtils'),
+    debug = require('debug'),
     jwt = require('jsonwebtoken'),
-    ldap = require('ldapjs');
+    ldap = require('ldapjs'),
     LdapAuth = require('ldapauth-fork'),
+    log4js = require('log4js');
     methodOverride = require('method-override'),
     morgan = require('morgan'),
     oracledb = require('oracledb'),
@@ -15,20 +16,30 @@ var express = require('express'),
     _ = require('underscore');
 
 //own files
-var features = require('../../../features');
+const DateUtils = require('../js/utils/DateUtils'),
+    features = require('../../../features');
     ldapConf = require('../../../ldapconfig'),
     jwtConf = require('../../../jwtconfig'),
     oracleDbConfig = require('../../../dbconfig.js'),
     Strings = require('../js/values/strings_de');
 
-var mongoose = restful.mongoose;
+const mongoose = restful.mongoose;
 mongoose.Promise = global.Promise;
 
 //////////////////////////////////////////////////////
 ///////////////////////DB-CONFIG//////////////////////
 //////////////////////////////////////////////////////
-var app = express();
-app.use(morgan('dev'));
+const app = express();
+const logger = log4js.getLogger('mongo-rest-api');
+logger.setLevel('TRACE');
+app.use(morgan('tiny', {
+  'stream': {
+     write:  function(str){
+        logger.trace(str);
+      }
+    }
+  }
+));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
@@ -60,14 +71,14 @@ function getDataFromLoga(){
       },
       function(err, connection)  {
         if (err) {
-          console.error(err.message);
+          logger.error(err.message);
           return reject(err);
         }
         connection.execute(
           "select * from kp_einstellung_workflow",
           function(err, result)  {
             if (err) {
-              console.error(err.message);
+              logger.error(err.message);
               doRelease(connection);
               return reject(err);
             }
@@ -84,7 +95,7 @@ function doRelease(connection){
   connection.close(
     function(err) {
       if (err) {
-        console.error(err.message);
+        logger.error(err.message);
       }
     }
   );
@@ -97,7 +108,7 @@ function getSendMailCommand(adress, subject, body){
 
 function sendMail(adress, subject, body){
   const command = getSendMailCommand(adress, subject, body);
-  console.log('Mail to: '+adress);
+  logger.trace('Mail to: '+adress);
   if(features.sendMailsWhenCreatingProcess) childProcess.exec(command);
 }
 
@@ -153,11 +164,11 @@ app.post('/authenticate', function(req, res){
   };
   var auth = new LdapAuth(options);
   auth.on('error', function (err) {
-    console.error('LdapAuth: ', err);
+    logger.error('LdapAuth: ', err);
   });
   auth.authenticate(req.body.name, req.body.password, function(err, user) {
     if(err){
-      console.log(err);
+      logger.error(err);
       res.status(401).send('unautherized: ' + err);
       return;
     }
@@ -178,7 +189,7 @@ app.post('/authenticate', function(req, res){
     });
   });
   auth.close(function(err) {
-    console.log('ldapAuth on close error'+err);
+    logger.error('ldapAuth on close error'+err);
   });
 });
 
@@ -189,7 +200,7 @@ app.get('/api/ldap/:nr', function(req, res){
     reconnect: true,
   });
   client.bind(ldapConf.dn, ldapConf.pw, function(err) {
-    if(err) console.log(err);
+    if(err) logger.error(err);
   });
   var opts = {
     filter: '(employeeNumber='+req.params.nr+')',
@@ -197,10 +208,10 @@ app.get('/api/ldap/:nr', function(req, res){
     attributes: ['name', 'mail', 'title', 'employeeNumber', 'department', 'l'],
   };
   client.on('error', function(err) {
-    console.warn('LDAP connection failed, but fear not, it will reconnect OK', err);
+    logger.warn('LDAP connection failed, but fear not, it will reconnect OK', err);
   });
   client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
-    if(err) console.log(err);
+    if(err) logger.info(err);
     function lul(){
       return new Promise((reject, resolve) => {
         res.on('searchEntry', function(entry) {
@@ -219,7 +230,7 @@ app.get('/api/ldap/:nr', function(req, res){
     }
     lul().then(y => {
       client.unbind(function(err) {
-        if(err) console.log(err);
+        if(err) logger.info(err);
       });
       client.destroy();
     });
@@ -275,5 +286,5 @@ CommentModel.register(app, '/api/comments');
 var UserModel = require('./models/User.js');
 
 
-console.log('app listens at localhost:3000');
+logger.info('app listens at localhost:3000');
 app.listen(3000);
