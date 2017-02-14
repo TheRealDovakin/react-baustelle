@@ -36,6 +36,7 @@ export default class CreatedProcessPage extends React.Component{
 		ES6Promise.polyfill();
 		super(props);
 		this.mailList = [];
+		this.mailPromises = [];
 		this.state = {
 		 	addAccounts: false,
 			baumanager: false,
@@ -55,11 +56,13 @@ export default class CreatedProcessPage extends React.Component{
 		};
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
+		this.doOutAnimation = this.doOutAnimation.bind(this);
 		this.fetchLoga = this.fetchLoga.bind(this);
 		this.fetchProcesses = this.fetchProcesses.bind(this);
 		this.fillInputs = this.fillInputs.bind(this);
 		this.getLoga = this.getLoga.bind(this);
 		this.getProcesses = this.getProcesses.bind(this);
+		this.getUserMailFromAd = this.getUserMailFromAd.bind(this);
 		this.handleAddAccountsChange = this.handleAddAccountsChange.bind(this);
 		this.handleBaumanagerChange = this.handleBaumanagerChange.bind(this);
 		this.handleCarChange = this.handleCarChange.bind(this);
@@ -139,6 +142,17 @@ export default class CreatedProcessPage extends React.Component{
 			tablePhone: tablePhone,
 		});
 		this.postProcess(json_data);
+	}
+
+
+	doOutAnimation(){
+		alertify.delay(2000).log(HtmlTemplates.creatingProzessSpinner);
+		setTimeout(function(){
+			alertify.delay(2000).success(HtmlTemplates.processCreatedLog);
+		},2000);
+		setTimeout(function(){
+			document.location.href = '#';
+		}, 4000);
 	}
 
 
@@ -237,6 +251,27 @@ export default class CreatedProcessPage extends React.Component{
 		});
 	}
 
+	getUserMailFromAd(personNr){
+		return new Promise((resolve, reject) => {
+			var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+			var myInit = { headers: myHeaders }
+			var self = this;
+			fetch(Constants.restApiPath+'ldap/'+personNr, myInit)
+			.then(function(res){
+				if(res.ok){
+					res.json().then(function(res){
+						return resolve(res.mail);
+					})
+				}
+				else{
+					console.log(Strings.error.restApi);
+				}
+			});
+		});
+	}
+
 	setProcess(res){
 		this.setState({
 			department: res.department,
@@ -309,13 +344,7 @@ export default class CreatedProcessPage extends React.Component{
 					if (options.baumanager) self.postPhase(res, PhaseValues.baumanager);
 					// HACK:
 					self.postPhase(res, PhaseValues.basic, true); //default phase that is created for all processess
-					alertify.delay(2000).log(HtmlTemplates.creatingProzessSpinner);
-					setTimeout(function(){
-						alertify.delay(2000).success(HtmlTemplates.processCreatedLog);
-					},2000);
-					setTimeout(function(){
-						document.location.href = '#';
-					}, 4000);
+					self.doOutAnimation();
 				});
 			}
 			else{
@@ -353,29 +382,38 @@ export default class CreatedProcessPage extends React.Component{
 			res.json().then(function(res){
 				_.each(ItemValues, function(itemValue){
 				 if(itemValue.phase==phaseValue.short){
-					 self.mailList.push(itemValue.mail);
-					 self.postItem(res, itemValue);
-				 }
-				})
+					 self.mailPromises.push(
+						 self.getUserMailFromAd(itemValue.person)
+						 .then(mail => {
+							 console.log(mail);
+							 self.mailList.push(mail);
+							 self.postItem(res, itemValue);
+						 })
+					 );
+					}
+				});
 				if (last) {
-					_.each(_.uniq(self.mailList), function(mail){
-						const json_data = JSON.stringify({
-							adress: mail,
-							subject: Strings.entryProcess+": "+p_name,
-							body: Strings.emailBody+Strings.appPath+"/#/processPage/"+p_id
-						});
-						var myHeaders = new Headers();
-						myHeaders.append("Content-Type", "application/json");
-						myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
-						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
-							if(res.ok){
-							}else{
-								console.log(Strings.error.restApi);
-								console.log(res);
-							}
-						});
-					})
+				 Promise.all(self.mailPromises)
+				 .then(() => {
+					 _.each(_.uniq(self.mailList), function(mail){
+ 						const json_data = JSON.stringify({
+ 							adress: mail,
+ 							subject: Strings.entryProcess+": "+p_name,
+ 							body: Strings.emailBody+Strings.appPath+"/#/processPage/"+p_id
+ 						});
+ 						var myHeaders = new Headers();
+ 						myHeaders.append("Content-Type", "application/json");
+ 						myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+ 						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
+ 						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
+ 							if(res.ok){
+ 							}else{
+ 								console.log(Strings.error.restApi);
+ 								console.log(res);
+ 							}
+ 						});
+ 					});
+				 })
 				}
 			})
 		}

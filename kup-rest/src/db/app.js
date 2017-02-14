@@ -15,7 +15,8 @@ var express = require('express'),
     _ = require('underscore');
 
 //own files
-var ldapConf = require('../../../ldapconfig'),
+var features = require('../../../features');
+    ldapConf = require('../../../ldapconfig'),
     jwtConf = require('../../../jwtconfig'),
     oracleDbConfig = require('../../../dbconfig.js'),
     Strings = require('../js/values/strings_de');
@@ -35,7 +36,6 @@ app.use(methodOverride());
 app.use(cors({origin:Constants.appPath}));
 mongoose.connect("mongodb://localhost/kup");
 var Schema = mongoose.Schema;
-this.ret = [];
 
 
 //////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ function getSendMailCommand(adress, subject, body){
 function sendMail(adress, subject, body){
   const command = getSendMailCommand(adress, subject, body);
   console.log('Mail to: '+adress);
-  //childProcess.exec(command);
+  if(features.sendMailsWhenCreatingProcess) childProcess.exec(command);
 }
 
 function requestHasToken(req){
