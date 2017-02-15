@@ -181,7 +181,7 @@ export default class CreatedProcessPage extends React.Component{
 				console.log(Strings.error.restApi);
 				if(res.status==401){
 					//HACK: #004 fixes #003
-					document.location.href = '/?#/login?callbackPath=newProcess';
+					document.location.href = '/?#/login?callbackPath=';
 				}
 			}
 		})

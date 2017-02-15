@@ -118,7 +118,6 @@ export default class ProcessListPage extends React.Component{
 
 	render(){
 		const panelElementStyle = { margin: '0%', width: '100%', };
-		const searchBarStyle = { width: '100%' };
 		const containerStyle = { overflow: 'auto', marginBottom: '30px' }
 		const headlineStyle = { marginTop: 70 };
 		const { items } = this.state;

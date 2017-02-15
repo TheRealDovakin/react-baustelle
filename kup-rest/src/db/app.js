@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
-app.use(cors({origin: [Constants.appPath+':8080', Constants.appPath] }));
+app.use(cors({origin: [Constants.appPath+':8080', 'https://172.22.23/'] }));
 mongoose.connect("mongodb://localhost/kup");
 var Schema = mongoose.Schema;
 
@@ -103,7 +103,7 @@ function doRelease(connection){
 
 
 function getSendMailCommand(adress, subject, body){
-  return "echo \""+body+"\" | mail -aFrom:noreply@kieback-peter.de -s \""+subject+"\" "+adress;
+  return "echo \""+body+"\" | mail -aFrom:epm@kieback-peter.de -s \""+subject+"\" "+adress;
 }
 
 function sendMail(adress, subject, body){
@@ -131,7 +131,7 @@ function requestHasToken(req){
 ///////////////////////ROUTES/////////////////////////
 //////////////////////////////////////////////////////
 //authentication
-app.use('/api', function(req, res, next){
+app.use('/api/rest', function(req, res, next){
   requestHasToken(req)
   .then(decoded => {
     addLineToLog(req, decoded);
@@ -147,13 +147,13 @@ app.use('/api', function(req, res, next){
     res.status(401).send('unauthorized');
   });
 });
-app.get('/', function(req, res){
+app.get('/api', function(req, res){
   res.send(
     '<h1> it works!</h1>'+
     '<h3>K&P REST-API</h3>'
   );
 });
-app.post('/authenticate', function(req, res){
+app.post('/api/authenticate', function(req, res){
   var options = {
     url: ldapConf.url,
     bindDn: ldapConf.dn,
@@ -193,7 +193,7 @@ app.post('/authenticate', function(req, res){
   });
 });
 
-app.get('/api/ldap/:nr', function(req, res){
+app.get('/api/rest/ldap/:nr', function(req, res){
   var x = res;
   var client = ldap.createClient({
     url: ldapConf.url,
@@ -237,13 +237,13 @@ app.get('/api/ldap/:nr', function(req, res){
   });
 });
 
-app.post('/api/sendMail', function(_req, res){
+app.post('/api/rest/sendMail', function(_req, res){
   var req = _req.body;
   sendMail(req.adress, req.subject, req.body);
   res.send('hallo');
 });
 
-app.get('/api/loga', function(req, res){
+app.get('/api/rest/loga', function(req, res){
   getDataFromLoga().then(rows => {
     var array = [];
     var i = 0;
@@ -269,22 +269,22 @@ app.get('/api/loga', function(req, res){
 
 var ItemModel = require('./models/Item.js');
 ItemModel.methods(['get', 'post', 'put', 'delete']),
-ItemModel.register(app, '/api/items');
+ItemModel.register(app, '/api/rest/items');
 
 var PhaseModel = require('./models/Phase.js');
 PhaseModel.methods(['get', 'post', 'put', 'delete']),
-PhaseModel.register(app, '/api/phases');
+PhaseModel.register(app, '/api/rest/phases');
 
 var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),
-ProcessModel.register(app, '/api/processes');
+ProcessModel.register(app, '/api/rest/processes');
 
 var CommentModel = require('./models/Comment.js');
 CommentModel.methods(['get', 'post', 'delete']),
-CommentModel.register(app, '/api/comments');
+CommentModel.register(app, '/api/rest/comments');
 
 var UserModel = require('./models/User.js');
 
 
-logger.info('app listens at localhost:3000');
+logger.info('app listens at localhost:3333');
 app.listen(3000);

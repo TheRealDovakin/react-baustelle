@@ -34,7 +34,7 @@ export default class LoginPage extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
     const self = this;
-    fetch('http://172.22.23.6:3000/authenticate/', myInit)
+    fetch(Constants.appPath+'/api/authenticate', myInit)
     .then(function(res){
 			if(res.ok){
         res.json().then(function(res){
@@ -57,9 +57,9 @@ export default class LoginPage extends React.Component{
     const style={marginTop: '60px'}
 		return(
       <div style={style} class="jumbotron col-xs-6">
-        <form class="form-signin">
-          <h2 class="form-signin-heading">{Strings.login}</h2>
-          <h2 class="form-signin-heading">{Strings.loginError}</h2>
+        <form class="form">
+          <h2 class="form-heading">{Strings.login}</h2>
+          <h2 class="form-heading">{Strings.loginError}</h2>
           <div class="input-group">
             <input type="text" class="form-control" placeholder={Strings.emailAdress} onChange={this.handleName} value={this.state.name}/>
             <div class="input-group-addon">{Strings.kupMail}</div>
