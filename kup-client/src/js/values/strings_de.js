@@ -27,6 +27,7 @@ module.exports = {
   equipment: 'Ausstattung',
   fillInputs: 'Felder ausfüllen',
   finish: 'Abschließen',
+  headerBrand: 'EPM - Entritts-Prozess Management',
   info: 'Info',
   job: 'Tätigkeit',
   kupMail: '@kieback-peter.de',

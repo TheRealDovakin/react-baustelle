@@ -42,7 +42,7 @@ class Header extends React.Component{
 				<nav class="navbar navbar-default navbar-fixed-top">
 				    <div>
 				      <ul class="nav navbar-nav">
-				      	<a style={margin} class="navbar-brand" href="/">EPM</a>
+				      	<a style={margin} class="navbar-brand" href="/">{Strings.headerBrand}</a>
 				      </ul>
 							<button style={margin} onClick={this.logout} class={"btn btn-default navbar-btn navbar-right "+logoutBtnHiddenClass}>Logout</button>
 							<button class="btn btn-default navbar-btn navbar-right">{loginString}</button>

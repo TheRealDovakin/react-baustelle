@@ -2,7 +2,8 @@
 import alertify from 'alertify.js'
 import React from "react";
 //css
-import "../../css/spinner.css"
+import "../../css/spinner.css";
+import "../../css/font-awesome.min.css";
 
 //own files
 import Comment from './Comment';
@@ -145,6 +146,12 @@ export default class Item extends React.Component{
 	*
 	*/
 	changeItemStatus(t, _id, status){
+		if (this.state.person_name!=sessionStorage.displayName) {
+			if (!this.props.open) {
+				alertify.error('Diese Aufgabe kann nur vom Verantwortlichen abgehackt werden');
+				return;
+			}
+		}
 		var json_data = JSON.stringify({
 			status: status
 		});
@@ -159,6 +166,42 @@ export default class Item extends React.Component{
 				self.fetchItems();
 				if (status==2&&self.phaseCanBeFinished())	self.finishPhase(2);
 				else self.finishPhase(1);
+				self.fetchPhases();
+				dispatcher.dispatch({
+					type: 'ITEM_STATUS_CHANGED',
+					res,
+				})
+			});
+			else{
+				console.log('error in set Items.Status');
+				console.log(res);
+			}
+		});
+	}
+	/**
+	* changes the status for a given Items to a given status and dispatches
+	* an action thta updates the store
+	* @param {object} t			this from caller
+	* @param {String} _id			ID of Item to be changed
+	* @param {int} status			status Item will be changed to
+	*
+	*/
+	changeItemOpen(t, _id, _open){
+		if (true) {
+
+		}
+		var json_data = JSON.stringify({
+			open: !_open
+		});
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { method: 'PUT', headers: myHeaders, body: json_data }
+		var self = this;
+		fetch(Constants.restApiPath+'items/'+_id, myInit)
+		.then(function(res){
+			if(res.ok) res.json().then(function(res){
+				self.fetchItems();
 				self.fetchPhases();
 				dispatcher.dispatch({
 					type: 'ITEM_STATUS_CHANGED',
@@ -306,12 +349,13 @@ export default class Item extends React.Component{
 
 
 	render(){
-		const { _id, status, name, place, person, person_spare, spare } = this.props;
+		const { _id, status, name, place, person, person_spare, spare, open } = this.props;
 		//constant styling
 		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const btnSendStyle = { margin: '0%', minWidth: '60px', maxWidth: '8%' }
 		const headlineStyle = { marginLeft: '10px'	};
 		//dynamic styling
+		var lock = (open) ? 'fa-unlock' : 'fa-lock';
 		var responsablePerson = (spare) ? 'disabled' : '';
 		var sparePerson = (!spare) ? 'disabled' : '';
 		// TODO: replace multiple views with dynamic styles
@@ -325,7 +369,12 @@ export default class Item extends React.Component{
 			if(status==3){//nicht erledigt
 				return(
 				<div class="panel panel-default">
-					<div class="panel-heading"><h4>{name}</h4></div>
+					<div class="panel-heading">
+						<h4>
+							{name}
+							<i style={headlineStyle} onClick={() => this.changeItemOpen(this, _id, open)} class={"fa "+lock+" fa-lg pull-right"}></i>
+						</h4>
+					</div>
 					<ul class="list-group">
 						<li class="list-group-item"><span>{Strings.status}: {Strings.running}</span></li>
 						<li class={"list-group-item "+responsablePerson}><span>{Strings.item.responsablePerson}: {person_name}<a style={headlineStyle} href={"mailto:"+mail} class="glyphicon glyphicon-envelope"></a></span></li>

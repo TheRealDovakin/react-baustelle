@@ -7,8 +7,7 @@ import _ from 'underscore';
 import "whatwg-fetch";
 
 //css
-import "../../css/spinner.css"
-
+import "../../css/spinner.css";
 //own files
 import dispatcher from "../dispatcher";
 import Process from "../components/Process";
@@ -118,7 +117,7 @@ export default class ProcessListPage extends React.Component{
 
 	render(){
 		const panelElementStyle = { margin: '0%', width: '100%', };
-		const containerStyle = { overflow: 'auto', marginBottom: '30px' }
+		const containerStyle = { overflow: 'auto', marginBottom: '30px' };
 		const headlineStyle = { marginTop: 70 };
 		const { items } = this.state;
 		// makes sure data from DB is loaded, else render a loading spinner

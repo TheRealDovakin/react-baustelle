@@ -457,6 +457,7 @@ export default class CreatedProcessPage extends React.Component{
 		const headlineStyle = { marginTop: 70 };
 		const btnStyle = { width: '30%', marginBottom: "50px" };
 		const dueDateStyle = { backgroundColor: '#ffffff' };
+		const formBox = { backgroundColor: '#cccccc' };
 		const marginRight5Style = { marginRight: '5px', paddingBottom: '30px' }
 		const marginRight15Style = { marginRight: '50px', paddingBottom: '30px' }
 		const paddingLeft50Style = { paddingLeft: '17%' }
@@ -497,7 +498,7 @@ export default class CreatedProcessPage extends React.Component{
 
 				</form>
 
-				<h2>{Strings.basicInfo}</h2>
+				<h2>Mitarbeiterdaten</h2>
 				<form class="form-horizontal">
 
 				  <div class="form-group">
@@ -565,7 +566,7 @@ export default class CreatedProcessPage extends React.Component{
 
 				</form>
 
-				<h2>{Strings.equipment}</h2>
+				<h2>Mitarbeiterausstattung IT-Software</h2>
 				<form style={paddingLeft50Style} class="form-inline">
 
 					<div class="form-group">
@@ -580,11 +581,16 @@ export default class CreatedProcessPage extends React.Component{
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
-		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.car} onChange={this.handleCarChange}></input>
+		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.baumanager} onChange={this.handleBaumanagerChange}></input>
 			        </label>
-			    	</div>
-						<label style={marginRight15Style} class="control-label">{Strings.companyCar}</label>
+			      </div>
+						<label style={marginRight15Style} class="control-label">{Strings.baumanager}</label>
 				  </div>
+
+				</form>
+
+				<h2>Mitarbeiterausstattung IT-Hardware</h2>
+				<form style={paddingLeft50Style} class="form-inline">
 
 					<div class="form-group">
 						<div class="checkbox">
@@ -595,14 +601,25 @@ export default class CreatedProcessPage extends React.Component{
 						<label style={marginRight15Style} class="control-label">{Strings.tablePhone}</label>
 				  </div>
 
+				</form>
+
+				<h2>Mitarbeiterausstattung PKW/sonstiges</h2>
+				<form style={paddingLeft50Style} class="form-inline">
+
 					<div class="form-group">
 						<div class="checkbox">
 			        <label style={marginRight5Style}>
-		            <input id="addAccountsCheckbox" type='checkbox' value={this.state.baumanager} onChange={this.handleBaumanagerChange}></input>
+		            <input id="carCheckbox" type='checkbox' value={this.state.car} onChange={this.handleCarChange}></input>
 			        </label>
 			      </div>
-						<label style={marginRight15Style} class="control-label">{Strings.baumanager}</label>
+						<label style={marginRight15Style} class="control-label">{Strings.companyCar}</label>
 				  </div>
+
+				</form>
+
+				<h2>Mitarbeiterausstattung Werkzeuge</h2>
+				<form style={paddingLeft50Style} class="form-inline">
+				//werkzeuge
 
 				</form>
 

@@ -105,13 +105,13 @@ export default{
   auto: {
     phase: "car",
     name: "dauerhaften Firmenwagen bereitstellen",
-    person: "10083",
+    person: "10921",
     person_spare: "Keine Angabe",
   },
   tempAuto: {
     phase: "car",
     name: "temporären Firmenwagen bereitstellen",
-    person: "10083",
+    person: "10921",
     person_spare: "Keine Angabe",
   },
   //table phone phase

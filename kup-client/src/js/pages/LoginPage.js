@@ -42,7 +42,6 @@ export default class LoginPage extends React.Component{
           //BUG: #005 token isn't stored in IE
           sessionStorage.setItem('accessToken', res.token);
           sessionStorage.setItem('displayName', res.displayName);
-          console.log(sessionStorage.accessToken1);
           document.location.href='#/'+self.callbackPath;
         });
       }
@@ -54,7 +53,7 @@ export default class LoginPage extends React.Component{
   }
 	render(){
     this.callbackPath = this.props.location.query.callbackPath;
-    const style={marginTop: '60px'}
+    const style={marginTop: '60px'};
 		return(
       <div style={style} class="jumbotron col-xs-6">
         <form class="form">
