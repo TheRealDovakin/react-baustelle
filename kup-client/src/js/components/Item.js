@@ -32,6 +32,7 @@ export default class Item extends React.Component{
 		this.getComments = this.getComments.bind(this);
 		this.handleCommentChange = this.handleCommentChange.bind(this);
 		this.handleEnter = this.handleEnter.bind(this);
+		this.markAsSeen = this.markAsSeen.bind(this);
 		this.phaseCanBeFinished = this.phaseCanBeFinished.bind(this);
 		//this.postComment = postComment.bind(this);
 		this.state = {
@@ -104,12 +105,12 @@ export default class Item extends React.Component{
 		.then(function(res){
 			if(res.ok){
 				res.json().then(function(res){
-					console.log(res);
 					self.setState({
 						person_name: res.name,
 						person_name_spare: res.name,
 						mail: res.mail,
 					});
+					self.markAsSeen();
 				})
 			}
 			else{
@@ -146,11 +147,9 @@ export default class Item extends React.Component{
 	*
 	*/
 	changeItemStatus(t, _id, status){
-		if (this.state.person_name!=sessionStorage.displayName) {
-			if (!this.props.open) {
-				alertify.error('Diese Aufgabe kann nur vom Verantwortlichen abgehackt werden');
-				return;
-			}
+		if (this.state.person_name!=sessionStorage.displayName&&!this.props.open) {
+			alertify.error('Diese Aufgabe kann nur vom Verantwortlichen abgehackt werden');
+			return;
 		}
 		var json_data = JSON.stringify({
 			status: status
@@ -202,11 +201,6 @@ export default class Item extends React.Component{
 		.then(function(res){
 			if(res.ok) res.json().then(function(res){
 				self.fetchItems();
-				self.fetchPhases();
-				dispatcher.dispatch({
-					type: 'ITEM_STATUS_CHANGED',
-					res,
-				})
 			});
 			else{
 				console.log('error in set Items.Status');
@@ -302,6 +296,28 @@ export default class Item extends React.Component{
 		}
 	}
 
+	markAsSeen(){
+		console.log(this.state.person_name);
+		console.log(this.state.person_name!=sessionStorage.displayName);
+		console.log(this.props.seen);
+		if(this.state.person_name!=sessionStorage.displayName||this.props.seen) return;
+		const json_data = JSON.stringify({ seen: true });
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { method: 'PUT', mode: 'cors', body: json_data, headers: myHeaders }
+		var self = this;
+		fetch(Constants.restApiPath+'items/'+this.props._id, myInit)
+		.then(function(res){
+			if(res.ok){
+				self.fetchItems();
+			}else{
+				console.log(Strings.error.restApi);
+				console.log(res.json());
+			}
+		});
+	}
+
 	/**
 	* checks if all Items for the current Process are done and returns a boolean
 	 * @return {bolean}			true if all Items of Process are marked done
@@ -349,13 +365,14 @@ export default class Item extends React.Component{
 
 
 	render(){
-		const { _id, status, name, place, person, person_spare, spare, open } = this.props;
+		const { _id, status, name, place, person, person_spare, spare, open, seen } = this.props;
 		//constant styling
 		const btnStyle = { margin: '0%', minWidth: '220px', maxWidth: '35%' }
 		const btnSendStyle = { margin: '0%', minWidth: '60px', maxWidth: '8%' }
 		const headlineStyle = { marginLeft: '10px'	};
 		//dynamic styling
 		var lock = (open) ? 'fa-unlock' : 'fa-lock';
+		var eye = (seen) ? 'fa-eye' : 'fa-eye-slash';
 		var responsablePerson = (spare) ? 'disabled' : '';
 		var sparePerson = (!spare) ? 'disabled' : '';
 		// TODO: replace multiple views with dynamic styles
@@ -372,6 +389,7 @@ export default class Item extends React.Component{
 					<div class="panel-heading">
 						<h4>
 							{name}
+							<i style={headlineStyle} class={"fa "+eye+" fa-lg pull-right"}></i>
 							<i style={headlineStyle} onClick={() => this.changeItemOpen(this, _id, open)} class={"fa "+lock+" fa-lg pull-right"}></i>
 						</h4>
 					</div>

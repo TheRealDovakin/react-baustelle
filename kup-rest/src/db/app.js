@@ -10,6 +10,7 @@ const express = require('express'),
     LdapAuth = require('ldapauth-fork'),
     log4js = require('log4js');
     methodOverride = require('method-override'),
+    moment = require('moment'),
     morgan = require('morgan'),
     oracledb = require('oracledb'),
     restful = require('node-restful'),
@@ -59,6 +60,30 @@ function addLineToLog(req, decoded){
   childProcess.exec(command);
 }
 
+function checkIfItemsSeen(){
+  ItemModel.find(function(err, items){
+    if (err) return console.error(err);
+    _.each(items, function(item){
+      var createdAt = moment(item.createdAt);
+      var now = moment();
+      if(item.seen||(createdAt.diff(now, 'days')<=5)) return;
+      ItemModel.findOneAndUpdate({ _id: item._id }, { spare: true }, function(error){
+        if(error) console.log(error);
+      });
+    });
+  });
+}
+
+function doRelease(connection){
+  connection.close(
+    function(err) {
+      if (err) {
+        logger.error(err.message);
+      }
+    }
+  );
+}
+
 function getDataFromLoga(){
   var self = this;
   var ret;
@@ -90,17 +115,6 @@ function getDataFromLoga(){
     );
   });
 }
-
-function doRelease(connection){
-  connection.close(
-    function(err) {
-      if (err) {
-        logger.error(err.message);
-      }
-    }
-  );
-}
-
 
 function getSendMailCommand(adress, subject, body){
   return "echo \""+body+"\" | mail -aFrom:epm@kieback-peter.de -s \""+subject+"\" "+adress;
@@ -152,6 +166,10 @@ app.get('/api', function(req, res){
     '<h1> it works!</h1>'+
     '<h3>K&P REST-API</h3>'
   );
+});
+app.get('/api/check', function(req, res){
+  checkIfItemsSeen();
+  res.status(200).send('checking if Items have been seen by responsible persons');
 });
 app.post('/api/authenticate', function(req, res){
   var options = {

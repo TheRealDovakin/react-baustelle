@@ -14,6 +14,7 @@ var ItemSchema = new mongoose.Schema({
 	person_spare: {type: String, required: true},
 	spare: {type: Boolean, required: true},
 	open: {type: Boolean, default: false},
+	seen: {type: Boolean, default: false},
 	}, {
 	timestamps: {createAt: 'timestamp'}
 });
