@@ -66,7 +66,13 @@ function checkIfItemsSeen(){
     _.each(items, function(item){
       var createdAt = moment(item.createdAt);
       var now = moment();
-      if(item.seen||(createdAt.diff(now, 'days')<=5)) return;
+      var diff = now.diff(createdAt);
+      var time =  100 //m-sesonds
+                  *60 //seconds
+                  *60 //minutes
+                  *24 //hours
+                  *4; //days
+      if(item.seen||diff<=time) return;
       ItemModel.findOneAndUpdate({ _id: item._id }, { spare: true }, function(error){
         if(error) console.log(error);
       });
