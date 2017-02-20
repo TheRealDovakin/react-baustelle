@@ -232,7 +232,8 @@ app.get('/api/rest/ldap/:nr', function(req, res){
     attributes: ['name', 'mail', 'title', 'employeeNumber', 'department', 'l'],
   };
   client.on('error', function(err) {
-    logger.warn('LDAP connection failed, but fear not, it will reconnect OK', err);
+    logger.warn('LDAP connection failed, but fear not, it will reconnect OK');
+    logger.trace(err);
   });
   client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
     if(err) logger.info(err);
