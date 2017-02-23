@@ -36,7 +36,6 @@ export default class ProcessListPage extends React.Component{
 			search_filter: "",
 		};
 	}
-
 	/**
 	 * will be called before the component mounted,
 	 * adds changelisteners for stores
@@ -44,7 +43,6 @@ export default class ProcessListPage extends React.Component{
 	componentWillMount(){
 		ProcessStore.on("change", this.getProcesses);
 	}
-
 	/**
 	 * will be called before the component will unmount,
 	 * removes changelisteners for stores
@@ -53,7 +51,6 @@ export default class ProcessListPage extends React.Component{
 		ProcessStore.removeListener("change", this.getProcesses);
 		clearInterval(this.fetchProcessesInterval);
 	}
-
 	/**
 	 * will be called after the component mounted
 	 */
@@ -61,7 +58,6 @@ export default class ProcessListPage extends React.Component{
 		this.fetchProcesses();
 		this.fetchProccessesInterval = setInterval(this.fetchProcesses, 30000);
 	}
-
 	/**
 	 * fetches all Processes from the DB and dispatches an action that updates
 	 * its store
@@ -95,7 +91,6 @@ export default class ProcessListPage extends React.Component{
 			document.location.href = '/#/serverUnreachable';
 		});
 	}
-
 	/**
 	 * updates the state with Processes from its Store
 	 */
@@ -104,7 +99,6 @@ export default class ProcessListPage extends React.Component{
 			items: ProcessStore.getAll(),
 		});
 	}
-
 	/**
 	 * handles changes of the search-bar and updates the state
 	 */
@@ -214,16 +208,6 @@ export default class ProcessListPage extends React.Component{
 									    <input class="form-control"  style={panelElementStyle} placeholder={Strings.processList.searchString} onChange={this.handleSearchChange}></input>
 									  </div>
 									</form>
-									<div class="checkbox">
-										<label>
-											<input type="checkbox"></input> Some Filter 1
-										</label>
-									</div>
-									<div class="checkbox">
-										<label>
-											<input type="checkbox"></input> Some Filter 2
-										</label>
-									</div>
 								</li>
 							</ul>
 

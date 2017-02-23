@@ -45,7 +45,6 @@ export default class Item extends React.Component{
 			phases: [],
 		}
 	}
-
 	/**
 	 * will be called before the component mounted,
 	 * adds changelisteners for stores
@@ -53,7 +52,6 @@ export default class Item extends React.Component{
 	componentWillMount(){
 		CommentStore.on("change", this.getComments);
 	}
-
 	/**
 	 * will be called before the component will unmount,
 	 * removes changelisteners for stores
@@ -61,7 +59,6 @@ export default class Item extends React.Component{
 	componentWillUnmount(){
 		CommentStore.removeListener("change", this.getComments);
 	}
-
 	/**
 	 * will be called after the component mounted
 	 */
@@ -69,65 +66,6 @@ export default class Item extends React.Component{
 		this.getComments();
 		this.fetchUserFromAd();
 	}
-
-	/**
-	 * fetches all Processes from the DB and dispatches an action that updates
-	 * its store
-	 */
-	fetchComments(){
-		var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-		var myInit = { headers: myHeaders }
-		fetch(Constants.restApiPath+'comments', myInit)
-		.then(function(res){
-			if(res.ok){
-				res.json().then(function(res){
-					dispatcher.dispatch({
-						type: 	"FETCH_COMMENTS_FROM_API",
-						res,
-					});
-				})
-			}
-			else{
-				console.log(Strings.error.restApi);
-			}
-		});
-	}
-
-	fetchUserFromAd(){
-		var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
-		var myInit = { headers: myHeaders }
-		var self = this;
-		fetch(Constants.restApiPath+'ldap/'+self.props.person, myInit)
-		.then(function(res){
-			if(res.ok){
-				res.json().then(function(res){
-					self.setState({
-						person_name: res.name,
-						person_name_spare: res.name,
-						mail: res.mail,
-					});
-					self.markAsSeen();
-				})
-			}
-			else{
-				console.log(Strings.error.restApi);
-			}
-		});
-	}
-
-	/**
-	 * updates the state with Processes from its Store
-	 */
-	getComments(){
-		this.setState({
-			comments: CommentStore.getAll(),
-		});
-	}
-
 	/**
 	* changes the collapsed-state of an Item
 	* @param {boolean} collapse			true: collapsed, false: not collapsed
@@ -137,7 +75,6 @@ export default class Item extends React.Component{
 			collapsed: collapse,
 		})
 	}
-
 	/**
 	* changes the status for a given Items to a given status and dispatches
 	* an action thta updates the store
@@ -208,11 +145,59 @@ export default class Item extends React.Component{
 			}
 		});
 	}
-
+	/**
+	 * fetches all Processes from the DB and dispatches an action that updates
+	 * its store
+	 */
+	fetchComments(){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders }
+		fetch(Constants.restApiPath+'comments', myInit)
+		.then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					dispatcher.dispatch({
+						type: 	"FETCH_COMMENTS_FROM_API",
+						res,
+					});
+				})
+			}
+			else{
+				console.log(Strings.error.restApi);
+			}
+		});
+	}
+	/**
+	 * fetches a user from the AD via the API for a given person_nr
+	 */
+	fetchUserFromAd(){
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+		var myInit = { headers: myHeaders }
+		var self = this;
+		fetch(Constants.restApiPath+'ldap/'+self.props.person, myInit)
+		.then(function(res){
+			if(res.ok){
+				res.json().then(function(res){
+					self.setState({
+						person_name: res.name,
+						person_name_spare: res.name,
+						mail: res.mail,
+					});
+					self.markAsSeen();
+				})
+			}
+			else{
+				console.log(Strings.error.restApi);
+			}
+		});
+	}
 	/**
 	 * fetches Items from the DB and dispatches an action that updates its store
 	 */
-
 	fetchItems(){
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
@@ -234,7 +219,6 @@ export default class Item extends React.Component{
 			}
 		});
 	}
-
 	/**
 	 * fetches Phases from DB and dispatches an action that updates the store
 	 */
@@ -260,7 +244,10 @@ export default class Item extends React.Component{
 			}
 		});
 	}
-
+	/**
+	 * checks if all items of a phase are marked as done,
+	 * if so changes the status of the phase to done
+	 */
 	finishPhase(status){
 		var json_data = JSON.stringify({ status: status });
 		var myHeaders = new Headers();
@@ -278,7 +265,14 @@ export default class Item extends React.Component{
 			}
 		});
 	}
-
+	/**
+	* updates the state with Processes from its Store
+	*/
+	getComments(){
+		this.setState({
+			comments: CommentStore.getAll(),
+		});
+	}
 	/**
 	 * handles changeEvnet on comment-input
 	 * @param {event} envent
@@ -288,18 +282,20 @@ export default class Item extends React.Component{
 			comment: event.target.value
 		});
 	}
-
+	/**
+	 * handles the hit of the enter-button right to the comment-input
+	 */
 	handleEnter(event){
 		//cross browser
 		if (event.keyCode == 13 || event.which == 13 ){
 			this.postComment(this.props._id, this.state.comment);
 		}
 	}
-
+	/**
+	 * checks if loggen in person is the same as the responsible person for this item,
+	 * if so sets the 'seen' flag to true in the db
+	 */
 	markAsSeen(){
-		console.log(this.state.person_name);
-		console.log(this.state.person_name!=sessionStorage.displayName);
-		console.log(this.props.seen);
 		if(this.state.person_name!=sessionStorage.displayName||this.props.seen) return;
 		const json_data = JSON.stringify({ seen: true });
 		var myHeaders = new Headers();
@@ -317,7 +313,6 @@ export default class Item extends React.Component{
 			}
 		});
 	}
-
 	/**
 	* checks if all Items for the current Process are done and returns a boolean
 	 * @return {bolean}			true if all Items of Process are marked done
@@ -333,7 +328,9 @@ export default class Item extends React.Component{
 		});
 		return (can==1) ? true : false;
 	}
-
+	/**
+	 * sends a POST with a comment the body to the API
+	 */
 	postComment(_id, body){
 		const commentor = window.sessionStorage.displayName;
 		const json_data = JSON.stringify({
@@ -361,8 +358,6 @@ export default class Item extends React.Component{
 			}
 		});
 	}
-
-
 
 	render(){
 		const { _id, status, name, place, person, person_spare, spare, open, seen } = this.props;

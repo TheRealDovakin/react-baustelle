@@ -59,7 +59,6 @@ import Strings from '../values/strings_de';
 
 		};
 	}
-
 	/**
 	 * will be called before component will mount
 	 * adds change listeners for stores
@@ -69,7 +68,6 @@ import Strings from '../values/strings_de';
 		ItemsStore.on("change", this.getItems);
     PhaseStore.on("change", this.getPhases);
 	}
-
 	/**
 	 * will be called before component will unmount
 	 * removes changelisteners for stores
@@ -82,7 +80,6 @@ import Strings from '../values/strings_de';
     clearInterval(this.fetchItemsInterval);
     clearInterval(this.fetchProcessInterval);
 	}
-
 	/**
 	 * will be called after component mounted
 	 * call methods for fetching data from DB
@@ -97,7 +94,6 @@ import Strings from '../values/strings_de';
     this.fetchItemsInterval = setInterval(this.fetchItems, 30000);
     this.fetchProcessInterval = setInterval(this.fetchProcess, 60000);
 	}
-
 	/**
 	 * this function deletes all Comments of an given Item
 	 *  @param {String} phase_id			ID of the Item that the Comments will be deleted for
@@ -143,7 +139,6 @@ import Strings from '../values/strings_de';
 			}
 		});
 	}
-
 	/**
 	 * deletes all Phases of the current process
 	 */
@@ -168,7 +163,6 @@ import Strings from '../values/strings_de';
 			}
 		});
 	}
-
 	/**
 	 * deletes the current process
 	 */
@@ -196,7 +190,6 @@ import Strings from '../values/strings_de';
 				});
 			});
 	}
-
   fetchComments(){
     const processId = this.props.location.pathname.split("/")[2];
     var myHeaders = new Headers();
@@ -226,7 +219,6 @@ import Strings from '../values/strings_de';
 			document.location.href = '/#/serverUnreachable';
 		});
 	}
-
 	/**
 	 * fetches Items from DB and dispatches an action that updates the store
 	 */
@@ -252,7 +244,6 @@ import Strings from '../values/strings_de';
 			}
 		});
 	}
-
 	/**
 	 * fetches Phases from DB and dispatches an action that updates the store
 	 */
@@ -278,7 +269,6 @@ import Strings from '../values/strings_de';
 			}
 		});
 	}
-
 	/**
 	 * fetches the current Process and updates the state
 	 */
@@ -306,7 +296,6 @@ import Strings from '../values/strings_de';
 			}
 		});
 	}
-
 	/**
 	 * updates the status of the current Process to done
 	 */
@@ -317,14 +306,12 @@ import Strings from '../values/strings_de';
 			alertify.error(Strings.process.error.finishProcess);
 		}
 	}
-
 	/**
 	 * updates the state with items from its store
 	 */
   getComments(){ this.setState({ comments: CommentStore.getAll() }); }
 	getItems(){ this.setState({	items: ItemsStore.getAll() }); }
 	getPhases(){ this.setState({	phases: PhaseStore.getAll() }); }
-
 	/**
 	 * handles dispatches
 	 */
@@ -338,7 +325,6 @@ import Strings from '../values/strings_de';
 			};break;
 		}
 	}
-
 	/**
 	* checks if all Items for the current Process are done and returns a boolean
 	 * @return {bolean}			true if all Items of Process are marked done
@@ -358,14 +344,12 @@ import Strings from '../values/strings_de';
 		});
 		return can;
 	}
-
 	/**
 	 *
 	 */
 	setPhaseStatus(phase_id){
 		console.log(phase_id);
 	}
-
 	/**
 	* updates the state with the current Process
 	 * @param {object} res			current Process
@@ -377,7 +361,6 @@ import Strings from '../values/strings_de';
 			process: res,
 		});
 	}
-
 	/**
 	* updates the status of the current Process to the value of a given status
 	 * @param {int} status			status the Process will be changed to
@@ -407,7 +390,6 @@ import Strings from '../values/strings_de';
 			}
 		});
 	}
-
 	/**
 	 * updates the status of the current Process to not done
 	 */
@@ -415,7 +397,6 @@ import Strings from '../values/strings_de';
 		this.setProcessStatus(1);
 		alertify.success(Strings.process.reDoLog);
 	}
-
 	/**
 	 * react default render-method
 	 */

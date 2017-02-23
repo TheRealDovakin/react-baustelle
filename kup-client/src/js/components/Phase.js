@@ -38,7 +38,6 @@ export default class Phase extends React.Component{
 	componentWillMount(){
 		ItemsStore.on("change", this.getItems);
 	}
-
 	/**
 	 * will be called before the component unmounts,
 	 * adds changelisteners for stores
@@ -46,14 +45,12 @@ export default class Phase extends React.Component{
 	componentWillUnmount(){
 		ItemsStore.removeListener("change", this.getItems);
 	}
-
 	/**
 	 * will be called after the component mounted
 	 */
 	componentDidMount(){
 		this.getItems();
 	}
-
 	/**
 	 * fetches Items from the DB an dispatches an action that updates the ItemsStore
 	 */
@@ -74,7 +71,6 @@ export default class Phase extends React.Component{
 			}
 		});
 	}
-
 	/**
 	 * updates the state with items from its store
 	 */
@@ -84,7 +80,6 @@ export default class Phase extends React.Component{
 			progess: this.getProgress(),
 		});
 	}
-
 	/**
 	 *
 	 * loops throught all Items counting how much Items of this Phase are done

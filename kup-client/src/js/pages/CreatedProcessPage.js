@@ -81,7 +81,6 @@ export default class CreatedProcessPage extends React.Component{
 		this.postPhase = this.postPhase.bind(this);
 		this.postItem = this.postItem.bind(this);
 	}
-
 	/**
 	 * will be called before the component mounted,
 	 * adds changelisteners for stores
@@ -90,7 +89,6 @@ export default class CreatedProcessPage extends React.Component{
 		LogaStore.on("change", this.getLoga);
 		ProcessStore.on("change", this.getProcesses);
 	}
-
 	/**
 	 * will be called before the component will unmount,
 	 * removes changelisteners for stores
@@ -99,7 +97,6 @@ export default class CreatedProcessPage extends React.Component{
 		LogaStore.removeListener("change", this.getLoga);
 		ProcessStore.removeListener("change", this.getProcesses);
 	}
-
 	/**
 	 * wil be called after the component mounted
 	 */
@@ -143,8 +140,6 @@ export default class CreatedProcessPage extends React.Component{
 		});
 		this.postProcess(json_data);
 	}
-
-
 	doOutAnimation(){
 		alertify.delay(2000).log(HtmlTemplates.creatingProzessSpinner);
 		setTimeout(function(){
@@ -154,8 +149,6 @@ export default class CreatedProcessPage extends React.Component{
 			document.location.href = '#';
 		}, 4000);
 	}
-
-
 	/**
 	 * fetches all Processes from the DB and dispatches an action that updates
 	 * its store
@@ -213,7 +206,6 @@ export default class CreatedProcessPage extends React.Component{
 			}
 		});
 	}
-
 	fillInputs(){
 		//BUG: #001 refreshes the site on first use, fixed with #002
 		var self = this;
@@ -232,7 +224,6 @@ export default class CreatedProcessPage extends React.Component{
 			p_type: rightProcess.p_type
 		});
 	}
-
 	/**
 	 * updates the state with Processes from its Store
 	 */
@@ -241,7 +232,6 @@ export default class CreatedProcessPage extends React.Component{
 			loga: LogaStore.getAll(),
 		});
 	}
-
 	/**
 	 * updates the state with Processes from its Store
 	 */
@@ -250,7 +240,6 @@ export default class CreatedProcessPage extends React.Component{
 			processes: ProcessStore.getAll(),
 		});
 	}
-
 	getUserMailFromAd(personNr){
 		return new Promise((resolve, reject) => {
 			var myHeaders = new Headers();
@@ -271,7 +260,6 @@ export default class CreatedProcessPage extends React.Component{
 			});
 		});
 	}
-
 	setProcess(res){
 		this.setState({
 			department: res.department,
@@ -281,30 +269,18 @@ export default class CreatedProcessPage extends React.Component{
 			place: res.place,
 	  });
 	}
-
 	/**
 	* eventhandler for car-input, toggles true and false
 	* @param  {event} event 		input value
 	*/
-	 handleBaumanagerChange() {
-		 var baumanager = (this.state.baumanager) ? false : true;
-		 this.setState({ baumanager: baumanager });
-	 }
-	 handleAddAccountsChange() {
-		 var addAccounts = (this.state.addAccounts) ? false : true;
-		 this.setState({ addAccounts: addAccounts });
-	 }
-	 handleCarChange() {
-		 var car = (this.state.car) ? false : true;
-		 this.setState({ car: car });
-	 }
-	 handleTablePhoneChange() {
-		 this.setState({ tablePhone: !this.state.tablePhone });
-	 }
-	 /**
-	 * eventhandlers for remaining inputs
-	 * @param  {event} event 		input value
-	 */
+	handleBaumanagerChange() { this.setState({ baumanager: !this.state.baumanager }); }
+	handleAddAccountsChange(){ this.setState({ addAccounts: !this.state.addAccounts }); }
+	handleCarChange() { this.setState({ car: !this.state.car }); }
+	handleTablePhoneChange(){ this.setState({ tablePhone: !this.state.tablePhone }); }
+	/**
+	* eventhandlers for remaining inputs
+	* @param  {event} event 		input value
+	*/
 	handleDepartmentChange(event) {	this.setState({ department: event.target.value }); }
 	handleDueDateChange(event) { this.setState({ due_date: event.target.value }); }
 	handleJobChange(event) { this.setState({ job: event.target.value	});	}
@@ -314,7 +290,6 @@ export default class CreatedProcessPage extends React.Component{
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
 	handleShortChange(event) { this.setState({ short: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
-
 	/**
 	 * creates a new Process in the DB and calls function to create child-Phases
 	 * @param  {object} json_data JSON with data from inputs
@@ -354,7 +329,6 @@ export default class CreatedProcessPage extends React.Component{
 			}
 		});
 	}
-
 	/**
 	 * creates a Phase in the DB and calls functions that create child-Items
 	 * @param  {object} res        parent Process
@@ -393,37 +367,36 @@ export default class CreatedProcessPage extends React.Component{
 					}
 				});
 				if (last) {
-				 Promise.all(self.mailPromises)
-				 .then(() => {
-					 _.each(_.uniq(self.mailList), function(mail){
- 						const json_data = JSON.stringify({
- 							adress: mail,
- 							subject: Strings.entryProcess+": "+p_name,
- 							body: Strings.emailBody+Strings.appPath+"/#/processPage/"+p_id
- 						});
- 						var myHeaders = new Headers();
- 						myHeaders.append("Content-Type", "application/json");
- 						myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
- 						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
- 						fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
- 							if(res.ok){
- 							}else{
- 								console.log(Strings.error.restApi);
- 								console.log(res);
- 							}
- 						});
- 					});
-				 })
-				}
-			})
-		}
-		else{
-			console.log(Strings.error.restApi);
-			console.log(res.json());
-		}
-	});
+				 	Promise.all(self.mailPromises)
+				 	.then(() => {
+					 	_.each(_.uniq(self.mailList), function(mail){
+	 						const json_data = JSON.stringify({
+	 							adress: mail,
+	 							subject: Strings.entryProcess+": "+p_name,
+	 							body: Strings.emailBody+Strings.appPath+"/#/processPage/"+p_id
+	 						});
+	 						var myHeaders = new Headers();
+	 						myHeaders.append("Content-Type", "application/json");
+	 						myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
+	 						var myInit = { method: 'POST', headers: myHeaders, body: json_data }
+ 							fetch(Constants.restApiPath+'sendMail', myInit).then(function(res){
+ 								if(res.ok){
+	 							}else{
+	 								console.log(Strings.error.restApi);
+	 								console.log(res);
+	 							}
+	 						});
+	 					});
+					 })
+					}
+				})
+			}
+			else{
+				console.log(Strings.error.restApi);
+				console.log(res.json());
+			}
+		});
 	}
-
 	/**
 	 * creates an item in the DB
 	 * @param  {object} res       parent Phase
