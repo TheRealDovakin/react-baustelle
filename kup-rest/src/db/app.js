@@ -15,7 +15,6 @@ const express = require('express'),
     oracledb = require('oracledb'),
     restful = require('node-restful'),
     _ = require('underscore');
-
 //own files
 const DateUtils = require('../js/utils/DateUtils'),
     features = require('../../../features');
@@ -23,16 +22,17 @@ const DateUtils = require('../js/utils/DateUtils'),
     jwtConf = require('../../../jwtconfig'),
     oracleDbConfig = require('../../../dbconfig.js'),
     Strings = require('../js/values/strings_de');
-
+//mongoose
 const mongoose = restful.mongoose;
 mongoose.Promise = global.Promise;
+var Schema = mongoose.Schema;
 
 //////////////////////////////////////////////////////
 ///////////////////////DB-CONFIG//////////////////////
 //////////////////////////////////////////////////////
 const app = express();
 const logger = log4js.getLogger('mongo-rest-api');
-logger.setLevel('TRACE');
+logger.setLevel('WARN');
 app.use(morgan('tiny', {
   'stream': {
      write:  function(str){
@@ -47,8 +47,6 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
 app.use(cors({origin: [Constants.appPath+':8080', 'https://172.22.23/'] }));
 mongoose.connect("mongodb://localhost/kup");
-var Schema = mongoose.Schema;
-
 
 //////////////////////////////////////////////////////
 ///////////////////////FUNCTIONS//////////////////////
@@ -59,7 +57,6 @@ function addLineToLog(req, decoded){
   const command = 'echo \''+s+'\' >> app.log';
   childProcess.exec(command);
 }
-
 function checkIfItemsSeen(){
   ItemModel.find(function(err, items){
     if (err) return console.error(err);
@@ -79,7 +76,6 @@ function checkIfItemsSeen(){
     });
   });
 }
-
 function doRelease(connection){
   connection.close(
     function(err) {
@@ -89,7 +85,6 @@ function doRelease(connection){
     }
   );
 }
-
 function getDataFromLoga(){
   var self = this;
   var ret;
@@ -121,17 +116,14 @@ function getDataFromLoga(){
     );
   });
 }
-
 function getSendMailCommand(adress, subject, body){
   return "echo \""+body+"\" | mail -aFrom:epm@kieback-peter.de -s \""+subject+"\" "+adress;
 }
-
 function sendMail(adress, subject, body){
   const command = getSendMailCommand(adress, subject, body);
   logger.trace('Mail to: '+adress);
   if(features.sendMailsWhenCreatingProcess) childProcess.exec(command);
 }
-
 function requestHasToken(req){
   if(req.headers.authorization){
     var token = req.headers.authorization.split(' ')[1];
@@ -150,32 +142,11 @@ function requestHasToken(req){
 //////////////////////////////////////////////////////
 ///////////////////////ROUTES/////////////////////////
 //////////////////////////////////////////////////////
-//authentication
-app.use('/api/rest', function(req, res, next){
-  requestHasToken(req)
-  .then(decoded => {
-    addLineToLog(req, decoded);
-    if(req.method == 'DELETE'){
-      if(decoded.admin) next();
-      else res.status(401).send('unauthorized');
-      return;
-    }
-    if (decoded.access) next();
-    else res.status(401).send('unauthorized');
-  })
-  .catch(err =>{
-    res.status(401).send('unauthorized');
-  });
-});
 app.get('/api', function(req, res){
   res.send(
     '<h1> it works!</h1>'+
     '<h3>K&P REST-API</h3>'
   );
-});
-app.get('/api/check', function(req, res){
-  checkIfItemsSeen();
-  res.status(200).send('checking if Items have been seen by responsible persons');
 });
 app.post('/api/authenticate', function(req, res){
   var options = {
@@ -213,11 +184,30 @@ app.post('/api/authenticate', function(req, res){
     });
   });
   auth.close(function(err) {
-    logger.error('ldapAuth on close error'+err);
+    if(err) logger.error('ldapAuth on close error '+err);
   });
 });
-
-app.get('/api/rest/ldap/:nr', function(req, res){
+app.get('/api/check', function(req, res){
+  checkIfItemsSeen();
+  res.status(200).send('checking if Items have been seen by responsible persons');
+});
+app.use('/api/protected', function(req, res, next){
+  requestHasToken(req)
+  .then(decoded => {
+    addLineToLog(req, decoded);
+    if(req.method == 'DELETE'){
+      if(decoded.admin) next();
+      else res.status(401).send('unauthorized');
+      return;
+    }
+    if (decoded.access) next();
+    else res.status(401).send('unauthorized');
+  })
+  .catch(err =>{
+    res.status(401).send('unauthorized');
+  });
+});
+app.get('/api/protected/ldap/:nr', function(req, res){
   var x = res;
   var client = ldap.createClient({
     url: ldapConf.url,
@@ -261,14 +251,7 @@ app.get('/api/rest/ldap/:nr', function(req, res){
     });
   });
 });
-
-app.post('/api/rest/sendMail', function(_req, res){
-  var req = _req.body;
-  sendMail(req.adress, req.subject, req.body);
-  res.send('hallo');
-});
-
-app.get('/api/rest/loga', function(req, res){
+app.get('/api/protected/loga', function(req, res){
   getDataFromLoga().then(rows => {
     var array = [];
     var i = 0;
@@ -291,6 +274,15 @@ app.get('/api/rest/loga', function(req, res){
     res.json(array);
   });
 });
+app.post('/api/protected/sendMail', function(_req, res){
+  var req = _req.body;
+  sendMail(req.adress, req.subject, req.body);
+  res.send('hallo');
+});
+
+var CommentModel = require('./models/Comment.js');
+CommentModel.methods(['get', 'post', 'delete']),
+CommentModel.register(app, '/api/rest/comments');
 
 var ItemModel = require('./models/Item.js');
 ItemModel.methods(['get', 'post', 'put', 'delete']),
@@ -304,12 +296,8 @@ var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),
 ProcessModel.register(app, '/api/rest/processes');
 
-var CommentModel = require('./models/Comment.js');
-CommentModel.methods(['get', 'post', 'delete']),
-CommentModel.register(app, '/api/rest/comments');
-
 var UserModel = require('./models/User.js');
 
 
-logger.info('app listens at localhost:3333');
+console.log('app listens at localhost:3000');
 app.listen(3000);
