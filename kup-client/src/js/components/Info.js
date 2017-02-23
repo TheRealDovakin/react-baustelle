@@ -25,9 +25,6 @@ export default class Info extends React.Component{
 				<p>Anmeldung muss im manchen Fällen doppelt ausgeführt werden, Füllen der der Felder beim Erstellen eines neuen Prozesses lädt die Seite beim ersten Mal neu.</p>
 				<h3>Microsoft Internet Explorer</h3>
 				<p>Anmeldung nicht möglich und somit nicht zum Gebrauch geeignet.</p>
-
-				<h2>3. Die Startseite</h2>
-				<img src={"../../../../docs/img/startseite.PNG"} alt="Bild: Startseite" class="img-thumbnail"/>
       </div>
     );
   }

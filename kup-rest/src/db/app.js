@@ -282,19 +282,19 @@ app.post('/api/protected/sendMail', function(_req, res){
 
 var CommentModel = require('./models/Comment.js');
 CommentModel.methods(['get', 'post', 'delete']),
-CommentModel.register(app, '/api/rest/comments');
+CommentModel.register(app, '/api/protected/comments');
 
 var ItemModel = require('./models/Item.js');
 ItemModel.methods(['get', 'post', 'put', 'delete']),
-ItemModel.register(app, '/api/rest/items');
+ItemModel.register(app, '/api/protected/items');
 
 var PhaseModel = require('./models/Phase.js');
 PhaseModel.methods(['get', 'post', 'put', 'delete']),
-PhaseModel.register(app, '/api/rest/phases');
+PhaseModel.register(app, '/api/protected/phases');
 
 var ProcessModel = require('./models/Process.js');
 ProcessModel.methods(['get', 'post', 'put', 'delete']),
-ProcessModel.register(app, '/api/rest/processes');
+ProcessModel.register(app, '/api/protected/processes');
 
 var UserModel = require('./models/User.js');
 
