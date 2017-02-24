@@ -140,6 +140,7 @@ export default class Item extends React.Component{
 				self.fetchItems();
 			});
 			else{
+				if(res.status=='401') alertify.error(Strings.noAccessRights);
 				console.log('error in set Items.Status');
 				console.log(res);
 			}
@@ -384,8 +385,8 @@ export default class Item extends React.Component{
 					<div class="panel-heading">
 						<h4>
 							{name}
-							<i style={headlineStyle} class={"fa "+eye+" fa-lg pull-right"}></i>
-							<i style={headlineStyle} onClick={() => this.changeItemOpen(this, _id, open)} class={"fa "+lock+" fa-lg pull-right"}></i>
+							<i style={headlineStyle} title="Zeigt an, ob Aufgabe vom Verantwortlichen gesehen wurde"class={"fa "+eye+" fa-lg pull-right"}></i>
+							<i style={headlineStyle} title="Zeigt an, ob Aufgabe von allen als erledigt Markiert werden kann" onClick={() => this.changeItemOpen(this, _id, open)} class={"fa "+lock+" fa-lg pull-right"}></i>
 						</h4>
 					</div>
 					<ul class="list-group">

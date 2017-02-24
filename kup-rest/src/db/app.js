@@ -32,7 +32,7 @@ var Schema = mongoose.Schema;
 //////////////////////////////////////////////////////
 const app = express();
 const logger = log4js.getLogger('mongo-rest-api');
-logger.setLevel('WARN');
+logger.setLevel('TRACE');
 app.use(morgan('tiny', {
   'stream': {
      write:  function(str){
@@ -45,7 +45,7 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
-app.use(cors({origin: [Constants.appPath+':8080', 'https://172.22.23/'] }));
+app.use(cors({origin: [Constants.appPath+':8080', Constants.appPath] }));
 mongoose.connect("mongodb://localhost/kup");
 
 //////////////////////////////////////////////////////
@@ -207,6 +207,18 @@ app.use('/api/protected', function(req, res, next){
     res.status(401).send('unauthorized');
   });
 });
+app.use('/api/protected/items', function(req, res, next){
+  requestHasToken(req)
+  .then(decoded => {
+    if(req.method=='PUT'&&req.body.open!=undefined&&!decoded.admin){
+      res.status(401).send('unauthorized');
+      return;
+    }else next();
+  })
+  .catch(err =>{
+    res.status(401).send('unauthorized');
+  });
+});
 app.get('/api/protected/ldap/:nr', function(req, res){
   var x = res;
   var client = ldap.createClient({
@@ -222,7 +234,7 @@ app.get('/api/protected/ldap/:nr', function(req, res){
     attributes: ['name', 'mail', 'title', 'employeeNumber', 'department', 'l'],
   };
   client.on('error', function(err) {
-    logger.warn('LDAP connection failed, but fear not, it will reconnect OK');
+    logger.info('LDAP connection failed, but fear not, it will reconnect OK');
     logger.trace(err);
   });
   client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
