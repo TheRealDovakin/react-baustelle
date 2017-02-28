@@ -6,6 +6,8 @@ import React from "react";
 //own files
 import Constants from '../values/constants';
 import Strings from '../values/strings_de';
+//css
+import "../../css/spinner.css"
 /**
  * @author Kasper Nadrajkowski
  * container for Info
@@ -21,11 +23,13 @@ export default class LoginPage extends React.Component{
     this.state = {
       name: '',
       password: '',
+      hidden: 'hidden'
     };
   }
   handleName(event){ this.setState({ name: event.target.value }); }
   handlePassword(event){ this.setState({ password: event.target.value }); }
   authenticate(){
+    this.setState({hidden: ''});
     const json_data = JSON.stringify({
       name: this.state.name+Strings.kupMail,
       password: this.state.password,
@@ -48,6 +52,7 @@ export default class LoginPage extends React.Component{
 			else{
 				console.log(res.json());
         alertify.error('Name und/ oder Password ist falsch');
+        self.setState({hidden:''});
 			}
 		});
   }
@@ -67,6 +72,11 @@ export default class LoginPage extends React.Component{
           <br/>
           <button class="btn btn-primary" onClick={this.authenticate}>{Strings.login}</button>
         </form>
+        <div class={this.state.hidden}>
+          <div class="cssload-container">
+            <div class="cssload-speeding-wheel"></div>
+          </div>
+        </div>
       </div>
 		);
 	}

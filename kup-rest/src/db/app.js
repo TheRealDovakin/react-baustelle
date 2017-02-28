@@ -16,7 +16,8 @@ const express = require('express'),
     restful = require('node-restful'),
     _ = require('underscore');
 //own files
-const DateUtils = require('../js/utils/DateUtils'),
+const admins = require('../../../admins'),
+    DateUtils = require('../js/utils/DateUtils'),
     features = require('../../../features');
     ldapConf = require('../../../ldapconfig'),
     jwtConf = require('../../../jwtconfig'),
@@ -167,7 +168,9 @@ app.post('/api/authenticate', function(req, res){
       res.status(401).send('unautherized: ' + err);
       return;
     }
-    var isAdmin = user.employeeNumber==10921;
+    var admins1 = [ '10921' ];
+    var isAdmin = _.contains(admins1, user.employeeNumber);
+    console.log(isAdmin);
     var tInfo = {
       name: user.name,
       access: true,
