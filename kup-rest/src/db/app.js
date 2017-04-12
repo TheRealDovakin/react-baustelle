@@ -145,9 +145,33 @@ function requestHasToken(req){
 //////////////////////////////////////////////////////
 app.get('/api', function(req, res){
   res.send(
-    '<h1> it works!</h1>'+
-    '<h3>K&P REST-API</h3>'
+    '<h1> It works!</h1>'+
+    '<h3>EPM REST-API</h3>'
   );
+});
+app.get('/api/aue/:id', function(req, res){
+	var pr;
+	PhaseModel.find(function(err, phases){
+		if (err) return console.error(err);
+		_.each(phases, function(phase){
+			if(phase.process_id==req.params.id&&(phase.name=='Baumanager'||phase.name=='Adito')){
+        PhaseModel.findOneAndUpdate({ _id: phase._id }, { status: 2 }, function(error){
+          if(error) console.log(error);
+        });
+        ItemModel.find(function(err, items){
+          _.each(items, function(item){
+            if (item.phase_id==phase._id) {
+              logger.error(item);
+              ItemModel.findOneAndUpdate({ _id: item._id }, { status: 2 }, function(error){
+                if(error) console.log(error);
+              });
+            }
+          });
+        });
+			}
+		});
+	});
+	res.send('Allet jut!');
 });
 app.post('/api/authenticate', function(req, res){
   var options = {
@@ -168,8 +192,7 @@ app.post('/api/authenticate', function(req, res){
       res.status(401).send('unautherized: ' + err);
       return;
     }
-    var admins1 = [ '10921' ];
-    var isAdmin = _.contains(admins1, user.employeeNumber);
+    var isAdmin = _.contains(admins, user.employeeNumber);
     console.log(isAdmin);
     var tInfo = {
       name: user.name,

@@ -6,10 +6,14 @@ import Info from '../components/Info';
  * @author Kasper Nadrajkowski
  * container for Info
  */
+
 export default class InfoPage extends React.Component{
 	render(){
 		return(
-			<Info/>
+			<div>
+				<video autoplay></video>
+				<Info/>
+			</div>
 		);
 	}
 }
