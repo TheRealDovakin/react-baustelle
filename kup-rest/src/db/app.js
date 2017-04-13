@@ -86,6 +86,10 @@ function doRelease(connection){
     }
   );
 }
+function err(res, error){
+  logger.error(error);
+  res.send(error);
+}
 function getDataFromLoga(){
   var self = this;
   var ret;
@@ -149,21 +153,24 @@ app.get('/api', function(req, res){
     '<h3>EPM REST-API</h3>'
   );
 });
-app.get('/api/aue/:id', function(req, res){
-	var pr;
-	PhaseModel.find(function(err, phases){
-		if (err) return console.error(err);
+app.get('/api/ae/:id', function(req, res){
+  //auth
+  if (false) {
+    res.status(401).send('unautherized');
+    return;
+  }
+	PhaseModel.find(function(error, phases){
+		if (error) return console.error(err);
 		_.each(phases, function(phase){
 			if(phase.process_id==req.params.id&&(phase.name=='Baumanager'||phase.name=='Adito')){
         PhaseModel.findOneAndUpdate({ _id: phase._id }, { status: 2 }, function(error){
-          if(error) console.log(error);
+          if(error) return err(res, error);
         });
         ItemModel.find(function(err, items){
           _.each(items, function(item){
             if (item.phase_id==phase._id) {
-              logger.error(item);
               ItemModel.findOneAndUpdate({ _id: item._id }, { status: 2 }, function(error){
-                if(error) console.log(error);
+                if(error) return err(res, error);
               });
             }
           });

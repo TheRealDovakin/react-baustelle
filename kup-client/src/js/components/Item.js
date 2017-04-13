@@ -431,6 +431,7 @@ export default class Item extends React.Component{
 						<div class="panel-heading">
 							<h4>{name}
 								<span style={headlineStyle} onClick={() => this.changeCollapsed(true)} class="glyphicon glyphicon-triangle-top pull-right"></span>
+								<i style={headlineStyle} title="Zeigt an, ob Aufgabe von allen als erledigt Markiert werden kann" onClick={() => this.changeItemOpen(this, _id, open)} class={"fa "+lock+" fa-lg pull-right"}></i>
 							</h4>
 						</div>
 						<ul class="list-group">
@@ -449,6 +450,7 @@ export default class Item extends React.Component{
 						<div class="panel-heading">
 							<h4 >{name}
 								<span style={headlineStyle} onClick={() => this.changeCollapsed(false)} class="glyphicon glyphicon-menu-hamburger pull-right">  </span>
+								<i style={headlineStyle} title="Zeigt an, ob Aufgabe von allen als erledigt Markiert werden kann" onClick={() => this.changeItemOpen(this, _id, open)} class={"fa "+lock+" fa-lg pull-right"}></i>
 							</h4>
 						</div>
 					</div>

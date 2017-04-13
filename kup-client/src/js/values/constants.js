@@ -9,4 +9,5 @@ module.exports = {
   myMail: 'nadrajkowski@live.de',
   phoneBookLink: "http://edvweb.kiebackpeter.kup/telefon/index_html?sortorder=name&start:int=0&res_name=%25",
   restApiPath: 'https://epm.kiebackpeter.kup/api/protected/',
+  aueRest: 'https://epm.aue.kup/adito&baumanager',
 }
