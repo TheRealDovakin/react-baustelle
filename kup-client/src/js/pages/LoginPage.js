@@ -60,23 +60,27 @@ export default class LoginPage extends React.Component{
     this.callbackPath = this.props.location.query.callbackPath;
     const style={marginTop: '60px'};
 		return(
-      <div style={style} class="jumbotron col-xs-6">
-        <form class="form">
-          <h2 class="form-heading">{Strings.login}</h2>
-          <h2 class="form-heading">{Strings.loginError}</h2>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder={Strings.emailAdress} onChange={this.handleName} value={this.state.name}/>
-            <div class="input-group-addon">{Strings.kupMail}</div>
-          </div>
-          <input type="password" class="form-control" placeholder={Strings.password} onChange={this.handlePassword} value={this.state.password}/>
-          <br/>
-          <button class="btn btn-primary" onClick={this.authenticate}>{Strings.login}</button>
-        </form>
-        <div class={this.state.hidden}>
-          <div class="cssload-container">
-            <div class="cssload-speeding-wheel"></div>
+      <div>
+        <div class="col-xs-3"></div>
+        <div style={style} class="jumbotron col-xs-6">
+          <form class="form">
+            <h2 class="form-heading">{Strings.login}</h2>
+            <h2 class="form-heading">{Strings.loginError}</h2>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder={Strings.emailAdress} onChange={this.handleName} value={this.state.name}/>
+              <div class="input-group-addon">{Strings.kupMail}</div>
+            </div>
+            <input type="password" class="form-control" placeholder={Strings.password} onChange={this.handlePassword} value={this.state.password}/>
+            <br/>
+            <button class="btn btn-primary" onClick={this.authenticate}>{Strings.login}</button>
+          </form>
+          <div class={this.state.hidden}>
+            <div class="cssload-container">
+              <div class="cssload-speeding-wheel"></div>
+            </div>
           </div>
         </div>
+        <div class="col-xs-3"></div>
       </div>
 		);
 	}

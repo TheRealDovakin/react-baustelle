@@ -32,7 +32,7 @@ module.exports = {
   job: 'Tätigkeit',
   kupMail: '@kieback-peter.de',
   login: 'Anmelden',
-  loginError: 'Internet Explorer bitte Vermeiden. Mozilla Firefox und Chrome sind ok',
+  loginError: 'Internet Explorer bitte Vermeiden. Mozilla Firefox braucht 2 Anläufe zum Einloggen. Chrome ist OK ',
   mailBody: 'Neuer Eintrittsprozess an dem Sie beteiligt sind. Link: ',
   name: 'Name',
   noAccessRights: 'Sie haben nicht die nötigen Rechte um die Aktion auszuführen',
