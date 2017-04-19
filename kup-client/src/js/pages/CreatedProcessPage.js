@@ -300,8 +300,13 @@ export default class CreatedProcessPage extends React.Component{
 		myHeaders.append("Content-Type", "application/json");
 		myHeaders.append("Authorization", 'Bearer '+window.sessionStorage.accessToken);
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
+		var myAueInit = { method: 'POST', body: json_data }
 		const self = this;
-		//fetch(Constants.aueRest, myInit);
+		fetch(Constants.aueRest, myAueInit)
+		.then(function(res){
+			if(res.ok) console.log('AE-Reply: '+res)
+			else alert(res);
+		});
 		fetch(Constants.restApiPath+'processes/', myInit)
 		.then(function(res){
 			if(res.ok){

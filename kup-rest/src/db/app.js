@@ -16,7 +16,8 @@ const express = require('express'),
     restful = require('node-restful'),
     _ = require('underscore');
 //own files
-const admins = require('../../../admins'),
+const aeAuth = admins = require('../../../aeAuth'),
+    admins = require('../../../admins'),
     DateUtils = require('../js/utils/DateUtils'),
     features = require('../../../features');
     ldapConf = require('../../../ldapconfig'),
@@ -58,6 +59,33 @@ function addLineToLog(req, decoded){
   const command = 'echo \''+s+'\' >> app.log';
   childProcess.exec(command);
 }
+function ae(req, res){
+  var auth = req.headers.authorization;
+  var routes = ['Adito', 'Baumanager'];
+  var isRoute = _.contains(routes, req.params.phase);
+  if(!isRoute) return res.status(404).send('wrong route');
+  if(!auth) return res.status(401).send('Missing authorization Header');
+  if(!(auth==aeAuth.user)) return res.status(401).send('Wrong user or password');
+	PhaseModel.findOne({
+    process_id: req.params.id,
+    name: req.params.phase
+  },function(error, phase){
+    if(error) return err(res, error, 404);
+    PhaseModel.findOneAndUpdate(
+      {_id: phase._id}, //condition
+      {status: 2}, //change
+      function(error){
+        if(error) return err(res, error, 500);
+      }
+    );
+    ItemModel.updateMany({phase_id: phase._id},{status: 2},
+      function(error){
+        if(error) return err(res, error, 404);
+      }
+    );
+    return res.status(200).send('Set '+req.params.phase+' to done');
+  });
+};
 function checkIfItemsSeen(){
   ItemModel.find(function(err, items){
     if (err) return console.error(err);
@@ -81,13 +109,15 @@ function doRelease(connection){
   connection.close(
     function(err) {
       if (err) {
-        logger.error(err.message);
+        return logger.error(err.message);
       }
     }
   );
 }
-function err(res, error){
+function err(res, error, status, string){
   logger.error(error);
+  if(status) res.status(status);
+  if(string) return res.send(string);
   res.send(error);
 }
 function getDataFromLoga(){
@@ -147,38 +177,16 @@ function requestHasToken(req){
 //////////////////////////////////////////////////////
 ///////////////////////ROUTES/////////////////////////
 //////////////////////////////////////////////////////
-app.get('/api', function(req, res){
+app.all('/api', function(req, res){
   res.send(
     '<h1> It works!</h1>'+
     '<h3>EPM REST-API</h3>'
   );
 });
-app.get('/api/ae/:id', function(req, res){
-  //auth
-  if (false) {
-    res.status(401).send('unautherized');
-    return;
-  }
-	PhaseModel.find(function(error, phases){
-		if (error) return console.error(err);
-		_.each(phases, function(phase){
-			if(phase.process_id==req.params.id&&(phase.name=='Baumanager'||phase.name=='Adito')){
-        PhaseModel.findOneAndUpdate({ _id: phase._id }, { status: 2 }, function(error){
-          if(error) return err(res, error);
-        });
-        ItemModel.find(function(err, items){
-          _.each(items, function(item){
-            if (item.phase_id==phase._id) {
-              ItemModel.findOneAndUpdate({ _id: item._id }, { status: 2 }, function(error){
-                if(error) return err(res, error);
-              });
-            }
-          });
-        });
-			}
-		});
-	});
-	res.send('Allet jut!');
+//HACK: #010 app.put() can't be reached
+app.all('/api/ae/:phase/:id', function(req, res){ ae(req, res); });
+app.post('/api/tut', function(req, res){
+  res.send('hallo');
 });
 app.post('/api/authenticate', function(req, res){
   var options = {
@@ -272,7 +280,7 @@ app.get('/api/protected/ldap/:nr', function(req, res){
   });
   client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
     if(err) logger.info(err);
-    function lul(){
+    function myLdapAw(){
       return new Promise((reject, resolve) => {
         res.on('searchEntry', function(entry) {
           x.json(entry.object);
@@ -288,7 +296,7 @@ app.get('/api/protected/ldap/:nr', function(req, res){
         });
       });
     }
-    lul().then(y => {
+    myLdapAw().then(y => {
       client.unbind(function(err) {
         if(err) logger.info(err);
       });
