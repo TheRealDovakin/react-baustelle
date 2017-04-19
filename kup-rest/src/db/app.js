@@ -63,25 +63,24 @@ function ae(req, res){
   var auth = req.headers.authorization;
   var routes = ['Adito', 'Baumanager'];
   var isRoute = _.contains(routes, req.params.phase);
-  if(!isRoute) return res.status(404).send('wrong route');
-  if(!auth) return res.status(401).send('Missing authorization Header');
-  if(!(auth==aeAuth.user)) return res.status(401).send('Wrong user or password');
+  if(!isRoute) return err(res, null, 403, '403 - route forbidden');
+  if(!auth) return err(res, null, 401, '401 - Missing authorization Header');
+  if(!(auth==aeAuth.user)) return err(res, null, 401, '401 - Wrong user or password');
 	PhaseModel.findOne({
     process_id: req.params.id,
     name: req.params.phase
   },function(error, phase){
     if(error) return err(res, error, 404);
+    if(!phase) return err(res, null, 404, 'Could not find element with this ID');
     PhaseModel.findOneAndUpdate(
       {_id: phase._id}, //condition
       {status: 2}, //change
-      function(error){
-        if(error) return err(res, error, 500);
-      }
+      function(error){ if(error) return err(res, error, 500); }
     );
-    ItemModel.updateMany({phase_id: phase._id},{status: 2},
-      function(error){
-        if(error) return err(res, error, 404);
-      }
+    ItemModel.updateMany(
+      {phase_id: phase._id},
+      {status: 2},
+      function(error){ if(error) return err(res, error, 404); }
     );
     return res.status(200).send('Set '+req.params.phase+' to done');
   });
@@ -115,10 +114,10 @@ function doRelease(connection){
   );
 }
 function err(res, error, status, string){
-  logger.error(error);
+  var resString = (error) ? error : string;
+  logger.error(resString)
   if(status) res.status(status);
-  if(string) return res.send(string);
-  res.send(error);
+  return res.send(resString);
 }
 function getDataFromLoga(){
   var self = this;
