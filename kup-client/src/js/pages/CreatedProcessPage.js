@@ -302,10 +302,9 @@ export default class CreatedProcessPage extends React.Component{
 		var myInit = { method: 'POST', mode: 'cors', body: json_data, headers: myHeaders }
 		var myAueInit = { method: 'POST', body: json_data }
 		const self = this;
-		fetch(Constants.aueRest, myAueInit)
+		fetch(Constants.aueRest, myInit)
 		.then(function(res){
-			if(res.ok) console.log('AE-Reply: '+res)
-			else alert(res);
+			if(!res.ok) console.log(res);
 		});
 		fetch(Constants.restApiPath+'processes/', myInit)
 		.then(function(res){

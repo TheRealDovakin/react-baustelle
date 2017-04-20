@@ -6,4 +6,6 @@
  */
 module.exports = {
   sendMailsWhenCreatingProcess: false,
+  checkIfItemsSeen: false,
+  sendDataToAe: false,
 }

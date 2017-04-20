@@ -6,28 +6,30 @@ const express = require('express'),
     cors = require('cors'),
     debug = require('debug'),
     jwt = require('jsonwebtoken'),
-    ldap = require('ldapjs'),
-    LdapAuth = require('ldapauth-fork'),
     log4js = require('log4js');
     methodOverride = require('method-override'),
     moment = require('moment'),
     morgan = require('morgan'),
-    oracledb = require('oracledb'),
     restful = require('node-restful'),
     _ = require('underscore');
 //own files
-const aeAuth = admins = require('../../../aeAuth'),
+const aeconfig = require('../../../aeconfig'),
     admins = require('../../../admins'),
     DateUtils = require('../js/utils/DateUtils'),
-    features = require('../../../features');
-    ldapConf = require('../../../ldapconfig'),
+    logUtils = require('../js/utils/logUtils'),
+    features = require('../../../features'),
+    dbLogic = require('../js/logic/db'),
+    ldapLogic = require('../js/logic/ldap'),
+    logaLogic = require('../js/logic/loga'),
     jwtConf = require('../../../jwtconfig'),
-    oracleDbConfig = require('../../../dbconfig.js'),
+    placeholder = require('../js/logic/placeholder'),
     Strings = require('../js/values/strings_de');
 //mongoose
 const mongoose = restful.mongoose;
 mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
+//stuff
+var err = logUtils.err;
 
 //////////////////////////////////////////////////////
 ///////////////////////DB-CONFIG//////////////////////
@@ -63,101 +65,31 @@ function ae(req, res){
   var auth = req.headers.authorization;
   var routes = ['Adito', 'Baumanager'];
   var isRoute = _.contains(routes, req.params.phase);
-  if(!isRoute) return err(res, null, 403, '403 - route forbidden');
-  if(!auth) return err(res, null, 401, '401 - Missing authorization Header');
-  if(!(auth==aeAuth.user)) return err(res, null, 401, '401 - Wrong user or password');
+  if(!isRoute) return err(logger, res, null, 403, '403 - route forbidden');
+  if(!auth) return err(logger, res, null, 401, '401 - Missing authorization Header');
+  if(!(auth==aeconfig.user)) return err(logger, res, null, 401, '401 - Wrong user or password');
 	PhaseModel.findOne({
     process_id: req.params.id,
     name: req.params.phase
   },function(error, phase){
-    if(error) return err(res, error, 404);
-    if(!phase) return err(res, null, 404, 'Could not find element with this ID');
+    if(error) return err(logger, res, error, 404);
+    if(!phase) return err(logger, res, null, 404, 'Could not find element with this ID');
     PhaseModel.findOneAndUpdate(
       {_id: phase._id}, //condition
       {status: 2}, //change
-      function(error){ if(error) return err(res, error, 500); }
+      function(error){ if(error) return err(logger, res, error, 500); }
     );
     ItemModel.updateMany(
       {phase_id: phase._id},
       {status: 2},
-      function(error){ if(error) return err(res, error, 404); }
+      function(error){ if(error) return err(logger, res, error, 404); }
     );
     return res.status(200).send('Set '+req.params.phase+' to done');
   });
 };
-function checkIfItemsSeen(){
-  ItemModel.find(function(err, items){
-    if (err) return console.error(err);
-    _.each(items, function(item){
-      var createdAt = moment(item.createdAt);
-      var now = moment();
-      var diff = now.diff(createdAt);
-      var time =  100 //m-sesonds
-                  *60 //seconds
-                  *60 //minutes
-                  *24 //hours
-                  *4; //days
-      if(item.seen||diff<=time) return;
-      ItemModel.findOneAndUpdate({ _id: item._id }, { spare: true }, function(error){
-        if(error) console.log(error);
-      });
-    });
-  });
-}
-function doRelease(connection){
-  connection.close(
-    function(err) {
-      if (err) {
-        return logger.error(err.message);
-      }
-    }
-  );
-}
-function err(res, error, status, string){
-  var resString = (error) ? error : string;
-  logger.error(resString)
-  if(status) res.status(status);
-  return res.send(resString);
-}
-function getDataFromLoga(){
-  var self = this;
-  var ret;
-  return new Promise((resolve, reject) => {
-    oracledb.getConnection(
-      {
-        user          : oracleDbConfig.name,
-        password      : oracleDbConfig.pw,
-        connectString : oracleDbConfig.qstring,
-      },
-      function(err, connection)  {
-        if (err) {
-          logger.error(err.message);
-          return reject(err);
-        }
-        connection.execute(
-          "select * from kp_einstellung_workflow",
-          function(err, result)  {
-            if (err) {
-              logger.error(err.message);
-              doRelease(connection);
-              return reject(err);
-            }
-            doRelease(connection);
-            return resolve(result.rows);
-          }
-        );
-      }
-    );
-  });
-}
-function getSendMailCommand(adress, subject, body){
-  return "echo \""+body+"\" | mail -aFrom:epm@kieback-peter.de -s \""+subject+"\" "+adress;
-}
-function sendMail(adress, subject, body){
-  const command = getSendMailCommand(adress, subject, body);
-  logger.trace('Mail to: '+adress);
-  if(features.sendMailsWhenCreatingProcess) childProcess.exec(command);
-}
+
+
+
 function requestHasToken(req){
   if(req.headers.authorization){
     var token = req.headers.authorization.split(' ')[1];
@@ -188,48 +120,11 @@ app.post('/api/tut', function(req, res){
   res.send('hallo');
 });
 app.post('/api/authenticate', function(req, res){
-  var options = {
-    url: ldapConf.url,
-    bindDn: ldapConf.dn,
-    bindCredentials: ldapConf.pw,
-    searchBase: 'ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup',
-    searchFilter: '(mail='+req.body.name+')',
-    reconnect: true,
-  };
-  var auth = new LdapAuth(options);
-  auth.on('error', function (err) {
-    logger.error('LdapAuth: ', err);
-  });
-  auth.authenticate(req.body.name, req.body.password, function(err, user) {
-    if(err){
-      logger.error(err);
-      res.status(401).send('unautherized: ' + err);
-      return;
-    }
-    var isAdmin = _.contains(admins, user.employeeNumber);
-    console.log(isAdmin);
-    var tInfo = {
-      name: user.name,
-      access: true,
-      admin: isAdmin,
-    };
-    var secret = new Buffer(jwtConf.encodeString, 'base64');
-    var token = jwt.sign(tInfo, secret, { expiresIn: jwtConf.expire });
-    res.status(200);
-    res.json({
-      success: true,
-      displayName: user.name,
-      message: 'hier dein token',
-      token: token,
-    });
-  });
-  auth.close(function(err) {
-    if(err) logger.error('ldapAuth on close error '+err);
-  });
+  ldapLogic.authenticate(req, res, logger);
 });
 app.get('/api/check', function(req, res){
-  checkIfItemsSeen();
-  res.status(200).send('checking if Items have been seen by responsible persons');
+  if(features.checkIfItemsSeen) dbLogic.checkIfItemsSeen(res, logger, ItemModel);
+  else res.status(501).send('function disabled');
 });
 app.use('/api/protected', function(req, res, next){
   requestHasToken(req)
@@ -260,51 +155,10 @@ app.use('/api/protected/items', function(req, res, next){
   });
 });
 app.get('/api/protected/ldap/:nr', function(req, res){
-  var x = res;
-  var client = ldap.createClient({
-    url: ldapConf.url,
-    reconnect: true,
-  });
-  client.bind(ldapConf.dn, ldapConf.pw, function(err) {
-    if(err) logger.error(err);
-  });
-  var opts = {
-    filter: '(employeeNumber='+req.params.nr+')',
-    scope: 'sub',
-    attributes: ['name', 'mail', 'title', 'employeeNumber', 'department', 'l'],
-  };
-  client.on('error', function(err) {
-    logger.info('LDAP connection failed, but fear not, it will reconnect OK');
-    logger.trace(err);
-  });
-  client.search('ou=IT,ou=User,ou=Zentrale,dc=kiebackpeter,dc=kup', opts, function(err, res) {
-    if(err) logger.info(err);
-    function myLdapAw(){
-      return new Promise((reject, resolve) => {
-        res.on('searchEntry', function(entry) {
-          x.json(entry.object);
-          return resolve('');
-        })
-        res.on('searchReference', function(referral) {
-          return resolve('');
-        })
-        res.on('error', function(err) {
-          x.status(400);
-          x.json(err.message);
-          return resolve('');
-        });
-      });
-    }
-    myLdapAw().then(y => {
-      client.unbind(function(err) {
-        if(err) logger.info(err);
-      });
-      client.destroy();
-    });
-  });
+  ldapLogic.getPersonFromLdap(req, res, logger);
 });
 app.get('/api/protected/loga', function(req, res){
-  getDataFromLoga().then(rows => {
+  logaLogic.getDataFromLoga().then(rows => {
     var array = [];
     var i = 0;
     for(var i = 0; i<rows.length; i++){
@@ -326,10 +180,16 @@ app.get('/api/protected/loga', function(req, res){
     res.json(array);
   });
 });
+app.post('/api/protected/sendDataToAe', function(req, res){
+  if(features.sendDataToAe) placeholder.sendDataToAe(req, res, logger);
+  else res.status(501).send('function disabled');
+});
 app.post('/api/protected/sendMail', function(_req, res){
   var req = _req.body;
-  sendMail(req.adress, req.subject, req.body);
-  res.send('hallo');
+  if(features.sendMailsWhenCreatingProcess){
+    placeholder.sendMail(req.adress, req.subject, req.body, logger);
+    res.status(200).send('Sending mail to: '+req.adress);
+  }else res.status(501).send('Function disabled');
 });
 
 var CommentModel = require('./models/Comment.js');
