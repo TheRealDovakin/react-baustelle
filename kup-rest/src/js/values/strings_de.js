@@ -26,6 +26,7 @@ module.exports = {
   entryProcess: 'Eintrittsprocess',
   equipment: 'Ausstattung',
   fillInputs: 'Felder ausfüllen',
+  fillInputsOption: '"Personalnummer" - "Name"',
   finish: 'Abschließen',
   info: 'Info',
   job: 'Tätigkeit',
@@ -85,7 +86,7 @@ module.exports = {
     confirmDelete: 'Sie sind dabei diesen Prozess zu löschen. Wen Sie sicher sind, dass Sie ihn löschen wollen, dann klicken Sie auf OK',
     delete: 'Prozess löschen',
     error:{
-      finishProcess: 'Prozess kann erst beendet werden wenn alle Aufgaben abgehackt sind',
+      finishProcess: 'Prozess kann erst beendet werden wenn alle Aufgaben abgehakt sind',
       noAccessRights: 'Sie haben nicht die nötigen Rechte um diese Aufgabe als erledigt zu markieren',
     },
     finish: 'Prozess erfolgreich beenden',

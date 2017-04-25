@@ -20,7 +20,7 @@ export default class Process extends React.Component{
 	 */
 	goToProcess(id){
 		document.location.href = "#/processPage/"+id;
- }
+ 	}
 
 	render(){
 		const { _id, status, person_name, due_date, p_type, department, place } = this.props;

@@ -85,7 +85,7 @@ export default class Item extends React.Component{
 	*/
 	changeItemStatus(t, _id, status){
 		if (this.state.person_name!=sessionStorage.displayName&&!this.props.open) {
-			alertify.error('Diese Aufgabe kann nur vom Verantwortlichen abgehackt werden');
+			alertify.error('Diese Aufgabe kann nur vom Verantwortlichen abgehakt werden');
 			return;
 		}
 		var json_data = JSON.stringify({

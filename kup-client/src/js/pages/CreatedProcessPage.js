@@ -105,6 +105,7 @@ export default class CreatedProcessPage extends React.Component{
 	componentDidMount(){
 		this.fetchLoga();
 		this.fetchProcesses();
+		this.setState({person_nrToFill: 0});
 	}
 	/**
 	 * wrapes parameters to a JSON and call post-function with it
@@ -118,11 +119,12 @@ export default class CreatedProcessPage extends React.Component{
 		car,
 		department,
 		due_date,
+		job,
 		p_type,
 		person_name,
 		person_nr,
 		place,
-		short, job,
+		short,
 		tablePhone,
 		ticketNr
 	){
@@ -232,12 +234,15 @@ export default class CreatedProcessPage extends React.Component{
 		});
 	}
 	fillInputs(){
-		//BUG: #001 refreshes the site on first use, fixed with #002
+		//BUG: #001 refreshes the site on first use (Mozilla Firefox)
 		var self = this;
+		if(self.state.person_nrToFill==''||self.state.person_nrToFill=='- - -'){
+			alertify.error('bitte person auswählen');
+			return;
+		}
 		var rightProcess = _.find(self.state.loga, function(process){
 			return process.person_nr == self.state.person_nrToFill.split(' ')[0];
 		});
-		console.log(rightProcess);
 		self.setState({
 			department: rightProcess.department,
 			due_date: rightProcess.due_date,
@@ -289,7 +294,7 @@ export default class CreatedProcessPage extends React.Component{
 		this.setState({
 			department: res.department,
 			due_date: res.due_date,
-	  	name: res.person_name,
+	  	person_name: res.person_name,
 			job: res.job,
 			place: res.place,
 	  });
@@ -309,7 +314,7 @@ export default class CreatedProcessPage extends React.Component{
 	handleDepartmentChange(event) {	this.setState({ department: event.target.value }); }
 	handleDueDateChange(event) { this.setState({ due_date: event.target.value }); }
 	handleJobChange(event) { this.setState({ job: event.target.value	});	}
-	handleNameChange(event) {	this.setState({	name: event.target.value });}
+	handleNameChange(event) {	this.setState({	person_name: event.target.value });}
 	handlePersonNrChange(event) {	this.setState({	person_nr: event.target.value	});	}
 	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value	});	}
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
@@ -474,11 +479,10 @@ export default class CreatedProcessPage extends React.Component{
 			});
 		});
 
-		const ProcessesInDropdown = logaFiltered.map((item) => {
-			if(true){
-				return <ProcessInDropdown key={item.person_nr} {...item}/>;
-			}
+		var ProcessesInDropdown = logaFiltered.map((item) => {
+			return <ProcessInDropdown key={item.person_nr} {...item}/>;
 		});
+
 
 		return(
 			<div class="col-md-12">
@@ -491,6 +495,7 @@ export default class CreatedProcessPage extends React.Component{
 						<label class="col-sm-2 control-label">{Strings.personNr}</label>
 						<div class="col-sm-4">
 							<select class="form-control" value={this.state.person_nrToFill} onChange={this.handlePersonNrToFillChange}>
+							<option>- - - </option>
 							{ProcessesInDropdown}
 							</select>
 						</div>
@@ -503,7 +508,7 @@ export default class CreatedProcessPage extends React.Component{
 					<div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.ticketNr}*</label>
 				    <div class="col-sm-10">
-				      <input class="form-control" placeholder={Strings.ticketNr} value={this.state.ticketNr} onChange={this.handleTicketNrChange}></input>
+				      <input class="form-control" type='number' placeholder={Strings.ticketNr} value={this.state.ticketNr} onChange={this.handleTicketNrChange}></input>
 				    </div>
 				  </div>
 
