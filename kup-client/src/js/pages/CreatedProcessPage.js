@@ -44,7 +44,7 @@ export default class CreatedProcessPage extends React.Component{
 			department: '',
 			due_date:'',
 			loga: [],
-	  		name: '',
+	  	person_name: '',
 			job: '',
 			p_type: 'Vertrieb',
 			person_nr: '',
@@ -53,6 +53,7 @@ export default class CreatedProcessPage extends React.Component{
 			processes: [],
 			short: '',
 			tablePhone: false,
+			ticketNr: '',
 		};
 		// binded functions
 		this.createProcess = this.createProcess.bind(this);
@@ -75,6 +76,7 @@ export default class CreatedProcessPage extends React.Component{
 		this.handlePlaceChange = this.handlePlaceChange.bind(this);
 		this.handleShortChange = this.handleShortChange.bind(this);
 		this.handleTablePhoneChange = this.handleTablePhoneChange.bind(this);
+		this.handleTicketNrChange = this.handleTicketNrChange.bind(this);
 		this.handleTypeChange = this.handleTypeChange.bind(this);
 		this.setProcess = this.setProcess.bind(this);
 		this.postProcess = this.postProcess.bind(this);
@@ -110,9 +112,31 @@ export default class CreatedProcessPage extends React.Component{
 	 * @param {String} due_date			date from datepicker
 	 * @param {String} p_type			process type from input
 	 */
-	createProcess(person_name, person_nr, short, job, place, department, due_date, p_type, car, addAccounts, tablePhone, baumanager){
+	createProcess(
+		addAccounts,
+		baumanager,
+		car,
+		department,
+		due_date,
+		p_type,
+		person_name,
+		person_nr,
+		place,
+		short, job,
+		tablePhone,
+		ticketNr
+	){
 		var self = this;
-		if(short==''||person_nr==''||person_name==''||place==''||short==''||job==''||due_date==''||department==''){
+		if(
+			department==''
+			||due_date==''
+			||job==''
+			||person_name==''
+			||person_nr==''
+			||place==''
+			||short==''
+			||ticketNr==''
+		){
 			alertify.error('Bitte füllen Sie alle mit einem * markierte Felder aus');
 			return;
 		}
@@ -137,6 +161,7 @@ export default class CreatedProcessPage extends React.Component{
 			short: short,
 			status: 1,
 			tablePhone: tablePhone,
+			ticketNr: ticketNr,
 		});
 		this.postProcess(json_data);
 	}
@@ -216,7 +241,7 @@ export default class CreatedProcessPage extends React.Component{
 		self.setState({
 			department: rightProcess.department,
 			due_date: rightProcess.due_date,
-	  	name: rightProcess.person_name,
+	  	person_name: rightProcess.person_name,
 			job: rightProcess.job,
 			place: rightProcess.place,
 			person_nr: rightProcess.person_nr,
@@ -289,6 +314,7 @@ export default class CreatedProcessPage extends React.Component{
 	handlePersonNrToFillChange(event) {	this.setState({	person_nrToFill: event.target.value	});	}
 	handlePlaceChange(event) { this.setState({ place: event.target.value	});	}
 	handleShortChange(event) { this.setState({ short: event.target.value	});	}
+	handleTicketNrChange(event) { this.setState({ ticketNr: event.target.value	});	}
 	handleTypeChange(event) {	this.setState({	p_type: event.target.value }); }
 	/**
 	 * creates a new Process in the DB and calls function to create child-Phases
@@ -474,6 +500,13 @@ export default class CreatedProcessPage extends React.Component{
 						</div>
 					</div>
 
+					<div class="form-group">
+				    <label class="col-sm-2 control-label">{Strings.ticketNr}*</label>
+				    <div class="col-sm-10">
+				      <input class="form-control" placeholder={Strings.ticketNr} value={this.state.ticketNr} onChange={this.handleTicketNrChange}></input>
+				    </div>
+				  </div>
+
 				</form>
 
 				<h2>Mitarbeiterdaten</h2>
@@ -482,7 +515,7 @@ export default class CreatedProcessPage extends React.Component{
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">{Strings.name}*</label>
 				    <div class="col-sm-10">
-				      <input class="form-control" placeholder={Strings.name} value={this.state.name} onChange={this.handleNameChange}></input>
+				      <input class="form-control" placeholder={Strings.name} value={this.state.person_name} onChange={this.handleNameChange}></input>
 				    </div>
 				  </div>
 
@@ -608,18 +641,20 @@ export default class CreatedProcessPage extends React.Component{
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <a 	style={btnStyle} class="btn btn-primary"
 								onClick={() => this.createProcess(
-									this.state.name,
-									this.state.person_nr,
-									this.state.short,
-									this.state.job,
-									this.state.place,
+									this.state.addAccounts,
+									this.state.baumanager,
+									this.state.car,
 									this.state.department,
 									this.state.due_date,
+									this.state.job,
 									this.state.p_type,
-									this.state.car,
-									this.state.addAccounts,
+									this.state.person_name,
+									this.state.person_nr,
+									this.state.place,
+									this.state.short,
 									this.state.tablePhone,
-									this.state.baumanager)}>
+									this.state.ticketNr
+								)}>
 									<span class="glyphicon glyphicon-plus pull-left"></span>
 									{Strings.completeProcess}
 							</a>

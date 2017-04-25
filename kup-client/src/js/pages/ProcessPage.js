@@ -8,6 +8,7 @@ import _ from "underscore";
 import "whatwg-fetch";
 //cs
 import "../../css/spinner.css"
+import "../../css/font-awesome.min.css";
 //own files
 import CommentStore from '../stores/CommentStore';
 import DateUtils from '../utils/DateUtils';
@@ -411,7 +412,7 @@ import Strings from '../values/strings_de';
 				process = this.state.process;
 			}else{
 				process = {
-					person_name: "Babo",
+					person_name: "",
 				}
 			}
 
@@ -437,6 +438,12 @@ import Strings from '../values/strings_de';
 					return <PhaseSmall key={item._id} {...item}/>;
 				}
 			});
+
+      //ticket links
+      //var ticketNr = process.ticketNr;
+      var ticketNr = process.ticketNr;
+      var ticketLinkAgent = 'https://support.kieback-peter.de/otrs/index.pl?Action=AgentTicketZoom;TicketNumber='+ticketNr;
+      var ticketLinkCustomer = 'https://support.kieback-peter.de/otrs/customer.pl?Action=CustomerTicketZoom;TicketNumber='+ticketNr;
 
 			var formatted_date = DateUtils.getDateAsString(process.due_date);
       var height = window.innerHeight
@@ -466,6 +473,7 @@ import Strings from '../values/strings_de';
 							</div>
 							<ul class="list-group">
                 <li class="list-group-item"><span>{Strings.processStatus}:	{statusAsString}</span></li>
+                <li class="list-group-item"><span>{Strings.ticketNr}:	{process.ticketNr}</span></li>
 								<li class="list-group-item"><span>{Strings.name}:	{process.person_name}</span></li>
                 <li class="list-group-item"><span>{Strings.personNr}: {process.person_nr}</span></li>
                 <li class="list-group-item"><span>{Strings.short}: {process.short}</span></li>
@@ -494,6 +502,22 @@ import Strings from '../values/strings_de';
                             <span class="glyphicon glyphicon-remove pull-left"></span>
                             {Strings.process.delete}</a>
 							</ul>
+              <div class="panel-heading">
+								<h4>
+                  <span class="glyphicon glyphicon-link pull-right"></span>
+                  {Strings.process.links}
+                </h4>
+							</div>
+              <ul class="list-group">
+                <a class="btn btn-default" style={btnStyle}
+                            target='#' href={ticketLinkAgent}>
+                            <i class="fa fa-user pull-left"></i>
+                            {Strings.process.ticketLinkAgent}</a>
+                <a class="btn btn-default" style={btnStyle}
+                            target='#' href={ticketLinkCustomer}>
+                            <i class="fa fa-users pull-left"></i>
+                            {Strings.process.ticketLinkCustomer}</a>
+              </ul>
 						</div>
 					</div>
 					<div style={scrollStyle} class="col-md-7 col-xs-7">

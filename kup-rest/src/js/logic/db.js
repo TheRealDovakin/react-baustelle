@@ -17,10 +17,10 @@ function checkIfItemsSeen(res, logger, ItemModel){
       ItemModel.findOneAndUpdate({ _id: item._id }, { spare: true },
       function(error){
         if(error) return logUtils.err(logger, res, error, 404);
-        else{
-          logUtils.log(logger, res,
-          'checking if Items have been seen by responsible persons', 200);
-        }
+        //HACK: can't set header here
+        //(error: Can't set headers after they are sent)
+        //executing just res.send() works
+        else res.send();
       });
     });
   });

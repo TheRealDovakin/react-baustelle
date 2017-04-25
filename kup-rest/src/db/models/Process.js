@@ -16,7 +16,8 @@ var ProcessSchema = new mongoose.Schema({
 	department: {type: String, required: true},
 	due_date: {type: Date, required: true},
 	p_type: {type: String, required: true},
-	r_nr_progress: {type: Number, default: 0}
+	r_nr_progress: {type: Number, default: 0},
+	ticketNr: {type: Number, required: true}
 	}, {
 	timestamps: {createAt: 'timestamp'}
 });

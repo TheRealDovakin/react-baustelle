@@ -49,7 +49,7 @@ export default{
     phase: "b",
     name: "AD-Konto erstellen",
     person: "01809",
-    person_spare: "Ulf Röckert",
+    person_spare: "02451",
     mail: "atef@kieback-peter.de",
   },
   mobile: {
