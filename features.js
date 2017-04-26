@@ -5,7 +5,7 @@
  * this file contains flags to turn features off and on
  */
 module.exports = {
-  sendMailsWhenCreatingProcess: false,
+  sendMailsWhenCreatingProcess: true,
   checkIfItemsSeen: false,
   sendDataToAe: false,
 }

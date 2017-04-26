@@ -606,6 +606,7 @@ export default class CreatedProcessPage extends React.Component{
 				</form>
 
 				<h2>Mitarbeiterausstattung IT-Hardware</h2>
+				<h4>Je nach "Typ" des Eintritts wird ein Laptop mit Automatisch eingetragen</h4>
 				<form style={paddingLeft50Style} class="form-inline">
 
 					<div class="form-group">

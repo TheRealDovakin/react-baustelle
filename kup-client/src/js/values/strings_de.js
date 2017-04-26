@@ -8,6 +8,7 @@ module.exports = {
   //global strings
   additionalAccounts: 'Zusätzliche Konten',
   adito: 'Adito',
+  appPath: 'https://epm.kiebackpeter.kup',
   basicInfo: 'Grundinformationen',
   baumanager: 'Baumanager',
   closed: 'geschlossen',
@@ -22,7 +23,7 @@ module.exports = {
   dueDate: 'Einstellungsdatum',
   done: 'beendet',
   emailAdress: 'Email Adresse',
-  emailBody: 'Es gibt einen neuen Eintrittsprozess an dem auch Sie beteiligt sind und der folgende Link führt Sie zur Bearbeitungsseite dieses Prozesses.\n Die Applikation ist noch in der Testphase und ist nur Auf die IT-Abteilung beschränkt.\n\n Zum einloggen beutzen Sie bitte vorerst folgende Daten: \n\n Name: Ihre K&P-Emailadresse\n Passwort: kup \n\nLink zum Prozess: ',
+  emailBody: 'Es gibt einen neuen Eintrittsprozess an dem auch Sie beteiligt sind und der folgende Link führt Sie zur Bearbeitungsseite dieses Prozesses.\n Die Applikation ist noch in der Testphase und ist nur Auf die IT-Abteilung beschränkt.\n\n Zum einloggen beutzen Sie Ihre üblichen K&P Login-Daten \n\nLink zum Prozess: ',
   entryProcess: 'Eintrittsprocess',
   equipment: 'Ausstattung',
   fillInputs: 'Felder ausfüllen',

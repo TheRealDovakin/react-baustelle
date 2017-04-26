@@ -27,14 +27,14 @@ export default{
   adito1: {
     phase: "itk",
     name: "AD-Konto ist vorhanden",
-    person: "01202",
+    person: "02360",
     person_spare: "Rene Fürtenau",
     mail: "kraemer@kieback-peter.de",
   },
   adito2: {
     phase: "itk",
     name: "Adito-Konto erstellen",
-    person: "01202",
+    person: "02170",
     person_spare: "Rene Fürtenau",
     mail: "kraemer@kieback-peter.de",
   },
